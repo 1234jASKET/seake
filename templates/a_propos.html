@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}A propos - SEAKE JOURNAL{% endblock %}
+
+{% block content %}
+<section class="page-hero compact">
+    <p class="eyebrow">Le projet</p>
+    <h1>A propos</h1>
+    <p>SEAKE JOURNAL rassemble des articles, ressources et categories dans un site Django facile a administrer.</p>
+</section>
+
+<section class="section prose">
+    <h2>Objectif</h2>
+    <p>Ce projet sert de base pour publier un journal en ligne: une page d'accueil, une liste d'articles, des pages par categorie, une page contact, une page d'impression et une administration Django.</p>
+    <h2>Gestion</h2>
+    <p>Les administrateurs peuvent ajouter les categories et les articles depuis l'interface `/admin/` apres creation du compte superutilisateur.</p>
+</section>
+{% endblock %}

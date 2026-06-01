@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Coupons rabais - SEAKE JOURNAL{% endblock %}
+
+{% block content %}
+<section class="page-hero compact">
+    <p class="eyebrow">Economies locales</p>
+    <h1>Coupons rabais</h1>
+    <p>Une page pour publier des offres speciales que les lecteurs peuvent imprimer ou montrer sur leur telephone.</p>
+</section>
+
+<section class="section">
+    <div class="coupon-grid">
+        <article class="coupon-card">
+            <div>
+                <span>Coupon demo</span>
+                <h2>10% de rabais</h2>
+                <p>Sur un service ou un produit chez un commerce partenaire.</p>
+            </div>
+            <strong>CODE: SEAKE10</strong>
+        </article>
+        <article class="coupon-card dark">
+            <div>
+                <span>Offre locale</span>
+                <h2>2 pour 1</h2>
+                <p>Une offre simple pour attirer les premiers clients.</p>
+            </div>
+            <strong>CODE: LOCAL2</strong>
+        </article>
+        <article class="coupon-card">
+            <div>
+                <span>Nouveau client</span>
+                <h2>Consultation gratuite</h2>
+                <p>Parfait pour services, immobilier, finance, cours ou entretien.</p>
+            </div>
+            <strong>CODE: BIENVENUE</strong>
+        </article>
+    </div>
+</section>
+
+<section class="section muted">
+    <div class="section-heading">
+        <p class="eyebrow">Impression</p>
+        <h2>Distribuer les coupons</h2>
+    </div>
+    <p class="wide-copy">Pour distribuer porte a porte, imprimez cette page ou copiez les coupons dans la page flyer. Chaque coupon doit avoir un titre, une date limite, un code simple et une condition claire.</p>
+    <button class="button primary" type="button" onclick="window.print()">Imprimer les coupons</button>
+</section>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Demande publicitaire - SEAKE JOURNAL{% endblock %}
+
+{% block content %}
+<section class="page-hero compact promo-hero">
+    <p class="eyebrow">Acheter une visibilite</p>
+    <h1>Demande publicitaire</h1>
+    <p>Utilisez ce formulaire pour demander une page publicitaire, une carte d'affaire, un coupon rabais ou une campagne sur les reseaux sociaux.</p>
+</section>
+
+<section class="contact-layout">
+    <form class="contact-form purchase-form" method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <label for="{{ field.id_for_label }}">
+                {{ field.label }}
+                {{ field }}
+                {% if field.errors %}
+                    <span class="field-error">{{ field.errors|striptags }}</span>
+                {% endif %}
+            </label>
+        {% endfor %}
+        <button class="button primary" type="submit">Envoyer la demande</button>
+    </form>
+
+    <aside class="contact-panel">
+        <h2>Ce que le client peut acheter</h2>
+        <ul class="check-list">
+            <li>Page publicitaire complete</li>
+            <li>Carte d'affaire pour le site ou l'impression</li>
+            <li>Coupon rabais avec code promotionnel</li>
+            <li>Publication preparee pour TikTok, YouTube, Facebook ou Substack</li>
+        </ul>
+        <p>Apres l'envoi, la demande apparait dans l'admin Django, section <strong>Demandes publicitaires</strong>.</p>
+    </aside>
+</section>
+{% endblock %}

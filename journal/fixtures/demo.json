@@ -1,0 +1,80 @@
+[
+  {
+    "model": "journal.categorie",
+    "pk": 1,
+    "fields": {
+      "nom": "Actualites",
+      "slug": "actualites",
+      "description": "Les nouvelles importantes et les annonces de SEAKE JOURNAL."
+    }
+  },
+  {
+    "model": "journal.categorie",
+    "pk": 2,
+    "fields": {
+      "nom": "Culture",
+      "slug": "culture",
+      "description": "Lectures, portraits, evenements et decouvertes culturelles."
+    }
+  },
+  {
+    "model": "journal.categorie",
+    "pk": 3,
+    "fields": {
+      "nom": "Projets",
+      "slug": "projets",
+      "description": "Les projets, travaux et initiatives presentes dans le journal."
+    }
+  },
+  {
+    "model": "journal.article",
+    "pk": 1,
+    "fields": {
+      "titre": "Lancement de SEAKE JOURNAL",
+      "slug": "lancement-du-livret-numerique",
+      "categorie": 1,
+      "resume": "Une premiere version de SEAKE JOURNAL est prete avec accueil, articles, categories et administration.",
+      "contenu": "SEAKE JOURNAL permet de publier des articles et de les organiser par categorie.\n\nDepuis l'administration Django, l'equipe peut ajouter de nouveaux contenus, modifier les textes et gerer la publication.",
+      "auteur": "Equipe SEAKE JOURNAL",
+      "image": "",
+      "publie": true,
+      "date_publication": "2026-06-01T10:00:00-04:00",
+      "date_creation": "2026-06-01T10:00:00-04:00",
+      "date_modification": "2026-06-01T10:00:00-04:00"
+    }
+  },
+  {
+    "model": "journal.article",
+    "pk": 2,
+    "fields": {
+      "titre": "Comment organiser les articles",
+      "slug": "comment-organiser-les-articles",
+      "categorie": 3,
+      "resume": "Les categories aident les lecteurs a trouver rapidement les sujets qui les interessent.",
+      "contenu": "Chaque article appartient a une categorie. Cette organisation rend le journal plus clair pour les lecteurs.\n\nVous pouvez creer autant de categories que necessaire depuis l'administration.",
+      "auteur": "Equipe SEAKE JOURNAL",
+      "image": "",
+      "publie": true,
+      "date_publication": "2026-06-01T11:00:00-04:00",
+      "date_creation": "2026-06-01T11:00:00-04:00",
+      "date_modification": "2026-06-01T11:00:00-04:00"
+    }
+  },
+  {
+    "model": "journal.article",
+    "pk": 3,
+    "fields": {
+      "titre": "Une page culture pour inspirer",
+      "slug": "une-page-culture-pour-inspirer",
+      "categorie": 2,
+      "resume": "La rubrique culture peut accueillir des recommandations, portraits et evenements.",
+      "contenu": "La page culture donne une place aux idees, aux lectures et aux creations.\n\nElle peut evoluer avec de nouveaux formats: interviews, critiques, fiches de lecture ou annonces.",
+      "auteur": "Equipe SEAKE JOURNAL",
+      "image": "",
+      "publie": true,
+      "date_publication": "2026-06-01T12:00:00-04:00",
+      "date_creation": "2026-06-01T12:00:00-04:00",
+      "date_modification": "2026-06-01T12:00:00-04:00"
+    }
+  }
+]

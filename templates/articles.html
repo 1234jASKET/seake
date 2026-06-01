@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Articles - SEAKE JOURNAL{% endblock %}
+
+{% block content %}
+<section class="page-hero compact">
+    <p class="eyebrow">Tous les contenus</p>
+    <h1>Liste des articles</h1>
+    <p>Retrouvez toutes les publications de SEAKE JOURNAL.</p>
+</section>
+
+<section class="section">
+    <div class="article-grid">
+        {% for article in articles %}
+            {% include "partials/article_card.html" %}
+        {% empty %}
+            <article class="empty-state">
+                <h3>Aucun article publie</h3>
+                <p>Connectez-vous a l'administration pour publier le premier article.</p>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

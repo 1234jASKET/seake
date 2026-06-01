@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Publicite - SEAKE JOURNAL{% endblock %}
+
+{% block content %}
+<section class="page-hero compact promo-hero">
+    <p class="eyebrow">Pour les commerces locaux</p>
+    <h1>Publicite dans SEAKE JOURNAL</h1>
+    <p>Presentez votre entreprise aux lecteurs du quartier avec une annonce claire, locale et facile a partager.</p>
+</section>
+
+<section class="section">
+    <div class="ad-layout">
+        <article class="ad-preview">
+            <img src="{% static 'img/logo.png' %}" alt="SEAKE JOURNAL">
+            <p class="eyebrow">Espace annonceur</p>
+            <h2>Votre commerce ici</h2>
+            <p>Offre speciale, ouverture, service, restaurant, immobilier, evenement ou annonce communautaire.</p>
+            <a class="button primary" href="{% url 'demande_publicite' %}">Acheter une publicite</a>
+        </article>
+
+        <div class="pricing-grid">
+            <article class="price-card">
+                <span>Format simple</span>
+                <h2>Carte d'affaire</h2>
+                <p>Une carte avec logo, telephone, adresse et message court.</p>
+                <strong>Ideal pour tester</strong>
+            </article>
+            <article class="price-card featured">
+                <span>Format populaire</span>
+                <h2>Annonce + coupon</h2>
+                <p>Votre annonce avec un rabais que les lecteurs peuvent montrer en magasin.</p>
+                <strong>Ideal pour attirer des clients</strong>
+            </article>
+            <article class="price-card">
+                <span>Format complet</span>
+                <h2>Campagne sociale</h2>
+                <p>Annonce sur le site + contenu prepare pour TikTok, YouTube, Facebook et Substack.</p>
+                <strong>Ideal pour etre visible</strong>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="cta-band">
+        <div>
+            <p class="eyebrow">Formulaire client</p>
+            <h2>Un client veut acheter une page, une carte ou un coupon?</h2>
+            <p>Envoyez-le vers le formulaire. Sa demande sera conservee dans l'administration Django.</p>
+        </div>
+        <a class="button primary" href="{% url 'demande_publicite' %}">Ouvrir le formulaire</a>
+    </div>
+</section>
+
+<section class="section muted">
+    <div class="section-heading">
+        <p class="eyebrow">Ce qu'il faut fournir</p>
+        <h2>Materiel annonceur</h2>
+    </div>
+    <div class="info-grid">
+        <div class="info-card">
+            <h3>Texte court</h3>
+            <p>Nom du commerce, offre, adresse, telephone et site web.</p>
+        </div>
+        <div class="info-card">
+            <h3>Image ou logo</h3>
+            <p>Logo PNG/JPG, photo du produit ou photo du commerce.</p>
+        </div>
+        <div class="info-card">
+            <h3>Action claire</h3>
+            <p>Appeler, visiter, scanner, reserver, acheter ou utiliser un coupon.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.titre }} - SEAKE JOURNAL{% endblock %}
+
+{% block content %}
+<article class="article-page">
+    <header class="article-header">
+        <a class="category-pill" href="{{ article.categorie.get_absolute_url }}">{{ article.categorie.nom }}</a>
+        <h1>{{ article.titre }}</h1>
+        <p>{{ article.resume }}</p>
+        <div class="article-meta">
+            <span>Par {{ article.auteur }}</span>
+            <span>{{ article.date_publication|date:"d F Y" }}</span>
+        </div>
+        {% if article.image %}
+            <img class="article-main-image" src="{{ article.image.url }}" alt="{{ article.titre }}">
+        {% endif %}
+    </header>
+    <div class="article-body">
+        {{ article.contenu|linebreaks }}
+    </div>
+</article>
+
+<section class="section comments-section">
+    <div class="comments-layout">
+        <div>
+            <div class="section-heading">
+                <p class="eyebrow">Discussion</p>
+                <h2>Commentaires et questions</h2>
+            </div>
+            {% for commentaire in commentaires %}
+                <article class="comment-card">
+                    <div class="comment-meta">
+                        <strong>{{ commentaire.nom }}</strong>
+                        <span>{{ commentaire.date_creation|date:"d F Y" }}</span>
+                    </div>
+                    <p>{{ commentaire.message|linebreaksbr }}</p>
+                    {% if commentaire.reponse %}
+                        <div class="comment-answer">
+                            <strong>Reponse de SEAKE JOURNAL</strong>
+                            <p>{{ commentaire.reponse|linebreaksbr }}</p>
+                        </div>
+                    {% endif %}
+                </article>
+            {% empty %}
+                <p>Aucun commentaire approuve pour le moment.</p>
+            {% endfor %}
+        </div>
+
+        <form class="contact-form comment-form" method="post">
+            {% csrf_token %}
+            <h3>Poser une question</h3>
+            {% for field in commentaire_form %}
+                <label for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                    {{ field }}
+                    {% if field.errors %}
+                        <span class="field-error">{{ field.errors|striptags }}</span>
+                    {% endif %}
+                </label>
+            {% endfor %}
+            <button class="button primary" type="submit">Envoyer le commentaire</button>
+        </form>
+    </div>
+</section>
+
+{% if articles_lies %}
+<section class="section muted">
+    <div class="section-heading">
+        <p class="eyebrow">A lire aussi</p>
+        <h2>Dans la meme categorie</h2>
+    </div>
+    <div class="article-grid">
+        {% for article in articles_lies %}
+            {% include "partials/article_card.html" %}
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}

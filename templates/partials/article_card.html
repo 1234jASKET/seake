@@ -1,0 +1,12 @@
+<article class="article-card">
+    {% if article.image %}
+        <img class="article-card-image" src="{{ article.image.url }}" alt="{{ article.titre }}">
+    {% endif %}
+    <div class="card-topline">
+        <a href="{{ article.categorie.get_absolute_url }}">{{ article.categorie.nom }}</a>
+        <time datetime="{{ article.date_publication|date:'Y-m-d' }}">{{ article.date_publication|date:"d M Y" }}</time>
+    </div>
+    <h3><a href="{{ article.get_absolute_url }}">{{ article.titre }}</a></h3>
+    <p>{{ article.resume }}</p>
+    <a class="read-more" href="{{ article.get_absolute_url }}">Lire l'article</a>
+</article>

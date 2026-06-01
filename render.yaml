@@ -1,0 +1,30 @@
+databases:
+  - name: seake-journal-db
+    plan: basic-256mb
+    databaseName: seake_journal
+    user: seake_journal
+
+services:
+  - type: web
+    name: seake-journal
+    runtime: python
+    plan: starter
+    buildCommand: "./build.sh"
+    startCommand: "python -m gunicorn livret.asgi:application -k uvicorn.workers.UvicornWorker"
+    disk:
+      name: seake-media
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: seake-journal-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: WEB_CONCURRENCY
+        value: "4"
+      - key: MEDIA_ROOT
+        value: "/var/data/media"

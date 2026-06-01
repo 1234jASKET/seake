@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Accueil - SEAKE JOURNAL{% endblock %}
+
+{% block content %}
+<section class="hero" style="background-image: linear-gradient(90deg, rgba(8, 30, 49, .82), rgba(8, 30, 49, .22)), url('{% static "img/banniere.jpg" %}');">
+    <div class="hero-content">
+        <img class="hero-logo" src="{% static 'img/logo.png' %}" alt="SEAKE JOURNAL">
+        <p class="eyebrow">Votre journal local</p>
+        <h1>Bienvenue dans SEAKE JOURNAL</h1>
+        <p>Decouvrez les articles, les categories et les actualites de votre journal dans une interface claire, moderne et prete pour l'impression.</p>
+        <div class="hero-actions">
+            <a class="button primary" href="{% url 'articles' %}">Lire les articles</a>
+            <a class="button secondary" href="{% url 'impression' %}">Voir la version impression</a>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-heading">
+        <p class="eyebrow">Selection</p>
+        <h2>Articles recents</h2>
+    </div>
+    <div class="article-grid">
+        {% for article in articles %}
+            {% include "partials/article_card.html" %}
+        {% empty %}
+            <article class="empty-state">
+                <h3>Aucun article pour le moment</h3>
+                <p>Ajoutez vos premiers articles depuis l'administration Django.</p>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section muted">
+    <div class="section-heading">
+        <p class="eyebrow">Classement</p>
+        <h2>Categories principales</h2>
+    </div>
+    <div class="category-list">
+        {% for categorie in categories %}
+            <a class="category-pill" href="{{ categorie.get_absolute_url }}">{{ categorie.nom }}</a>
+        {% empty %}
+            <p>Les categories apparaitront ici apres leur creation.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Categories - SEAKE JOURNAL{% endblock %}
+
+{% block content %}
+<section class="page-hero compact">
+    <p class="eyebrow">Organisation</p>
+    <h1>Categories</h1>
+    <p>Parcourez les themes du journal et retrouvez les articles associes.</p>
+</section>
+
+<section class="section">
+    <div class="category-grid">
+        {% for categorie in categories %}
+            <a class="category-card" href="{{ categorie.get_absolute_url }}">
+                <span>{{ categorie.articles.count }} article{{ categorie.articles.count|pluralize }}</span>
+                <h2>{{ categorie.nom }}</h2>
+                <p>{{ categorie.description|default:"Les articles de cette categorie seront disponibles ici." }}</p>
+            </a>
+        {% empty %}
+            <article class="empty-state">
+                <h3>Aucune categorie</h3>
+                <p>Creez vos categories depuis l'administration.</p>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

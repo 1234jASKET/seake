@@ -1,0 +1,53 @@
+{% load static %}
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}SEAKE JOURNAL{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <nav class="navbar">
+            <a class="brand" href="{% url 'accueil' %}">
+                <img src="{% static 'img/logo.png' %}" alt="Logo SEAKE JOURNAL">
+                <span>SEAKE JOURNAL</span>
+            </a>
+            <button class="menu-toggle" type="button" aria-label="Ouvrir le menu">☰</button>
+            <ul class="nav-links">
+                <li><a href="{% url 'accueil' %}">Accueil</a></li>
+                <li><a href="{% url 'articles' %}">Articles</a></li>
+                <li><a href="{% url 'categories' %}">Categories</a></li>
+                <li><a href="{% url 'publicite' %}">Publicite</a></li>
+                <li><a href="{% url 'coupons' %}">Coupons</a></li>
+                <li><a href="{% url 'reseaux_sociaux' %}">Reseaux</a></li>
+                <li><a href="{% url 'a_propos' %}">A propos</a></li>
+                <li><a href="{% url 'impression' %}">Impression</a></li>
+                <li><a class="nav-cta" href="{% url 'contact' %}">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <p class="message {{ message.tags }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div>
+            <strong>SEAKE JOURNAL</strong>
+            <p>Un journal local pour publier, classer et partager les articles avec la communaute.</p>
+        </div>
+        <p>&copy; {% now "Y" %} SEAKE JOURNAL. Tous droits reserves.</p>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

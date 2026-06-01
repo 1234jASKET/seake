@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Impression - SEAKE JOURNAL{% endblock %}
+
+{% block content %}
+<section class="print-toolbar">
+    <a class="button secondary dark" href="{% url 'accueil' %}">Retour au site</a>
+    <button class="button primary" type="button" onclick="window.print()">Imprimer le flyer</button>
+</section>
+
+<section class="flyer-page">
+    <header class="flyer-header">
+        <img src="{% static 'img/logo.png' %}" alt="SEAKE JOURNAL">
+        <p>Journal local • Articles • Categories • Contact</p>
+    </header>
+
+    <div class="flyer-main">
+        <p class="eyebrow">Distribution porte a porte</p>
+        <h1>SEAKE JOURNAL arrive dans votre quartier</h1>
+        <p>Un journal numerique simple pour suivre les nouvelles, lire les articles et decouvrir les projets de la communaute.</p>
+    </div>
+
+    <div class="flyer-columns">
+        <div>
+            <h2>Au programme</h2>
+            <ul>
+                <li>Actualites locales et annonces importantes</li>
+                <li>Articles classes par categories</li>
+                <li>Rubrique culture, projets et informations utiles</li>
+                <li>Contact direct avec l'equipe du journal</li>
+            </ul>
+        </div>
+        <div class="flyer-contact">
+            <h2>Visitez le site</h2>
+            <p><strong>Adresse locale:</strong><br>http://127.0.0.1:8000/</p>
+            <p><strong>Email:</strong><br>contact@seakejournal.local</p>
+            <div class="qr-placeholder">QR</div>
+        </div>
+    </div>
+
+    <div class="flyer-articles">
+        <h2>Articles recents</h2>
+        {% for article in articles %}
+            <p><strong>{{ article.titre }}</strong><br>{{ article.resume }}</p>
+        {% empty %}
+            <p>Les prochains articles seront bientot disponibles.</p>
+        {% endfor %}
+    </div>
+
+    <footer class="flyer-footer">
+        <strong>SEAKE JOURNAL</strong>
+        <span>Gardez cette feuille et partagez le journal autour de vous.</span>
+    </footer>
+</section>
+{% endblock %}
