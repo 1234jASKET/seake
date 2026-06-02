@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}{{ article.titre }} - SEAKE JOURNAL{% endblock %}
 
@@ -14,6 +15,8 @@
         </div>
         {% if article.image %}
             <img class="article-main-image" src="{{ article.image.url }}" alt="{{ article.titre }}">
+        {% else %}
+            <img class="article-main-image" src="{% static 'img/banniere.jpg' %}" alt="{{ article.titre }}">
         {% endif %}
     </header>
     <div class="article-body">

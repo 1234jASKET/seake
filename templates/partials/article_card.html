@@ -1,6 +1,9 @@
+{% load static %}
 <article class="article-card">
     {% if article.image %}
         <img class="article-card-image" src="{{ article.image.url }}" alt="{{ article.titre }}">
+    {% else %}
+        <img class="article-card-image" src="{% static 'img/banniere.jpg' %}" alt="{{ article.titre }}">
     {% endif %}
     <div class="card-topline">
         <a href="{{ article.categorie.get_absolute_url }}">{{ article.categorie.nom }}</a>
