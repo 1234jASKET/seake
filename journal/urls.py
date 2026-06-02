@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import views
+from .feeds import ArticlesFeed
 
 urlpatterns = [
     path("", views.accueil, name="accueil"),
@@ -15,4 +16,5 @@ urlpatterns = [
     path("publicite/demande/", views.demande_publicite, name="demande_publicite"),
     path("coupons/", views.coupons, name="coupons"),
     path("reseaux-sociaux/", views.reseaux_sociaux, name="reseaux_sociaux"),
+    path("flux/rss/", ArticlesFeed(), name="articles_feed"),
 ]

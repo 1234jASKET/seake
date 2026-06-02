@@ -384,6 +384,58 @@ p {
     padding: 34px;
 }
 
+.share-panel {
+    background: var(--brand-dark);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    color: var(--white);
+    margin-top: 24px;
+    max-width: 820px;
+    padding: 26px;
+}
+
+.share-panel h2 {
+    margin-bottom: 16px;
+}
+
+.share-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.share-button {
+    border: 0;
+    border-radius: 8px;
+    color: var(--white);
+    cursor: pointer;
+    display: inline-flex;
+    font: inherit;
+    font-weight: 900;
+    padding: 11px 14px;
+}
+
+.share-button.x {
+    background: #111;
+}
+
+.share-button.facebook {
+    background: #1877f2;
+}
+
+.share-button.substack {
+    background: #ff6719;
+}
+
+.share-button.copy-link {
+    background: var(--brand);
+}
+
+.share-note {
+    color: rgba(255, 255, 255, .76);
+    margin: 16px 0 0;
+}
+
 .contact-layout {
     display: grid;
     gap: 24px;

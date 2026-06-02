@@ -53,6 +53,7 @@ def article(request, slug):
             "articles_lies": articles_lies,
             "commentaire_form": commentaire_form,
             "commentaires": commentaires,
+            "article_url": request.build_absolute_uri(article_obj.get_absolute_url()),
         },
     )
 

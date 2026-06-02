@@ -19,6 +19,17 @@
     <div class="article-body">
         {{ article.contenu|linebreaks }}
     </div>
+    <aside class="share-panel">
+        <p class="eyebrow">Partager</p>
+        <h2>Publier cet article</h2>
+        <div class="share-actions">
+            <a class="share-button x" href="https://twitter.com/intent/tweet?text={{ article.titre|urlencode }}&url={{ article_url|urlencode }}" target="_blank" rel="noopener">X</a>
+            <a class="share-button facebook" href="https://www.facebook.com/sharer/sharer.php?u={{ article_url|urlencode }}" target="_blank" rel="noopener">Facebook</a>
+            <a class="share-button substack" href="https://seakejournal.com" target="_blank" rel="noopener">Substack</a>
+            <button class="share-button copy-link" type="button" data-copy-link="{{ article_url }}">Copier le lien</button>
+        </div>
+        <p class="share-note">Pour Instagram, TikTok et YouTube, utilise ce lien dans la description de ta video ou de ta publication.</p>
+    </aside>
 </article>
 
 <section class="section comments-section">
