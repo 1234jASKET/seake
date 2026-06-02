@@ -22,6 +22,22 @@
     <div class="article-body">
         {{ article.contenu|linebreaks }}
     </div>
+    {% if article.photos.all %}
+        <section class="article-gallery">
+            <p class="eyebrow">Galerie</p>
+            <h2>Photos de l'article</h2>
+            <div class="gallery-grid">
+                {% for photo in article.photos.all %}
+                    <figure>
+                        <img src="{{ photo.image.url }}" alt="{{ photo.legende|default:article.titre }}">
+                        {% if photo.legende %}
+                            <figcaption>{{ photo.legende }}</figcaption>
+                        {% endif %}
+                    </figure>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
     <aside class="share-panel">
         <p class="eyebrow">Partager</p>
         <h2>Publier cet article</h2>

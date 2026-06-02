@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Article, Categorie, Commentaire, DemandePublicite
+from .models import Article, Categorie, Commentaire, DemandePublicite, PhotoArticle
 
 
 @admin.register(Categorie)
@@ -10,6 +10,12 @@ class CategorieAdmin(admin.ModelAdmin):
     search_fields = ("nom", "description")
 
 
+class PhotoArticleInline(admin.TabularInline):
+    model = PhotoArticle
+    extra = 3
+    fields = ("image", "legende", "ordre")
+
+
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
     list_display = ("titre", "categorie", "auteur", "publie", "date_publication")
@@ -17,6 +23,14 @@ class ArticleAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("titre",)}
     search_fields = ("titre", "resume", "contenu", "auteur")
     date_hierarchy = "date_publication"
+    inlines = [PhotoArticleInline]
+
+
+@admin.register(PhotoArticle)
+class PhotoArticleAdmin(admin.ModelAdmin):
+    list_display = ("article", "legende", "ordre")
+    list_filter = ("article",)
+    search_fields = ("article__titre", "legende")
 
 
 @admin.register(DemandePublicite)

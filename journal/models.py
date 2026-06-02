@@ -45,6 +45,23 @@ class Article(models.Model):
         return reverse("article", kwargs={"slug": self.slug})
 
 
+class PhotoArticle(models.Model):
+    article = models.ForeignKey(
+        Article,
+        on_delete=models.CASCADE,
+        related_name="photos",
+    )
+    image = models.FileField(upload_to="articles/galerie/")
+    legende = models.CharField(max_length=180, blank=True)
+    ordre = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["ordre", "id"]
+
+    def __str__(self):
+        return self.legende or f"Photo pour {self.article}"
+
+
 class DemandePublicite(models.Model):
     TYPE_PAGE = "page"
     TYPE_CARTE = "carte"
