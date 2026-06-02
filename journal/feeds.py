@@ -16,7 +16,7 @@ class ArticlesFeed(Feed):
         return item.titre
 
     def item_description(self, item):
-        return item.resume
+        return f"{item.resume}\n\n{item.contenu}"
 
     def item_link(self, item):
         return item.get_absolute_url()
