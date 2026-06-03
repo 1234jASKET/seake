@@ -13,6 +13,11 @@
             <span>Par {{ article.auteur }}</span>
             <span>{{ article.date_publication|date:"d F Y" }}</span>
         </div>
+        {% if user.is_staff %}
+            <a class="admin-edit-link" href="{% url 'admin:journal_article_change' article.id %}">
+                Modifier cet article
+            </a>
+        {% endif %}
         {% if article.image %}
             <img class="article-main-image" src="{{ article.image.url }}" alt="{{ article.titre }}">
         {% else %}
@@ -22,6 +27,27 @@
     <div class="article-body">
         {{ article.contenu|linebreaks }}
     </div>
+    {% if article.publicite_titre or article.publicite_texte or article.publicite_image %}
+        <aside class="article-ad">
+            {% if article.publicite_image %}
+                <img src="{{ article.publicite_image.url }}" alt="{{ article.publicite_titre|default:'Publicite' }}">
+            {% endif %}
+            <div>
+                <p class="eyebrow">Publicite</p>
+                {% if article.publicite_titre %}
+                    <h2>{{ article.publicite_titre }}</h2>
+                {% endif %}
+                {% if article.publicite_texte %}
+                    <p>{{ article.publicite_texte|linebreaksbr }}</p>
+                {% endif %}
+                {% if article.publicite_lien %}
+                    <a class="button primary" href="{{ article.publicite_lien }}" target="_blank" rel="noopener">
+                        {{ article.publicite_bouton|default:"En savoir plus" }}
+                    </a>
+                {% endif %}
+            </div>
+        </aside>
+    {% endif %}
     {% if article.photos.all %}
         <section class="article-gallery">
             <p class="eyebrow">Galerie</p>

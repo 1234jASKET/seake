@@ -1,6 +1,13 @@
 from django.db import models
 from django.urls import reverse
+from django.core.validators import FileExtensionValidator
 from django.utils import timezone
+
+
+image_file_validator = FileExtensionValidator(
+    allowed_extensions=["jpg", "jpeg", "png", "webp", "avif", "gif"],
+    message="Ajoutez une image valide: JPG, PNG, WEBP, AVIF ou GIF.",
+)
 
 
 class Categorie(models.Model):
@@ -29,7 +36,20 @@ class Article(models.Model):
     resume = models.CharField(max_length=280)
     contenu = models.TextField()
     auteur = models.CharField(max_length=120, default="Equipe SEAKE JOURNAL")
-    image = models.FileField(upload_to="articles/", blank=True)
+    image = models.FileField(
+        upload_to="articles/",
+        blank=True,
+        validators=[image_file_validator],
+    )
+    publicite_titre = models.CharField(max_length=160, blank=True)
+    publicite_texte = models.TextField(blank=True)
+    publicite_image = models.FileField(
+        upload_to="articles/publicites/",
+        blank=True,
+        validators=[image_file_validator],
+    )
+    publicite_lien = models.URLField(blank=True)
+    publicite_bouton = models.CharField(max_length=80, blank=True)
     publie = models.BooleanField(default=True)
     date_publication = models.DateTimeField(default=timezone.now)
     date_creation = models.DateTimeField(auto_now_add=True)
@@ -51,7 +71,10 @@ class PhotoArticle(models.Model):
         on_delete=models.CASCADE,
         related_name="photos",
     )
-    image = models.FileField(upload_to="articles/galerie/")
+    image = models.FileField(
+        upload_to="articles/galerie/",
+        validators=[image_file_validator],
+    )
     legende = models.CharField(max_length=180, blank=True)
     ordre = models.PositiveIntegerField(default=0)
 

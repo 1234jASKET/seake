@@ -127,8 +127,8 @@ img {
     border-radius: 8px;
     box-shadow: 0 16px 35px rgba(0, 0, 0, .22);
     margin-bottom: 22px;
-    max-width: 300px;
-    padding: 10px 18px;
+    max-width: 220px;
+    padding: 8px 14px;
 }
 
 .eyebrow {
@@ -363,6 +363,21 @@ p {
     font-size: 1.22rem;
 }
 
+.admin-edit-link {
+    background: var(--brand-dark);
+    border-radius: 8px;
+    color: var(--white);
+    display: inline-flex;
+    font-weight: 800;
+    margin-top: 4px;
+    padding: 10px 14px;
+}
+
+.admin-edit-link:hover {
+    background: var(--brand);
+    color: var(--white);
+}
+
 .article-main-image {
     border-radius: 8px;
     box-shadow: var(--shadow);
@@ -382,6 +397,39 @@ p {
     margin-top: 34px;
     max-width: 820px;
     padding: 34px;
+}
+
+.article-ad {
+    align-items: center;
+    background: #f8fbf6;
+    border: 1px solid #cfdcc4;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    display: grid;
+    gap: 22px;
+    grid-template-columns: 220px minmax(0, 1fr);
+    margin-top: 24px;
+    max-width: 820px;
+    padding: 22px;
+}
+
+.article-ad img {
+    aspect-ratio: 4 / 3;
+    border-radius: 8px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.article-ad h2 {
+    color: var(--brand-dark);
+    font-size: 1.5rem;
+    line-height: 1.2;
+    margin-bottom: 10px;
+}
+
+.article-ad p {
+    color: var(--muted);
+    margin-bottom: 14px;
 }
 
 .share-panel {
@@ -918,6 +966,7 @@ textarea {
     .coupon-grid,
     .social-grid,
     .publishing-plan,
+    .article-ad,
     .flyer-columns {
         grid-template-columns: 1fr;
     }
