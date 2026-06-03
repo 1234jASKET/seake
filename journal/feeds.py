@@ -34,11 +34,31 @@ def article_html(item):
         image_html(photo.image, photo.legende or item.titre)
         for photo in item.photos.all()
     )
+    ad_html = ""
+    if item.publicite_titre or item.publicite_texte or item.publicite_image:
+        ad_button = ""
+        if item.publicite_lien:
+            button_text = item.publicite_bouton or "En savoir plus"
+            ad_button = (
+                f'<p><a href="{escape(item.publicite_lien)}">'
+                f"{escape(button_text)}</a></p>"
+            )
+        ad_html = "".join(
+            [
+                "<hr>",
+                "<p><strong>Publicite</strong></p>",
+                image_html(item.publicite_image, item.publicite_titre or "Publicite"),
+                f"<h2>{escape(item.publicite_titre)}</h2>" if item.publicite_titre else "",
+                paragraphs_html(item.publicite_texte),
+                ad_button,
+            ]
+        )
     return "".join(
         [
             image_html(item.image, item.titre),
             f"<p><strong>{escape(item.resume)}</strong></p>",
             paragraphs_html(item.contenu),
+            ad_html,
             gallery_html,
         ]
     )
