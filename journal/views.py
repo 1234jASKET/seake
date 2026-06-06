@@ -23,6 +23,30 @@ def articles(request):
     return render(request, "articles.html", {"articles": _articles_publies()})
 
 
+def ecran_actualites(request):
+    articles = _articles_publies().prefetch_related("photos")[:12]
+    publicites = [
+        {
+            "titre": "Votre entreprise ici",
+            "texte": "Contactez SEAKE JOURNAL pour annoncer vos services sur nos ecrans.",
+            "lien": "https://site.seakejournal.com/publicite/demande/",
+        },
+        {
+            "titre": "Abonnez-vous a SEAKE JOURNAL",
+            "texte": "Recevez des articles clairs sur l'actualite locale, nationale et internationale.",
+            "lien": "https://www.seakejournal.com/",
+        },
+    ]
+    return render(
+        request,
+        "ecran_actualites.html",
+        {
+            "articles": articles,
+            "publicites": publicites,
+        },
+    )
+
+
 def article(request, slug):
     article_obj = get_object_or_404(_articles_publies(), slug=slug)
     if request.method == "POST":

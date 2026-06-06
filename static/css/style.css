@@ -931,6 +931,215 @@ textarea {
     color: var(--white);
 }
 
+.screen-news-page {
+    background: #07111f;
+    color: #f7fbff;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.screen-news {
+    display: grid;
+    gap: 18px;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    height: 100vh;
+    padding: 22px;
+}
+
+.screen-news-header {
+    align-items: center;
+    border-bottom: 2px solid rgba(255, 255, 255, .18);
+    display: grid;
+    gap: 20px;
+    grid-template-columns: auto 1fr auto;
+    padding-bottom: 16px;
+}
+
+.screen-news-header img {
+    background: #fff;
+    border-radius: 6px;
+    height: 74px;
+    object-fit: contain;
+    padding: 6px 10px;
+    width: 150px;
+}
+
+.screen-news-header p {
+    color: #fff;
+    font-size: 2.35rem;
+    font-weight: 900;
+    line-height: 1;
+    margin: 0;
+}
+
+.screen-news-header span,
+.screen-news-header time {
+    color: #a9b9cc;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.screen-header-actions {
+    align-items: flex-end;
+    display: grid;
+    gap: 10px;
+    justify-items: end;
+}
+
+.screen-header-actions button {
+    background: #ffb347;
+    border: 0;
+    border-radius: 8px;
+    color: #07111f;
+    cursor: pointer;
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 900;
+    padding: 10px 14px;
+}
+
+.screen-header-actions button.is-active {
+    background: #d81818;
+    color: #fff;
+}
+
+.screen-ticker {
+    background: #d81818;
+    border-radius: 8px;
+    box-shadow: 0 -14px 36px rgba(0, 0, 0, .22);
+    overflow: hidden;
+    padding: 14px 0;
+}
+
+.screen-ticker-track {
+    animation: screenTicker 42s linear infinite;
+    display: flex;
+    gap: 48px;
+    white-space: nowrap;
+    width: max-content;
+}
+
+.screen-ticker-track span {
+    color: #fff;
+    font-size: 1.38rem;
+    font-weight: 900;
+    padding-left: 48px;
+}
+
+@keyframes screenTicker {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+.screen-feed {
+    display: grid;
+    gap: 18px;
+    overflow: hidden;
+    padding-right: 4px;
+    scroll-behavior: smooth;
+}
+
+.screen-card {
+    background: #101d2f;
+    border: 1px solid rgba(255, 255, 255, .14);
+    border-radius: 8px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, .28);
+    min-height: 300px;
+    padding: 22px;
+}
+
+.screen-card-layout {
+    align-items: stretch;
+    display: grid;
+    gap: 24px;
+    grid-template-columns: minmax(360px, 46%) minmax(0, 1fr);
+    min-height: 240px;
+}
+
+.screen-card-layout.without-image {
+    grid-template-columns: 1fr;
+}
+
+.screen-card img {
+    border-radius: 8px;
+    height: 100%;
+    min-height: 240px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.screen-label {
+    color: #ffb347;
+    font-size: .95rem;
+    font-weight: 900;
+    letter-spacing: .14em;
+    margin: 0 0 12px;
+    text-transform: uppercase;
+}
+
+.screen-card h1,
+.screen-card h2 {
+    color: #fff;
+    font-size: 2.25rem;
+    line-height: 1.08;
+    margin: 0 0 14px;
+}
+
+.screen-card p {
+    color: #d7e2ef;
+    font-size: 1.2rem;
+    line-height: 1.45;
+    margin: 0 0 12px;
+}
+
+.screen-card-layout p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+}
+
+.screen-card span {
+    color: #9fb1c7;
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.screen-card.headline {
+    background: #132948;
+    border-color: rgba(255, 179, 71, .5);
+}
+
+.screen-ad {
+    background: #fff8e8;
+    color: #102033;
+    min-height: 180px;
+}
+
+.screen-ad.secondary {
+    background: #eef7f2;
+}
+
+.screen-ad .screen-label {
+    color: #d81818;
+}
+
+.screen-ad h2 {
+    color: #102033;
+}
+
+.screen-ad p {
+    color: #425163;
+}
+
+.screen-ad span {
+    color: #d81818;
+}
+
 @media (max-width: 820px) {
     .menu-toggle {
         display: block;
@@ -995,6 +1204,21 @@ textarea {
     .site-footer {
         align-items: flex-start;
         flex-direction: column;
+    }
+
+    .screen-news-header,
+    .screen-card-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .screen-news-header p,
+    .screen-card h1,
+    .screen-card h2 {
+        font-size: 1.8rem;
+    }
+
+    .screen-card p {
+        font-size: 1.1rem;
     }
 }
 
