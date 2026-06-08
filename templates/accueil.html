@@ -9,11 +9,50 @@
         <img class="hero-logo" src="{% static 'img/logo.png' %}" alt="SEAKE JOURNAL">
         <p class="eyebrow">Votre journal local</p>
         <h1>Bienvenue dans SEAKE JOURNAL</h1>
-        <p>Decouvrez les articles, les categories et les actualites de votre journal dans une interface claire, moderne et prete pour l'impression.</p>
+        <p>Articles, coupons, publicites et fil d'actualites en continu pour informer la communaute et garder les lecteurs engages.</p>
         <div class="hero-actions">
             <a class="button primary" href="{% url 'articles' %}">Lire les articles</a>
-            <a class="button secondary" href="{% url 'impression' %}">Voir la version impression</a>
+            <a class="button secondary" href="https://www.seakejournal.com/">S'abonner</a>
         </div>
+    </div>
+</section>
+
+<section class="section home-dashboard" aria-label="Services SEAKE JOURNAL">
+    <div class="section-heading">
+        <p class="eyebrow">Espace lecteurs</p>
+        <h2>Tout SEAKE JOURNAL au meme endroit</h2>
+    </div>
+    <div class="home-feature-grid">
+        <a class="home-feature-card feature-articles" href="{% url 'articles' %}">
+            <span>Articles</span>
+            <h3>Lire les dernieres nouvelles</h3>
+            <p>Actualites locales, nationales et internationales publiees depuis l'admin.</p>
+            <strong>Ouvrir les articles</strong>
+        </a>
+        <a class="home-feature-card feature-coupons" href="{% url 'coupons' %}">
+            <span>Coupons rabais</span>
+            <h3>Economiser localement</h3>
+            <p>Offres, codes promo et rabais que les lecteurs peuvent garder ou montrer.</p>
+            <strong>Voir les coupons</strong>
+        </a>
+        <a class="home-feature-card feature-publicite" href="{% url 'publicite' %}">
+            <span>Publicites</span>
+            <h3>Promouvoir un commerce</h3>
+            <p>Une vitrine simple pour les annonces, les campagnes et les partenaires locaux.</p>
+            <strong>Devenir annonceur</strong>
+        </a>
+        <a class="home-feature-card feature-ecran" href="{% url 'ecran_actualites' %}">
+            <span>Page ecran</span>
+            <h3>Afficher le fil d'actualites</h3>
+            <p>Une presentation type television pour maison, commerce ou salle d'attente.</p>
+            <strong>Ouvrir l'ecran</strong>
+        </a>
+        <a class="home-feature-card feature-abonnement" href="https://www.seakejournal.com/">
+            <span>Abonnement</span>
+            <h3>Recevoir SEAKE JOURNAL</h3>
+            <p>Le lien Substack pour suivre les publications et ne pas manquer les prochains articles.</p>
+            <strong>S'abonner</strong>
+        </a>
     </div>
 </section>
 

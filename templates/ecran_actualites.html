@@ -25,7 +25,7 @@
         <section class="screen-feed" data-screen-feed>
             {% for article in articles %}
                 <article
-                    class="screen-card {% if forloop.first %}headline{% endif %}"
+                    class="screen-card {% if forloop.first %}headline is-active{% endif %}"
                     data-audio-item
                     data-audio-title="{{ article.titre }}"
                     data-audio-summary="{{ article.resume }}"
@@ -46,7 +46,13 @@
 
                 {% if forloop.counter|divisibleby:2 %}
                     {% for publicite in publicites|slice:":1" %}
-                        <aside class="screen-card screen-ad">
+                        <aside
+                            class="screen-card screen-ad"
+                            data-audio-item
+                            data-audio-title="{{ publicite.titre }}"
+                            data-audio-summary="{{ publicite.texte }}"
+                            data-audio-category="Publicite"
+                        >
                             <p class="screen-label">Publicite</p>
                             <h2>{{ publicite.titre }}</h2>
                             <p>{{ publicite.texte }}</p>
@@ -55,7 +61,13 @@
                     {% endfor %}
                 {% elif forloop.counter|divisibleby:3 %}
                     {% for publicite in publicites|slice:"1:2" %}
-                        <aside class="screen-card screen-ad secondary">
+                        <aside
+                            class="screen-card screen-ad secondary"
+                            data-audio-item
+                            data-audio-title="{{ publicite.titre }}"
+                            data-audio-summary="{{ publicite.texte }}"
+                            data-audio-category="Publicite"
+                        >
                             <p class="screen-label">Publicite</p>
                             <h2>{{ publicite.titre }}</h2>
                             <p>{{ publicite.texte }}</p>
@@ -64,7 +76,13 @@
                     {% endfor %}
                 {% endif %}
             {% empty %}
-                <article class="screen-card headline">
+                <article
+                    class="screen-card headline is-active"
+                    data-audio-item
+                    data-audio-title="Aucun article publie pour le moment"
+                    data-audio-summary="Publiez un article dans l'administration pour alimenter cet ecran."
+                    data-audio-category="SEAKE JOURNAL"
+                >
                     <p class="screen-label">SEAKE JOURNAL</p>
                     <h1>Aucun article publie pour le moment</h1>
                     <p>Publiez un article dans l'administration pour alimenter cet ecran.</p>
@@ -84,29 +102,34 @@
     </main>
 
     <script>
-        const feed = document.querySelector("[data-screen-feed]");
         const audioButton = document.querySelector("[data-audio-toggle]");
-        const audioItems = Array.from(document.querySelectorAll("[data-audio-item]"));
-        let direction = 1;
-        let audioIndex = 0;
+        const rotatingCards = Array.from(document.querySelectorAll(".screen-feed > .screen-card"));
         let audioEnabled = false;
         let audioTimer = null;
+        let activeCardIndex = rotatingCards.findIndex((card) => card.classList.contains("is-active"));
 
-        function scrollFeed() {
-            if (!feed) return;
-            const maxScroll = feed.scrollHeight - feed.clientHeight;
-            if (maxScroll <= 0) return;
+        if (activeCardIndex < 0) activeCardIndex = 0;
 
-            feed.scrollTop += direction * 1.2;
-            if (feed.scrollTop >= maxScroll - 2) direction = -1;
-            if (feed.scrollTop <= 2) direction = 1;
-            requestAnimationFrame(scrollFeed);
+        function showScreenCard(index) {
+            rotatingCards.forEach((card, cardIndex) => {
+                const active = cardIndex === index;
+                card.classList.toggle("is-active", active);
+                card.style.display = active ? "block" : "none";
+            });
+        }
+
+        function rotateScreenCards() {
+            if (rotatingCards.length <= 1) return;
+
+            activeCardIndex = (activeCardIndex + 1) % rotatingCards.length;
+            showScreenCard(activeCardIndex);
+            if (audioEnabled) speakCurrentItem();
         }
 
         function speakCurrentItem() {
-            if (!audioEnabled || !("speechSynthesis" in window) || !audioItems.length) return;
+            if (!audioEnabled || !("speechSynthesis" in window) || !rotatingCards.length) return;
 
-            const item = audioItems[audioIndex % audioItems.length];
+            const item = rotatingCards[activeCardIndex];
             const title = item.dataset.audioTitle || "";
             const summary = item.dataset.audioSummary || "";
             const category = item.dataset.audioCategory || "Actualite";
@@ -117,12 +140,8 @@
             utterance.rate = 0.92;
             utterance.pitch = 1;
             utterance.volume = 1;
-            utterance.onend = () => {
-                if (!audioEnabled) return;
-                audioIndex += 1;
-                audioTimer = window.setTimeout(speakCurrentItem, 5000);
-            };
 
+            window.clearTimeout(audioTimer);
             window.speechSynthesis.cancel();
             window.speechSynthesis.speak(utterance);
         }
@@ -143,7 +162,8 @@
             });
         }
 
-        setTimeout(scrollFeed, 1800);
+        showScreenCard(activeCardIndex);
+        setInterval(rotateScreenCards, 7000);
         setInterval(() => window.location.reload(), 300000);
     </script>
 </body>
