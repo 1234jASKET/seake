@@ -2,11 +2,43 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import CommentaireForm, DemandePubliciteForm
-from .models import Article, Categorie
+from .models import Article, Categorie, EchantillonCouleur
 
 
 def _articles_publies():
     return Article.objects.filter(publie=True).select_related("categorie")
+
+
+def _article_layout(article_obj):
+    paragraphs = [
+        line.strip()
+        for line in article_obj.contenu.splitlines()
+        if line.strip()
+    ]
+    photos = list(article_obj.photos.all())
+    photos_by_paragraph = {}
+    gallery_photos = []
+
+    for photo in photos:
+        if photo.apres_paragraphe:
+            position = min(photo.apres_paragraphe, max(len(paragraphs), 1))
+            photos_by_paragraph.setdefault(position, []).append(photo)
+        else:
+            gallery_photos.append(photo)
+
+    ad_position = article_obj.publicite_apres_paragraphe
+    if ad_position and paragraphs:
+        ad_position = min(ad_position, len(paragraphs))
+
+    blocks = []
+    for position, paragraph in enumerate(paragraphs, start=1):
+        blocks.append({"type": "paragraph", "text": paragraph})
+        for photo in photos_by_paragraph.get(position, []):
+            blocks.append({"type": "photo", "photo": photo})
+        if ad_position == position:
+            blocks.append({"type": "advertisement"})
+
+    return blocks, gallery_photos, bool(ad_position)
 
 
 def accueil(request):
@@ -48,7 +80,10 @@ def ecran_actualites(request):
 
 
 def article(request, slug):
-    article_obj = get_object_or_404(_articles_publies(), slug=slug)
+    article_obj = get_object_or_404(
+        _articles_publies().prefetch_related("photos"),
+        slug=slug,
+    )
     if request.method == "POST":
         commentaire_form = CommentaireForm(request.POST)
         if commentaire_form.is_valid():
@@ -69,6 +104,9 @@ def article(request, slug):
         .exclude(pk=article_obj.pk)[:3]
     )
     commentaires = article_obj.commentaires.filter(approuve=True)
+    article_blocks, gallery_photos, advertisement_is_inline = _article_layout(
+        article_obj
+    )
     return render(
         request,
         "article.html",
@@ -78,6 +116,9 @@ def article(request, slug):
             "commentaire_form": commentaire_form,
             "commentaires": commentaires,
             "article_url": request.build_absolute_uri(article_obj.get_absolute_url()),
+            "article_blocks": article_blocks,
+            "gallery_photos": gallery_photos,
+            "advertisement_is_inline": advertisement_is_inline,
         },
     )
 
@@ -135,6 +176,28 @@ def coupons(request):
 
 
 def reseaux_sociaux(request):
-    return render(request, "reseaux_sociaux.html")
+    articles = _articles_publies()[:6]
+    return render(request, "reseaux_sociaux.html", {"articles": articles})
+
+
+def color_control(request):
+    echantillons = EchantillonCouleur.objects.all()[:12]
+    return render(
+        request,
+        "color_control.html",
+        {"echantillons": echantillons},
+    )
+
+
+def color_control_studio(request):
+    return render(request, "color_control_studio.html")
+
+
+def color_control_phone_scan(request):
+    return render(request, "color_control_phone_scan.html")
+
+
+def color_control_sample_timer(request):
+    return render(request, "color_control_sample_timer.html")
 
 # Create your views here.

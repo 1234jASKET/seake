@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.core.validators import FileExtensionValidator
 from django.utils import timezone
+import math
 
 
 image_file_validator = FileExtensionValidator(
@@ -50,6 +51,14 @@ class Article(models.Model):
     )
     publicite_lien = models.URLField(blank=True)
     publicite_bouton = models.CharField(max_length=80, blank=True)
+    publicite_apres_paragraphe = models.PositiveSmallIntegerField(
+        blank=True,
+        null=True,
+        help_text=(
+            "Numero du paragraphe apres lequel afficher la publicite. "
+            "Laissez vide pour l'afficher apres tout le texte."
+        ),
+    )
     publie = models.BooleanField(default=True)
     date_publication = models.DateTimeField(default=timezone.now)
     date_creation = models.DateTimeField(auto_now_add=True)
@@ -76,7 +85,19 @@ class PhotoArticle(models.Model):
         validators=[image_file_validator],
     )
     legende = models.CharField(max_length=180, blank=True)
-    ordre = models.PositiveIntegerField(default=0)
+    ordre = models.PositiveIntegerField(
+        default=0,
+        verbose_name="Ordre dans la galerie",
+    )
+    apres_paragraphe = models.PositiveSmallIntegerField(
+        verbose_name="Afficher apres le paragraphe",
+        blank=True,
+        null=True,
+        help_text=(
+            "Exemple: 3 affiche la photo apres le 3e paragraphe. "
+            "Laissez vide pour la galerie a la fin."
+        ),
+    )
 
     class Meta:
         ordering = ["ordre", "id"]
@@ -128,6 +149,266 @@ class DemandePublicite(models.Model):
 
     def __str__(self):
         return f"{self.nom_client} - {self.get_type_produit_display()}"
+
+
+class EchantillonCouleur(models.Model):
+    STATUT_PREPARATION = "preparation"
+    STATUT_APPROUVER = "a_approuver"
+    STATUT_APPROUVE = "approuve"
+    STATUT_REFUSE = "refuse"
+    STATUT_CHOICES = [
+        (STATUT_PREPARATION, "En preparation"),
+        (STATUT_APPROUVER, "A approuver"),
+        (STATUT_APPROUVE, "Approuve"),
+        (STATUT_REFUSE, "Refuse"),
+    ]
+    SUBSTRAT_CHOICES = [
+        ("papier_couche", "Papier couche"),
+        ("papier_non_couche", "Papier non couche"),
+        ("carton", "Carton"),
+        ("film", "Film"),
+        ("foil", "Foil"),
+        ("plastique", "Plastique"),
+        ("autre", "Autre"),
+    ]
+
+    nom_client = models.CharField(max_length=160)
+    projet = models.CharField(max_length=180)
+    couleur = models.CharField(max_length=120)
+    reference = models.CharField(
+        max_length=120,
+        blank=True,
+        help_text="Exemple: Pantone 485 C, CMYK, HEX ou reference client.",
+    )
+    substrat = models.CharField(
+        max_length=30,
+        choices=SUBSTRAT_CHOICES,
+        default="papier_couche",
+    )
+    surface = models.CharField(
+        max_length=120,
+        blank=True,
+        help_text="Exemple: brillant, mat, metallise, transparent.",
+    )
+    blanc_soutien = models.BooleanField(default=False)
+    couches_blanc = models.PositiveSmallIntegerField(default=0)
+    opacite_blanc = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        help_text="Pourcentage optionnel, exemple: 85.00.",
+    )
+    hex_couleur = models.CharField(
+        max_length=7,
+        blank=True,
+        help_text="Exemple: #D81818 pour afficher un apercu.",
+    )
+    cible_l = models.DecimalField(max_digits=6, decimal_places=2)
+    cible_a = models.DecimalField(max_digits=6, decimal_places=2)
+    cible_b = models.DecimalField(max_digits=6, decimal_places=2)
+    mesure_l = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    mesure_a = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    mesure_b = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    tolerance_delta_e = models.DecimalField(max_digits=5, decimal_places=2, default=2.00)
+    statut = models.CharField(
+        max_length=20,
+        choices=STATUT_CHOICES,
+        default=STATUT_PREPARATION,
+    )
+    commentaire = models.TextField(blank=True)
+    date_creation = models.DateTimeField(auto_now_add=True)
+    date_modification = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-date_modification"]
+        verbose_name = "Echantillon couleur"
+        verbose_name_plural = "Echantillons couleur"
+
+    def __str__(self):
+        return f"{self.nom_client} - {self.couleur}"
+
+    @property
+    def delta_e(self):
+        mesure = self.mesures.order_by("ordre", "id").first()
+        if mesure:
+            return mesure.delta_e
+        return self._calculate_delta_e(self.mesure_l, self.mesure_a, self.mesure_b)
+
+    @property
+    def resultat(self):
+        if not self.delta_e_values:
+            return "En attente de mesure"
+        if self.pire_delta_e <= float(self.tolerance_delta_e):
+            return "Accepte"
+        return "Refuse"
+
+    @property
+    def delta_e_values(self):
+        values = [mesure.delta_e for mesure in self.mesures.all() if mesure.delta_e is not None]
+        if values:
+            return values
+        delta_e = self._calculate_delta_e(self.mesure_l, self.mesure_a, self.mesure_b)
+        return [delta_e] if delta_e is not None else []
+
+    @property
+    def moyenne_delta_e(self):
+        values = self.delta_e_values
+        if not values:
+            return None
+        return round(sum(values) / len(values), 2)
+
+    @property
+    def meilleur_delta_e(self):
+        values = self.delta_e_values
+        if not values:
+            return None
+        return round(min(values), 2)
+
+    @property
+    def pire_delta_e(self):
+        values = self.delta_e_values
+        if not values:
+            return None
+        return round(max(values), 2)
+
+    @property
+    def apercu_hex(self):
+        if self.hex_couleur:
+            return self.hex_couleur
+        if self.cible_l is None or self.cible_a is None or self.cible_b is None:
+            return None
+        return self._lab_to_srgb_hex(self.cible_l, self.cible_a, self.cible_b)
+
+    def _calculate_delta_e(self, mesure_l, mesure_a, mesure_b):
+        if mesure_l is None or mesure_a is None or mesure_b is None:
+            return None
+
+        delta_l = float(self.cible_l) - float(mesure_l)
+        delta_a = float(self.cible_a) - float(mesure_a)
+        delta_b = float(self.cible_b) - float(mesure_b)
+        return round(math.sqrt(delta_l**2 + delta_a**2 + delta_b**2), 2)
+
+    def _lab_to_srgb_hex(self, lab_l, lab_a, lab_b):
+        l_value = float(lab_l)
+        a_value = float(lab_a)
+        b_value = float(lab_b)
+
+        y = (l_value + 16) / 116
+        x = a_value / 500 + y
+        z = y - b_value / 200
+
+        def lab_to_xyz_channel(value):
+            if value**3 > 0.008856:
+                return value**3
+            return (value - 16 / 116) / 7.787
+
+        x = 95.047 * lab_to_xyz_channel(x)
+        y = 100.000 * lab_to_xyz_channel(y)
+        z = 108.883 * lab_to_xyz_channel(z)
+
+        x /= 100
+        y /= 100
+        z /= 100
+
+        red = x * 3.2406 + y * -1.5372 + z * -0.4986
+        green = x * -0.9689 + y * 1.8758 + z * 0.0415
+        blue = x * 0.0557 + y * -0.2040 + z * 1.0570
+
+        def srgb_channel(value):
+            if value > 0.0031308:
+                value = 1.055 * (value ** (1 / 2.4)) - 0.055
+            else:
+                value *= 12.92
+            value = max(0, min(1, value))
+            return round(value * 255)
+
+        return "#{:02X}{:02X}{:02X}".format(
+            srgb_channel(red),
+            srgb_channel(green),
+            srgb_channel(blue),
+        )
+
+
+class LectureCouleur(models.Model):
+    echantillon = models.ForeignKey(
+        EchantillonCouleur,
+        on_delete=models.CASCADE,
+        related_name="mesures",
+    )
+    nom = models.CharField(max_length=80, blank=True)
+    mesure_l = models.DecimalField(max_digits=6, decimal_places=2)
+    mesure_a = models.DecimalField(max_digits=6, decimal_places=2)
+    mesure_b = models.DecimalField(max_digits=6, decimal_places=2)
+    ordre = models.PositiveIntegerField(default=0)
+    commentaire = models.CharField(max_length=180, blank=True)
+    date_creation = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["ordre", "id"]
+        verbose_name = "Lecture couleur"
+        verbose_name_plural = "Lectures couleur"
+
+    def __str__(self):
+        return self.nom or f"Lecture {self.ordre}"
+
+    @property
+    def delta_e(self):
+        return self.echantillon._calculate_delta_e(
+            self.mesure_l,
+            self.mesure_a,
+            self.mesure_b,
+        )
+
+    @property
+    def resultat(self):
+        if self.delta_e <= float(self.echantillon.tolerance_delta_e):
+            return "Pass"
+        return "Fail"
+
+
+class CorrectionFormule(models.Model):
+    echantillon = models.ForeignKey(
+        EchantillonCouleur,
+        on_delete=models.CASCADE,
+        related_name="corrections",
+    )
+    titre = models.CharField(max_length=120, default="Correction")
+    poids_batch = models.DecimalField(max_digits=8, decimal_places=2, default=1000.00)
+    pro_blue_ajout = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
+    green_ajout = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
+    trans_white_reduction = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
+    autre_correction = models.CharField(max_length=180, blank=True)
+    mesure_apres_l = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    mesure_apres_a = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    mesure_apres_b = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    commentaire = models.TextField(blank=True)
+    date_creation = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-date_creation"]
+        verbose_name = "Correction formule"
+        verbose_name_plural = "Corrections formule"
+
+    def __str__(self):
+        return f"{self.echantillon} - {self.titre}"
+
+    @property
+    def delta_e_apres(self):
+        return self.echantillon._calculate_delta_e(
+            self.mesure_apres_l,
+            self.mesure_apres_a,
+            self.mesure_apres_b,
+        )
+
+    @property
+    def resultat_apres(self):
+        delta_e = self.delta_e_apres
+        if delta_e is None:
+            return "En attente"
+        if delta_e <= float(self.echantillon.tolerance_delta_e):
+            return "Pass"
+        return "Fail"
 
 
 class Commentaire(models.Model):

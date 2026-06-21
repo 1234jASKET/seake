@@ -25,35 +25,25 @@
         {% endif %}
     </header>
     <div class="article-body">
-        {{ article.contenu|linebreaks }}
-    </div>
-    {% if article.publicite_titre or article.publicite_texte or article.publicite_image %}
-        <aside class="article-ad">
-            {% if article.publicite_image %}
-                <img src="{{ article.publicite_image.url }}" alt="{{ article.publicite_titre|default:'Publicite' }}">
+        {% for block in article_blocks %}
+            {% if block.type == "paragraph" %}
+                <p>{{ block.text|linebreaksbr }}</p>
+            {% elif block.type == "photo" %}
+                {% include "partials/article_inline_photo.html" with photo=block.photo %}
+            {% elif block.type == "advertisement" %}
+                {% include "partials/article_ad.html" %}
             {% endif %}
-            <div>
-                <p class="eyebrow">Publicite</p>
-                {% if article.publicite_titre %}
-                    <h2>{{ article.publicite_titre }}</h2>
-                {% endif %}
-                {% if article.publicite_texte %}
-                    <p>{{ article.publicite_texte|linebreaksbr }}</p>
-                {% endif %}
-                {% if article.publicite_lien %}
-                    <a class="button primary" href="{{ article.publicite_lien }}" target="_blank" rel="noopener">
-                        {{ article.publicite_bouton|default:"En savoir plus" }}
-                    </a>
-                {% endif %}
-            </div>
-        </aside>
+        {% endfor %}
+    </div>
+    {% if not advertisement_is_inline %}
+        {% include "partials/article_ad.html" %}
     {% endif %}
-    {% if article.photos.all %}
+    {% if gallery_photos %}
         <section class="article-gallery">
             <p class="eyebrow">Galerie</p>
             <h2>Photos de l'article</h2>
             <div class="gallery-grid">
-                {% for photo in article.photos.all %}
+                {% for photo in gallery_photos %}
                     <figure>
                         <img src="{{ photo.image.url }}" alt="{{ photo.legende|default:article.titre }}">
                         {% if photo.legende %}

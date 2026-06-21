@@ -1,0 +1,21 @@
+{% if article.publicite_titre or article.publicite_texte or article.publicite_image %}
+    <aside class="article-ad">
+        {% if article.publicite_image %}
+            <img src="{{ article.publicite_image.url }}" alt="{{ article.publicite_titre|default:'Publicite' }}">
+        {% endif %}
+        <div>
+            <p class="eyebrow">Publicite</p>
+            {% if article.publicite_titre %}
+                <h2>{{ article.publicite_titre }}</h2>
+            {% endif %}
+            {% if article.publicite_texte %}
+                <p>{{ article.publicite_texte|linebreaksbr }}</p>
+            {% endif %}
+            {% if article.publicite_lien %}
+                <a class="button primary" href="{{ article.publicite_lien }}" target="_blank" rel="noopener">
+                    {{ article.publicite_bouton|default:"En savoir plus" }}
+                </a>
+            {% endif %}
+        </div>
+    </aside>
+{% endif %}

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}SEAKE JOURNAL{% endblock %}</title>
     <link rel="alternate" type="application/rss+xml" title="SEAKE JOURNAL RSS" href="{% url 'articles_feed' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260614-timer">
 </head>
 <body>
     <header class="site-header">
@@ -22,6 +22,7 @@
                 <li><a href="{% url 'categories' %}">Categories</a></li>
                 <li><a href="{% url 'publicite' %}">Publicite</a></li>
                 <li><a href="{% url 'coupons' %}">Coupons</a></li>
+                <li><a href="{% url 'color_control' %}">Couleur</a></li>
                 <li><a href="{% url 'reseaux_sociaux' %}">Reseaux</a></li>
                 <li><a href="{% url 'a_propos' %}">A propos</a></li>
                 <li><a href="{% url 'impression' %}">Impression</a></li>

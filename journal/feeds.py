@@ -29,12 +29,7 @@ def paragraphs_html(text):
     return "".join(f"<p>{escape(paragraph).replace(chr(10), '<br>')}</p>" for paragraph in paragraphs)
 
 
-def article_html(item):
-    gallery_html = "".join(
-        image_html(photo.image, photo.legende or item.titre)
-        for photo in item.photos.all()
-    )
-    ad_html = ""
+def advertisement_html(item):
     if item.publicite_titre or item.publicite_texte or item.publicite_image:
         ad_button = ""
         if item.publicite_lien:
@@ -43,7 +38,7 @@ def article_html(item):
                 f'<p><a href="{escape(item.publicite_lien)}">'
                 f"{escape(button_text)}</a></p>"
             )
-        ad_html = "".join(
+        return "".join(
             [
                 "<hr>",
                 "<p><strong>Publicite</strong></p>",
@@ -53,13 +48,53 @@ def article_html(item):
                 ad_button,
             ]
         )
+    return ""
+
+
+def article_html(item):
+    paragraphs = [
+        line.strip()
+        for line in item.contenu.splitlines()
+        if line.strip()
+    ]
+    photos_by_paragraph = {}
+    gallery_photos = []
+    for photo in item.photos.all():
+        if photo.apres_paragraphe:
+            position = min(photo.apres_paragraphe, max(len(paragraphs), 1))
+            photos_by_paragraph.setdefault(position, []).append(photo)
+        else:
+            gallery_photos.append(photo)
+
+    ad_position = item.publicite_apres_paragraphe
+    if ad_position and paragraphs:
+        ad_position = min(ad_position, len(paragraphs))
+
+    content_html = []
+    for position, paragraph in enumerate(paragraphs, start=1):
+        content_html.append(
+            f"<p>{escape(paragraph).replace(chr(10), '<br>')}</p>"
+        )
+        content_html.extend(
+            image_html(photo.image, photo.legende or item.titre)
+            for photo in photos_by_paragraph.get(position, [])
+        )
+        if ad_position == position:
+            content_html.append(advertisement_html(item))
+
+    if not ad_position:
+        content_html.append(advertisement_html(item))
+
+    content_html.extend(
+        image_html(photo.image, photo.legende or item.titre)
+        for photo in gallery_photos
+    )
+
     return "".join(
         [
             image_html(item.image, item.titre),
             f"<p><strong>{escape(item.resume)}</strong></p>",
-            paragraphs_html(item.contenu),
-            ad_html,
-            gallery_html,
+            *content_html,
         ]
     )
 

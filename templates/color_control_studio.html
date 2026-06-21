@@ -1,0 +1,282 @@
+{% extends "base.html" %}
+
+{% block title %}Studio couleur - SEAKE Color Control{% endblock %}
+
+{% block content %}
+<section class="page-hero compact promo-hero">
+    <p class="eyebrow">Poste de controle</p>
+    <h1>Studio couleur</h1>
+    <p>Entrez les valeurs L*a*b* du spectrophotometre et voyez l'apercu, le Delta E et le statut Pass/Fail en direct.</p>
+</section>
+
+<section class="section color-studio" data-color-studio>
+    <div class="studio-toolbar">
+        <div>
+            <p class="eyebrow">Standard</p>
+            <h2>Controle rapide Lab</h2>
+        </div>
+        <a class="button secondary dark" href="{% url 'color_control' %}">Voir les fiches sauvegardees</a>
+    </div>
+
+    <div class="studio-grid">
+        <article class="studio-panel">
+            <h3>Cible Lab</h3>
+            <p>Standard client, Pantone Book ou couleur approuvee.</p>
+            <div class="studio-swatch" data-target-swatch></div>
+            <div class="studio-fields">
+                <label>L <input type="number" step="0.01" data-target-l value="52.12"></label>
+                <label>a <input type="number" step="0.01" data-target-a value="-49.21"></label>
+                <label>b <input type="number" step="0.01" data-target-b value="-41.24"></label>
+                <label>Tolerance Delta E <input type="number" step="0.01" data-tolerance value="2.00"></label>
+            </div>
+        </article>
+
+        <article class="studio-panel studio-result-panel">
+            <h3>Resultat final</h3>
+            <div class="studio-status" data-final-status>En attente</div>
+            <dl class="studio-metrics">
+                <div><dt>Moyenne</dt><dd data-average>--</dd></div>
+                <div><dt>Meilleur</dt><dd data-best>--</dd></div>
+                <div><dt>Pire</dt><dd data-worst>--</dd></div>
+                <div><dt>Lectures</dt><dd data-count>0</dd></div>
+            </dl>
+            <p class="studio-note">Le statut final utilise le pire Delta E. Si une lecture depasse la tolerance, le resultat est Fail.</p>
+        </article>
+    </div>
+
+    <div class="reading-studio">
+        <div class="section-heading">
+            <p class="eyebrow">Mesures</p>
+            <h2>Lectures du spectrophotometre</h2>
+        </div>
+
+        {% for number in "12345" %}
+            <article class="reading-row" data-reading-row>
+                <div class="reading-id">Lecture {{ forloop.counter }}</div>
+                <div class="studio-swatch small" data-reading-swatch></div>
+                <label>L <input type="number" step="0.01" data-reading-l {% if forloop.first %}value="77.57"{% endif %}></label>
+                <label>a <input type="number" step="0.01" data-reading-a {% if forloop.first %}value="-11.85"{% endif %}></label>
+                <label>b <input type="number" step="0.01" data-reading-b {% if forloop.first %}value="-18.26"{% endif %}></label>
+                <div class="reading-delta">Delta E <strong data-reading-delta>--</strong></div>
+                <div class="reading-status" data-reading-status>--</div>
+            </article>
+        {% endfor %}
+    </div>
+
+    <section class="formula-correction" data-formula-correction>
+        <div class="section-heading">
+            <p class="eyebrow">Correction formule</p>
+            <h2>Suggestion de correction en grammes</h2>
+            <p class="wide-copy">Entrez la recette actuelle et le poids du batch. Le studio propose une direction de correction approximative selon l'ecart Lab.</p>
+        </div>
+
+        <div class="formula-grid">
+            <article class="studio-panel">
+                <h3>Recette actuelle</h3>
+                <div class="studio-fields formula-fields">
+                    <label>Poids batch g <input type="number" step="0.01" data-batch-grams value="1000"></label>
+                    <label>Pro Blue % <input type="number" step="0.01" data-pro-blue value="53.72"></label>
+                    <label>Green % <input type="number" step="0.01" data-green value="21.00"></label>
+                    <label>Trans. Wt. % <input type="number" step="0.01" data-trans-white value="25.28"></label>
+                </div>
+            </article>
+
+            <article class="studio-panel correction-panel">
+                <h3>Correction proposee</h3>
+                <div class="correction-summary" data-correction-summary>Entrez une lecture pour calculer la correction.</div>
+                <div class="correction-table">
+                    <div><strong>Pro Blue</strong><span data-add-blue>--</span></div>
+                    <div><strong>Green</strong><span data-add-green>--</span></div>
+                    <div><strong>Trans. Wt.</strong><span data-reduce-trans>--</span></div>
+                </div>
+                <p class="studio-note">Suggestion approximative seulement. Faites un petit drawdown, sechez, mesurez encore, puis ajustez.</p>
+            </article>
+        </div>
+    </section>
+</section>
+
+<script>
+    const studio = document.querySelector("[data-color-studio]");
+
+    function numberFrom(input) {
+        if (!input || input.value === "") return null;
+        const value = Number(input.value);
+        return Number.isFinite(value) ? value : null;
+    }
+
+    function labToHex(lValue, aValue, bValue) {
+        if ([lValue, aValue, bValue].some((value) => value === null)) return "#d9d9d9";
+
+        let y = (lValue + 16) / 116;
+        let x = aValue / 500 + y;
+        let z = y - bValue / 200;
+
+        function labToXyzChannel(value) {
+            return value ** 3 > 0.008856 ? value ** 3 : (value - 16 / 116) / 7.787;
+        }
+
+        x = 95.047 * labToXyzChannel(x) / 100;
+        y = 100.000 * labToXyzChannel(y) / 100;
+        z = 108.883 * labToXyzChannel(z) / 100;
+
+        const red = x * 3.2406 + y * -1.5372 + z * -0.4986;
+        const green = x * -0.9689 + y * 1.8758 + z * 0.0415;
+        const blue = x * 0.0557 + y * -0.2040 + z * 1.0570;
+
+        function srgbChannel(value) {
+            value = value > 0.0031308 ? 1.055 * value ** (1 / 2.4) - 0.055 : value * 12.92;
+            value = Math.max(0, Math.min(1, value));
+            return Math.round(value * 255).toString(16).padStart(2, "0");
+        }
+
+        return `#${srgbChannel(red)}${srgbChannel(green)}${srgbChannel(blue)}`.toUpperCase();
+    }
+
+    function deltaE(target, reading) {
+        if ([...target, ...reading].some((value) => value === null)) return null;
+        const deltaL = target[0] - reading[0];
+        const deltaA = target[1] - reading[1];
+        const deltaB = target[2] - reading[2];
+        return Math.sqrt(deltaL ** 2 + deltaA ** 2 + deltaB ** 2);
+    }
+
+    function updateStudio() {
+        if (!studio) return;
+
+        const target = [
+            numberFrom(studio.querySelector("[data-target-l]")),
+            numberFrom(studio.querySelector("[data-target-a]")),
+            numberFrom(studio.querySelector("[data-target-b]")),
+        ];
+        const tolerance = numberFrom(studio.querySelector("[data-tolerance]")) ?? 2;
+        studio.querySelector("[data-target-swatch]").style.background = labToHex(...target);
+
+        const values = [];
+        studio.querySelectorAll("[data-reading-row]").forEach((row) => {
+            const reading = [
+                numberFrom(row.querySelector("[data-reading-l]")),
+                numberFrom(row.querySelector("[data-reading-a]")),
+                numberFrom(row.querySelector("[data-reading-b]")),
+            ];
+            const delta = deltaE(target, reading);
+            const status = row.querySelector("[data-reading-status]");
+
+            row.querySelector("[data-reading-swatch]").style.background = labToHex(...reading);
+            row.querySelector("[data-reading-delta]").textContent = delta === null ? "--" : delta.toFixed(2);
+
+            status.classList.remove("pass", "fail");
+            if (delta === null) {
+                status.textContent = "--";
+            } else {
+                values.push(delta);
+                const pass = delta <= tolerance;
+                status.textContent = pass ? "Pass" : "Fail";
+                status.classList.add(pass ? "pass" : "fail");
+            }
+        });
+
+        const finalStatus = studio.querySelector("[data-final-status]");
+        finalStatus.classList.remove("pass", "fail");
+
+        if (!values.length) {
+            finalStatus.textContent = "En attente";
+            studio.querySelector("[data-average]").textContent = "--";
+            studio.querySelector("[data-best]").textContent = "--";
+            studio.querySelector("[data-worst]").textContent = "--";
+            studio.querySelector("[data-count]").textContent = "0";
+            return;
+        }
+
+        const average = values.reduce((sum, value) => sum + value, 0) / values.length;
+        const best = Math.min(...values);
+        const worst = Math.max(...values);
+        const pass = worst <= tolerance;
+
+        finalStatus.textContent = pass ? "Pass" : "Fail";
+        finalStatus.classList.add(pass ? "pass" : "fail");
+        studio.querySelector("[data-average]").textContent = average.toFixed(2);
+        studio.querySelector("[data-best]").textContent = best.toFixed(2);
+        studio.querySelector("[data-worst]").textContent = worst.toFixed(2);
+        studio.querySelector("[data-count]").textContent = values.length;
+        updateFormulaCorrection(target);
+    }
+
+    function firstCompleteReading() {
+        const row = studio.querySelector("[data-reading-row]");
+        if (!row) return null;
+        const reading = [
+            numberFrom(row.querySelector("[data-reading-l]")),
+            numberFrom(row.querySelector("[data-reading-a]")),
+            numberFrom(row.querySelector("[data-reading-b]")),
+        ];
+        if (reading.some((value) => value === null)) return null;
+        return reading;
+    }
+
+    function updateFormulaCorrection(target) {
+        const correction = studio.querySelector("[data-formula-correction]");
+        if (!correction) return;
+
+        const reading = firstCompleteReading();
+        const summary = correction.querySelector("[data-correction-summary]");
+        const addBlue = correction.querySelector("[data-add-blue]");
+        const addGreen = correction.querySelector("[data-add-green]");
+        const reduceTrans = correction.querySelector("[data-reduce-trans]");
+
+        if (!reading || target.some((value) => value === null)) {
+            summary.textContent = "Entrez la cible et la lecture 1 pour calculer la correction.";
+            addBlue.textContent = "--";
+            addGreen.textContent = "--";
+            reduceTrans.textContent = "--";
+            return;
+        }
+
+        const batchGrams = numberFrom(correction.querySelector("[data-batch-grams]")) ?? 1000;
+        const proBluePct = numberFrom(correction.querySelector("[data-pro-blue]")) ?? 0;
+        const greenPct = numberFrom(correction.querySelector("[data-green]")) ?? 0;
+        const transPct = numberFrom(correction.querySelector("[data-trans-white]")) ?? 0;
+        const deltaL = target[0] - reading[0];
+        const deltaA = target[1] - reading[1];
+        const deltaB = target[2] - reading[2];
+        const currentDelta = deltaE(target, reading) ?? 0;
+
+        const needsDarker = deltaL < 0;
+        const needsMoreGreen = deltaA < 0;
+        const needsMoreBlue = deltaB < 0;
+
+        if (!needsDarker && !needsMoreGreen && !needsMoreBlue) {
+            summary.textContent = `Delta E ${currentDelta.toFixed(2)}. La direction principale n'est pas une correction bleu/vert/trans blanc. Ajustez avec prudence.`;
+            addBlue.textContent = "0.00 g";
+            addGreen.textContent = "0.00 g";
+            reduceTrans.textContent = "0.00 g";
+            return;
+        }
+
+        const lightnessPush = Math.max(0, Math.abs(deltaL)) * 0.34;
+        const chromaPush = (Math.max(0, -deltaA) + Math.max(0, -deltaB)) * 0.12;
+        const movePct = Math.min(transPct * 0.85, Math.max(1, lightnessPush + chromaPush));
+        const blueNeed = Math.max(0, -deltaB);
+        const greenNeed = Math.max(0, -deltaA);
+        const totalNeed = blueNeed + greenNeed || 1;
+        const bluePct = movePct * (blueNeed / totalNeed);
+        const greenPctAdd = movePct * (greenNeed / totalNeed);
+
+        const blueGrams = batchGrams * bluePct / 100;
+        const greenGrams = batchGrams * greenPctAdd / 100;
+        const transGrams = batchGrams * movePct / 100;
+        const newBluePct = proBluePct + bluePct;
+        const newGreenPct = greenPct + greenPctAdd;
+        const newTransPct = Math.max(0, transPct - movePct);
+
+        summary.textContent = `Delta E ${currentDelta.toFixed(2)}. Le sample est trop clair et manque de bleu/vert. Reduire le Trans. Wt. et ajouter Pro Blue + Green.`;
+        addBlue.textContent = `+${blueGrams.toFixed(2)} g  (${newBluePct.toFixed(2)} %)`;
+        addGreen.textContent = `+${greenGrams.toFixed(2)} g  (${newGreenPct.toFixed(2)} %)`;
+        reduceTrans.textContent = `-${transGrams.toFixed(2)} g  (${newTransPct.toFixed(2)} %)`;
+    }
+
+    if (studio) {
+        studio.addEventListener("input", updateStudio);
+        updateStudio();
+    }
+</script>
+{% endblock %}

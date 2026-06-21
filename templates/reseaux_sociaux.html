@@ -39,6 +39,53 @@
     </div>
 </section>
 
+<section class="section video-studio-section">
+    <div class="section-heading">
+        <p class="eyebrow">Studio video</p>
+        <h2>Preparer une publication YouTube ou TikTok</h2>
+        <p class="wide-copy">Choisissez un article, copiez le texte, ouvrez la page ecran, puis enregistrez la video en plein ecran.</p>
+    </div>
+
+    <div class="video-studio-grid">
+        {% for article in articles %}
+            <article class="video-studio-card">
+                <div class="video-studio-preview">
+                    {% if article.image %}
+                        <img src="{{ article.image.url }}" alt="{{ article.titre }}">
+                    {% else %}
+                        <img src="{% static 'img/logo.png' %}" alt="SEAKE JOURNAL">
+                    {% endif %}
+                </div>
+                <div class="video-studio-content">
+                    <span>{{ article.categorie.nom }}</span>
+                    <h3>{{ article.titre }}</h3>
+                    <p>{{ article.resume }}</p>
+
+                    <div class="script-box">
+                        <h4>Texte a lire</h4>
+                        <p>Aujourd'hui sur SEAKE JOURNAL : {{ article.titre }}. {{ article.resume }} Suivez SEAKE JOURNAL pour des nouvelles claires, rapides et faciles a comprendre.</p>
+                    </div>
+
+                    <div class="script-box">
+                        <h4>Description</h4>
+                        <p>{{ article.titre }} - A lire sur SEAKE JOURNAL. #SEAKEJOURNAL #Actualite #Quebec #Nouvelles #YouTubeShorts #TikTokNews</p>
+                    </div>
+
+                    <div class="video-actions">
+                        <a class="button primary" href="{{ article.get_absolute_url }}">Voir l'article</a>
+                        <a class="button secondary dark" href="{% url 'ecran_actualites' %}">Ouvrir l'ecran</a>
+                    </div>
+                </div>
+            </article>
+        {% empty %}
+            <article class="empty-state">
+                <h3>Aucun article publie</h3>
+                <p>Publiez un article dans l'administration pour preparer une video.</p>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+
 <section class="section muted">
     <div class="publishing-plan">
         <div>
@@ -46,16 +93,18 @@
             <h2>Routine de publication</h2>
             <ol>
                 <li>Publier un article sur SEAKE JOURNAL.</li>
-                <li>Faire une image ou une video courte avec le titre de l'article.</li>
-                <li>Publier sur Facebook et TikTok le meme jour.</li>
+                <li>Ouvrir la page ecran ou l'article en plein ecran.</li>
+                <li>Enregistrer avec QuickTime, OBS, CapCut, TikTok Studio ou YouTube Studio.</li>
+                <li>Publier sur TikTok, YouTube Shorts et Facebook le meme jour.</li>
                 <li>Regrouper les meilleurs articles dans Substack chaque semaine.</li>
-                <li>Mettre les videos importantes sur YouTube Shorts.</li>
+                <li>Reprendre les meilleurs sujets dans une video YouTube plus longue.</li>
             </ol>
         </div>
         <aside class="copy-box">
-            <h3>Texte pret a copier</h3>
-            <p>Nouveau dans le quartier: SEAKE JOURNAL. Articles locaux, coupons rabais, publicites de commerces et nouvelles de la communaute. Visitez notre site et partagez autour de vous.</p>
-            <p><strong>Hashtags:</strong> #SEAKEJOURNAL #JournalLocal #CouponsRabais #PubliciteLocale</p>
+            <h3>Format conseille</h3>
+            <p><strong>TikTok / Shorts:</strong> 30 a 60 secondes, vertical 9:16, titre tres visible, une idee principale.</p>
+            <p><strong>YouTube:</strong> 2 a 5 minutes, horizontal 16:9, introduction courte, article resume, conclusion.</p>
+            <p><strong>Hashtags:</strong> #SEAKEJOURNAL #Actualite #Quebec #Nouvelles</p>
         </aside>
     </div>
 </section>

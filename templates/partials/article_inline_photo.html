@@ -1,0 +1,6 @@
+<figure class="article-inline-photo">
+    <img src="{{ photo.image.url }}" alt="{{ photo.legende|default:article.titre }}">
+    {% if photo.legende %}
+        <figcaption>{{ photo.legende }}</figcaption>
+    {% endif %}
+</figure>

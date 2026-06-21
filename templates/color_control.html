@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}SEAKE Color Control{% endblock %}
+
+{% block content %}
+<section class="page-hero compact promo-hero">
+    <p class="eyebrow">Controle qualite couleur</p>
+    <h1>SEAKE Color Control</h1>
+    <p>Preparez des echantillons couleur pour les clients, comparez la cible Lab avec la mesure et suivez le resultat Delta E.</p>
+</section>
+
+<section class="section">
+    <div class="cta-band color-control-cta">
+        <div>
+            <p class="eyebrow">Mesure en direct</p>
+            <h2>Ouvrir le studio couleur</h2>
+            <p>Entrez les valeurs du spectrophotometre et voyez l'apercu, le Delta E et le Pass/Fail sans sauvegarder.</p>
+        </div>
+        <div class="hero-actions">
+            <a class="button primary" href="{% url 'color_control_studio' %}">Ouvrir le studio</a>
+            <a class="button secondary" href="{% url 'color_control_phone_scan' %}">Phone Scan</a>
+            <a class="button secondary" href="{% url 'color_control_sample_timer' %}">Sample Timer</a>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="color-control-intro">
+        <article class="info-card">
+            <h2>Fiche client</h2>
+            <p>Nom du client, projet, reference Pantone ou client, couleur et commentaire.</p>
+        </article>
+        <article class="info-card">
+            <h2>Controle Lab</h2>
+            <p>Cible L*a*b*, mesure L*a*b*, tolerance Delta E et resultat accepte ou refuse.</p>
+        </article>
+        <article class="info-card">
+            <h2>Rapport simple</h2>
+            <p>Une vue claire pour discuter avec le client avant impression ou production.</p>
+        </article>
+    </div>
+</section>
+
+<section class="section muted">
+    <div class="section-heading">
+        <p class="eyebrow">Echantillons</p>
+        <h2>Dernieres fiches couleur</h2>
+    </div>
+
+    <div class="color-sample-grid">
+        {% for echantillon in echantillons %}
+            <article class="color-sample-card">
+                <div class="color-swatch" style="background: {{ echantillon.apercu_hex }};"></div>
+                <div>
+                    <span>{{ echantillon.get_statut_display }}</span>
+                    <h3>{{ echantillon.couleur }}</h3>
+                    <p><strong>Client:</strong> {{ echantillon.nom_client }}</p>
+                    <p><strong>Projet:</strong> {{ echantillon.projet }}</p>
+                    <p><strong>Substrat:</strong> {{ echantillon.get_substrat_display }}</p>
+                    <p><strong>Blanc de soutien:</strong> {% if echantillon.blanc_soutien %}Oui{% else %}Non{% endif %}</p>
+                    {% if echantillon.reference %}
+                        <p><strong>Reference:</strong> {{ echantillon.reference }}</p>
+                    {% endif %}
+                    <p><strong>Apercu ecran:</strong> {{ echantillon.apercu_hex }}</p>
+                </div>
+
+                <div class="lab-table" aria-label="Valeurs Lab">
+                    <div>
+                        <strong>Cible</strong>
+                        <span>L {{ echantillon.cible_l }}</span>
+                        <span>a {{ echantillon.cible_a }}</span>
+                        <span>b {{ echantillon.cible_b }}</span>
+                    </div>
+                    <div>
+                        <strong>Mesure</strong>
+                        <span>L {{ echantillon.mesure_l|default:"--" }}</span>
+                        <span>a {{ echantillon.mesure_a|default:"--" }}</span>
+                        <span>b {{ echantillon.mesure_b|default:"--" }}</span>
+                    </div>
+                </div>
+
+                <div class="color-result {% if echantillon.resultat == 'Accepte' %}accepted{% elif echantillon.resultat == 'Refuse' %}rejected{% endif %}">
+                    <strong>{{ echantillon.resultat }}</strong>
+                    <span>Moyenne: {{ echantillon.moyenne_delta_e|default:"En attente" }}</span>
+                    <span>Meilleur: {{ echantillon.meilleur_delta_e|default:"--" }}</span>
+                    <span>Pire: {{ echantillon.pire_delta_e|default:"--" }}</span>
+                    <span>Tolerance: {{ echantillon.tolerance_delta_e }}</span>
+                </div>
+
+                {% if echantillon.mesures.all %}
+                    <div class="reading-list">
+                        <strong>Lectures</strong>
+                        {% for mesure in echantillon.mesures.all %}
+                            <p>{{ mesure.nom|default:"Lecture" }}: Delta E {{ mesure.delta_e }} - {{ mesure.resultat }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </article>
+        {% empty %}
+            <article class="empty-state">
+                <h3>Aucun echantillon pour le moment</h3>
+                <p>Ajoutez une fiche dans l'administration Django pour commencer le suivi couleur.</p>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
