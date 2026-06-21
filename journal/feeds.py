@@ -52,14 +52,26 @@ def advertisement_html(item):
 
 
 def article_html(item):
+    photos = list(item.photos.all())
+    photo_positions = {
+        photo.apres_paragraphe
+        for photo in photos
+        if photo.apres_paragraphe
+    }
+    placement_markers = photo_positions | {item.publicite_apres_paragraphe}
+    placement_markers.discard(None)
     paragraphs = [
         line.strip()
         for line in item.contenu.splitlines()
         if line.strip()
+        and not (
+            line.strip().isdigit()
+            and int(line.strip()) in placement_markers
+        )
     ]
     photos_by_paragraph = {}
     gallery_photos = []
-    for photo in item.photos.all():
+    for photo in photos:
         if photo.apres_paragraphe:
             position = min(photo.apres_paragraphe, max(len(paragraphs), 1))
             photos_by_paragraph.setdefault(position, []).append(photo)

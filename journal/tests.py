@@ -37,7 +37,13 @@ class ArticleMediaPlacementTests(TestCase):
             slug="article-avec-photos",
             categorie=categorie,
             resume="Un resume.",
-            contenu="Premier paragraphe.\n\nDeuxieme paragraphe.\n\nTroisieme paragraphe.",
+            contenu=(
+                "Premier paragraphe.\n"
+                "1\n"
+                "Deuxieme paragraphe.\n"
+                "2\n"
+                "Troisieme paragraphe."
+            ),
             publicite_titre="SEAKE JOURNAL",
             publicite_texte="Abonnez-vous.",
             publicite_apres_paragraphe=2,
@@ -62,6 +68,8 @@ class ArticleMediaPlacementTests(TestCase):
         self.assertLess(html.index(self.photo.image.url), html.index("Deuxieme paragraphe."))
         self.assertLess(html.index("Deuxieme paragraphe."), html.index("Abonnez-vous."))
         self.assertLess(html.index("Abonnez-vous."), html.index("Troisieme paragraphe."))
+        self.assertNotIn("<p>1</p>", html)
+        self.assertNotIn("<p>2</p>", html)
 
     def test_rss_places_photo_and_ad_between_paragraphs(self):
         html = article_html(self.article)
@@ -70,3 +78,5 @@ class ArticleMediaPlacementTests(TestCase):
         self.assertLess(html.index(self.photo.image.url), html.index("Deuxieme paragraphe."))
         self.assertLess(html.index("Deuxieme paragraphe."), html.index("Abonnez-vous."))
         self.assertLess(html.index("Abonnez-vous."), html.index("Troisieme paragraphe."))
+        self.assertNotIn("<p>1</p>", html)
+        self.assertNotIn("<p>2</p>", html)

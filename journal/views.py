@@ -10,10 +10,23 @@ def _articles_publies():
 
 
 def _article_layout(article_obj):
+    photo_positions = {
+        photo.apres_paragraphe
+        for photo in article_obj.photos.all()
+        if photo.apres_paragraphe
+    }
+    placement_markers = photo_positions | {
+        article_obj.publicite_apres_paragraphe
+    }
+    placement_markers.discard(None)
     paragraphs = [
         line.strip()
         for line in article_obj.contenu.splitlines()
         if line.strip()
+        and not (
+            line.strip().isdigit()
+            and int(line.strip()) in placement_markers
+        )
     ]
     photos = list(article_obj.photos.all())
     photos_by_paragraph = {}
