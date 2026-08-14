@@ -788,6 +788,149 @@ p {
     grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.training-workflow {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.training-step,
+.material-card,
+.client-satisfaction-card,
+.recipe-grid div {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.training-step {
+    padding: 22px;
+}
+
+.training-step span {
+    align-items: center;
+    background: var(--brand);
+    border-radius: 999px;
+    color: var(--white);
+    display: inline-flex;
+    font-weight: 900;
+    height: 38px;
+    justify-content: center;
+    margin-bottom: 14px;
+    width: 38px;
+}
+
+.training-step h3,
+.material-card h3 {
+    margin-bottom: 8px;
+}
+
+.training-step p,
+.material-card p,
+.client-satisfaction-card li,
+.recipe-grid span {
+    color: var(--muted);
+}
+
+.training-layout {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1.2fr .8fr;
+}
+
+.material-grid {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.material-card,
+.client-satisfaction-card {
+    padding: 24px;
+}
+
+.client-satisfaction-card {
+    align-self: start;
+    background: linear-gradient(135deg, #ffffff, #fff4e5);
+    border-color: #ffd39a;
+}
+
+.client-satisfaction-card ul {
+    padding-left: 20px;
+}
+
+.client-satisfaction-card li {
+    margin-bottom: 10px;
+}
+
+.recipe-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.recipe-grid div {
+    display: grid;
+    gap: 8px;
+    padding: 18px;
+}
+
+.recipe-grid strong {
+    color: var(--brand-dark);
+}
+
+.chemistry-grid {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.chemistry-card,
+.chemistry-rule-card,
+.chemistry-check-grid article {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.chemistry-card {
+    padding: 24px;
+}
+
+.chemistry-card.warning {
+    border-color: rgba(216, 24, 24, .35);
+    border-top: 5px solid var(--brand);
+}
+
+.chemistry-card p,
+.chemistry-rule-card p,
+.chemistry-check-grid span {
+    color: var(--muted);
+}
+
+.chemistry-protocol {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1.1fr .9fr;
+}
+
+.chemistry-protocol ol {
+    padding-left: 22px;
+}
+
+.chemistry-protocol li {
+    margin-bottom: 10px;
+}
+
+.chemistry-rule-card {
+    align-self: start;
+    background: linear-gradient(135deg, #fff, #fff1f1);
+    border-color: rgba(216, 24, 24, .25);
+    padding: 26px;
+}
+
 .color-sample-grid {
     display: grid;
     gap: 18px;
@@ -1136,6 +1279,89 @@ p {
 .correction-table span {
     color: var(--brand);
     font-weight: 900;
+}
+
+.studio-training-table {
+    margin-top: 38px;
+}
+
+.training-table-wrap {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+}
+
+.training-table {
+    border-collapse: collapse;
+    min-width: 920px;
+    width: 100%;
+}
+
+.training-table th,
+.training-table td {
+    border-bottom: 1px solid var(--line);
+    padding: 14px 16px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.training-table th {
+    background: var(--brand-dark);
+    color: var(--white);
+    font-size: .82rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.training-table td {
+    color: var(--muted);
+}
+
+.training-table td:first-child {
+    color: var(--ink);
+    font-weight: 900;
+}
+
+.studio-client-check {
+    align-items: flex-start;
+    background: #fff8ef;
+    border: 1px solid #ffd39a;
+    border-radius: 8px;
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    padding: 16px;
+}
+
+.studio-client-check span {
+    color: var(--muted);
+}
+
+.studio-client-check.danger {
+    background: #fff1f1;
+    border-color: rgba(216, 24, 24, .35);
+}
+
+.studio-chemistry-check {
+    margin-top: 38px;
+}
+
+.chemistry-check-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.chemistry-check-grid article {
+    display: grid;
+    gap: 8px;
+    padding: 18px;
+}
+
+.chemistry-check-grid strong {
+    color: var(--brand);
 }
 
 .phone-scan-grid,
@@ -1960,6 +2186,13 @@ textarea {
     .category-grid,
     .home-feature-grid,
     .color-control-intro,
+    .training-workflow,
+    .training-layout,
+    .material-grid,
+    .recipe-grid,
+    .chemistry-grid,
+    .chemistry-protocol,
+    .chemistry-check-grid,
     .color-sample-grid,
     .studio-grid,
     .studio-fields,

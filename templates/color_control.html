@@ -43,6 +43,151 @@
 
 <section class="section muted">
     <div class="section-heading">
+        <p class="eyebrow">Formation impression</p>
+        <h2>Comment preparer un echantillon client</h2>
+        <p>Une methode simple pour produire un sample clair, mesurable et facile a approuver, peu importe le materiel ou la serie d'encre.</p>
+    </div>
+
+    <div class="training-workflow">
+        <article class="training-step">
+            <span>1</span>
+            <h3>Comprendre la demande</h3>
+            <p>Confirmer la reference couleur, l'usage final, le materiel, la quantite, la finition et le niveau d'exigence du client.</p>
+        </article>
+        <article class="training-step">
+            <span>2</span>
+            <h3>Choisir le support</h3>
+            <p>Tester sur le vrai substrat: papier couche, non couche, carton, film, foil, plastique, transparent ou metallise.</p>
+        </article>
+        <article class="training-step">
+            <span>3</span>
+            <h3>Choisir l'encre</h3>
+            <p>Selectionner la bonne serie selon le support: UV, water-based, solvent, eco-solvent, offset, flexo, screen ou digital.</p>
+        </article>
+        <article class="training-step">
+            <span>4</span>
+            <h3>Faire le sample</h3>
+            <p>Imprimer une petite zone controlee avec notes: anilox, mesh, pression, vitesse, sechage, blanc de soutien et couches.</p>
+        </article>
+        <article class="training-step">
+            <span>5</span>
+            <h3>Mesurer et comparer</h3>
+            <p>Lire la couleur au spectrophotometre, noter L*a*b*, Delta E, densite, opacite, gloss et effet du support.</p>
+        </article>
+        <article class="training-step">
+            <span>6</span>
+            <h3>Faire approuver</h3>
+            <p>Presenter un rapport simple: cible, resultat, photo, conditions d'impression et recommandation Pass/Fail.</p>
+        </article>
+    </div>
+</section>
+
+<section class="section">
+    <div class="training-layout">
+        <div>
+            <div class="section-heading">
+                <p class="eyebrow">Materiaux</p>
+                <h2>Points a verifier selon le support</h2>
+            </div>
+            <div class="material-grid">
+                <article class="material-card">
+                    <h3>Papier</h3>
+                    <p>Absorption, blancheur, couchage, gain de point, sechage et difference entre mat/brillant.</p>
+                </article>
+                <article class="material-card">
+                    <h3>Foil metallise</h3>
+                    <p>Besoin possible d'un blanc de soutien, opacite, reflet, adhérence et changement visuel selon l'angle.</p>
+                </article>
+                <article class="material-card">
+                    <h3>Film transparent</h3>
+                    <p>Tester recto/verso, blanc sous-couche, transparence, densite et lisibilite sur fond clair ou fonce.</p>
+                </article>
+                <article class="material-card">
+                    <h3>Plastique ou synthetique</h3>
+                    <p>Traitement corona, adhesion, frottement, resistance chimique, pliage et comportement au sechage.</p>
+                </article>
+            </div>
+        </div>
+
+        <aside class="client-satisfaction-card">
+            <p class="eyebrow">Satisfaction client</p>
+            <h2>Comment bien satisfaire le client</h2>
+            <ul>
+                <li>Montrer un echantillon sur le vrai materiel, pas seulement a l'ecran.</li>
+                <li>Expliquer que le support influence la couleur finale.</li>
+                <li>Donner 2 ou 3 options si la couleur est difficile a atteindre.</li>
+                <li>Faire signer ou approuver le sample avant production.</li>
+                <li>Garder la recette: encre, support, machine, conditions et mesures.</li>
+            </ul>
+            <a class="button primary" href="{% url 'color_control_studio' %}">Calculer un sample</a>
+        </aside>
+    </div>
+</section>
+
+<section class="section muted">
+    <div class="section-heading">
+        <p class="eyebrow">Chimie responsable</p>
+        <h2>Ne jamais modifier une encre au hasard</h2>
+        <p>Une encre est une formulation chimique. Ajouter un solvant, un diluant, un durcisseur, un additif, un vernis ou un pigment sans validation peut creer un probleme de couleur, d'adhesion, de sechage, d'odeur, de migration, de securite ou de production.</p>
+    </div>
+
+    <div class="chemistry-grid">
+        <article class="chemistry-card warning">
+            <h3>Ce qu'il ne faut pas dire</h3>
+            <p>"Mets n'importe quoi, ca va marcher." Ce n'est pas une methode. Sans formation, sans FDS/SDS et sans test, on prend un risque avec le client, la machine et la securite.</p>
+        </article>
+        <article class="chemistry-card">
+            <h3>Ce qu'il faut dire</h3>
+            <p>"On va verifier la compatibilite, faire un petit sample controle, mesurer le resultat et documenter la recette avant production."</p>
+        </article>
+        <article class="chemistry-card">
+            <h3>Base de verification</h3>
+            <p>Lire la fiche technique et la FDS/SDS, confirmer la serie d'encre, le support, le sechage, l'adhesion et les limites recommandees par le fournisseur.</p>
+        </article>
+    </div>
+</section>
+
+<section class="section">
+    <div class="chemistry-protocol">
+        <div>
+            <p class="eyebrow">Protocole</p>
+            <h2>Methode avant d'ajouter quoi que ce soit</h2>
+            <ol>
+                <li>Identifier le probleme: couleur, viscosite, adhesion, sechage, opacite, gloss ou resistance.</li>
+                <li>Verifier la FDS/SDS et la fiche technique du produit.</li>
+                <li>Confirmer que l'additif appartient a la meme famille ou qu'il est approuve par le fournisseur.</li>
+                <li>Faire un micro-test, jamais directement dans le batch principal.</li>
+                <li>Noter le pourcentage, le poids, le temps de melange, la temperature et le temps de sechage.</li>
+                <li>Mesurer Lab/Delta E, adhesion, rub test et apparence visuelle.</li>
+                <li>Faire approuver le sample par le client avant production.</li>
+            </ol>
+        </div>
+
+        <aside class="chemistry-rule-card">
+            <h3>Regle d'or</h3>
+            <p>Si ce n'est pas documente, mesure et approuve, ce n'est pas une recette de production. C'est seulement une hypothese.</p>
+            <p><strong>Objectif:</strong> proteger la qualite, la securite et la confiance du client.</p>
+        </aside>
+    </div>
+</section>
+
+<section class="section muted">
+    <div class="section-heading">
+        <p class="eyebrow">Recette de production</p>
+        <h2>Informations a noter pour chaque sample</h2>
+    </div>
+    <div class="recipe-grid">
+        <div><strong>Client</strong><span>Nom, projet, contact, date.</span></div>
+        <div><strong>Couleur cible</strong><span>Pantone, Lab, CMYK, reference client ou echantillon physique.</span></div>
+        <div><strong>Support</strong><span>Papier, film, foil, plastique, fini mat/brillant/transparent.</span></div>
+        <div><strong>Serie d'encre</strong><span>UV, solvent, water-based, digital, flexo, offset ou autre.</span></div>
+        <div><strong>Parametres</strong><span>Vitesse, pression, mesh/anilox, sechage, nombre de couches.</span></div>
+        <div><strong>Validation</strong><span>Delta E, remarque visuelle, approbation client, signature ou courriel.</span></div>
+    </div>
+</section>
+
+<section class="section muted">
+    <div class="section-heading">
         <p class="eyebrow">Echantillons</p>
         <h2>Dernieres fiches couleur</h2>
     </div>
