@@ -162,10 +162,29 @@ class DemandePubliciteAdmin(admin.ModelAdmin):
         "budget",
         "statut",
         "date_creation",
+        "photo_preview",
     )
     list_filter = ("type_produit", "statut", "date_creation")
     search_fields = ("nom_client", "nom_entreprise", "email", "telephone", "message")
-    readonly_fields = ("date_creation",)
+    readonly_fields = ("date_creation", "photo_preview")
+    fields = (
+        "nom_client",
+        "nom_entreprise",
+        "email",
+        "telephone",
+        "type_produit",
+        "budget",
+        "date_souhaitee",
+        "photo_preview",
+        "photo",
+        "message",
+        "statut",
+        "date_creation",
+    )
+
+    @admin.display(description="Photo")
+    def photo_preview(self, obj):
+        return render_image_preview(obj.photo if obj else None)
 
 
 @admin.register(EchantillonCouleur)

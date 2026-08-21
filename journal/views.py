@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import CommentaireForm, DemandePubliciteForm
-from .models import Article, Categorie, EchantillonCouleur
+from .models import Article, Categorie, DemandePublicite, EchantillonCouleur
 
 
 def _articles_publies():
@@ -10,48 +10,67 @@ def _articles_publies():
 
 
 def _article_layout(article_obj):
-    photo_positions = {
-        photo.apres_paragraphe
-        for photo in article_obj.photos.all()
-        if photo.apres_paragraphe
-    }
-    placement_markers = photo_positions | {
-        article_obj.publicite_apres_paragraphe
-    }
-    placement_markers.discard(None)
-    paragraphs = [
-        line.strip()
-        for line in article_obj.contenu.splitlines()
-        if line.strip()
-        and not (
-            line.strip().isdigit()
-            and int(line.strip()) in placement_markers
-        )
-    ]
     photos = list(article_obj.photos.all())
-    photos_by_paragraph = {}
+    photos_by_marker = {}
     gallery_photos = []
-
     for photo in photos:
         if photo.apres_paragraphe:
-            position = min(photo.apres_paragraphe, max(len(paragraphs), 1))
-            photos_by_paragraph.setdefault(position, []).append(photo)
+            photos_by_marker.setdefault(photo.apres_paragraphe, []).append(photo)
         else:
             gallery_photos.append(photo)
 
-    ad_position = article_obj.publicite_apres_paragraphe
-    if ad_position and paragraphs:
-        ad_position = min(ad_position, len(paragraphs))
+    placement_markers = set(photos_by_marker) | {article_obj.publicite_apres_paragraphe}
+    placement_markers.discard(None)
+    explicit_markers = {
+        int(line.strip())
+        for line in article_obj.contenu.splitlines()
+        if line.strip().isdigit() and int(line.strip()) in placement_markers
+    }
 
     blocks = []
-    for position, paragraph in enumerate(paragraphs, start=1):
-        blocks.append({"type": "paragraph", "text": paragraph})
-        for photo in photos_by_paragraph.get(position, []):
-            blocks.append({"type": "photo", "photo": photo})
-        if ad_position == position:
-            blocks.append({"type": "advertisement"})
+    paragraph_position = 0
+    placed_photo_ids = set()
+    advertisement_is_inline = False
 
-    return blocks, gallery_photos, bool(ad_position)
+    def place_marker(marker):
+        nonlocal advertisement_is_inline
+        for photo in photos_by_marker.get(marker, []):
+            if photo.id in placed_photo_ids:
+                continue
+            blocks.append({"type": "photo", "photo": photo})
+            placed_photo_ids.add(photo.id)
+        if article_obj.publicite_apres_paragraphe == marker:
+            blocks.append({"type": "advertisement"})
+            advertisement_is_inline = True
+
+    for line in article_obj.contenu.splitlines():
+        paragraph = line.strip()
+        if not paragraph:
+            continue
+
+        if paragraph.isdigit() and int(paragraph) in placement_markers:
+            place_marker(int(paragraph))
+            continue
+
+        paragraph_position += 1
+        blocks.append({"type": "paragraph", "text": paragraph})
+        if paragraph_position not in explicit_markers:
+            place_marker(paragraph_position)
+
+    for marker in sorted(photos_by_marker):
+        for photo in photos_by_marker[marker]:
+            if photo.id not in placed_photo_ids:
+                blocks.append({"type": "photo", "photo": photo})
+                placed_photo_ids.add(photo.id)
+
+    if (
+        article_obj.publicite_apres_paragraphe
+        and not advertisement_is_inline
+    ):
+        blocks.append({"type": "advertisement"})
+        advertisement_is_inline = True
+
+    return blocks, gallery_photos, advertisement_is_inline
 
 
 def accueil(request):
@@ -165,12 +184,19 @@ def impression(request):
 
 
 def publicite(request):
-    return render(request, "publicite.html")
+    publicites_approuvees = DemandePublicite.objects.filter(
+        statut=DemandePublicite.STATUT_ACCEPTEE,
+    )[:12]
+    return render(
+        request,
+        "publicite.html",
+        {"publicites_approuvees": publicites_approuvees},
+    )
 
 
 def demande_publicite(request):
     if request.method == "POST":
-        form = DemandePubliciteForm(request.POST)
+        form = DemandePubliciteForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             messages.success(

@@ -53,48 +53,62 @@ def advertisement_html(item):
 
 def article_html(item):
     photos = list(item.photos.all())
-    photo_positions = {
-        photo.apres_paragraphe
-        for photo in photos
-        if photo.apres_paragraphe
-    }
-    placement_markers = photo_positions | {item.publicite_apres_paragraphe}
-    placement_markers.discard(None)
-    paragraphs = [
-        line.strip()
-        for line in item.contenu.splitlines()
-        if line.strip()
-        and not (
-            line.strip().isdigit()
-            and int(line.strip()) in placement_markers
-        )
-    ]
-    photos_by_paragraph = {}
+    photos_by_marker = {}
     gallery_photos = []
     for photo in photos:
         if photo.apres_paragraphe:
-            position = min(photo.apres_paragraphe, max(len(paragraphs), 1))
-            photos_by_paragraph.setdefault(position, []).append(photo)
+            photos_by_marker.setdefault(photo.apres_paragraphe, []).append(photo)
         else:
             gallery_photos.append(photo)
 
-    ad_position = item.publicite_apres_paragraphe
-    if ad_position and paragraphs:
-        ad_position = min(ad_position, len(paragraphs))
+    placement_markers = set(photos_by_marker) | {item.publicite_apres_paragraphe}
+    placement_markers.discard(None)
+    explicit_markers = {
+        int(line.strip())
+        for line in item.contenu.splitlines()
+        if line.strip().isdigit() and int(line.strip()) in placement_markers
+    }
 
     content_html = []
-    for position, paragraph in enumerate(paragraphs, start=1):
+    paragraph_position = 0
+    placed_photo_ids = set()
+    ad_is_inline = False
+
+    def place_marker(marker):
+        nonlocal ad_is_inline
+        for photo in photos_by_marker.get(marker, []):
+            if photo.id in placed_photo_ids:
+                continue
+            content_html.append(image_html(photo.image, photo.legende or item.titre))
+            placed_photo_ids.add(photo.id)
+        if item.publicite_apres_paragraphe == marker:
+            content_html.append(advertisement_html(item))
+            ad_is_inline = True
+
+    for line in item.contenu.splitlines():
+        paragraph = line.strip()
+        if not paragraph:
+            continue
+
+        if paragraph.isdigit() and int(paragraph) in placement_markers:
+            place_marker(int(paragraph))
+            continue
+
+        paragraph_position += 1
         content_html.append(
             f"<p>{escape(paragraph).replace(chr(10), '<br>')}</p>"
         )
-        content_html.extend(
-            image_html(photo.image, photo.legende or item.titre)
-            for photo in photos_by_paragraph.get(position, [])
-        )
-        if ad_position == position:
-            content_html.append(advertisement_html(item))
+        if paragraph_position not in explicit_markers:
+            place_marker(paragraph_position)
 
-    if not ad_position:
+    for marker in sorted(photos_by_marker):
+        for photo in photos_by_marker[marker]:
+            if photo.id in placed_photo_ids:
+                continue
+            content_html.append(image_html(photo.image, photo.legende or item.titre))
+            placed_photo_ids.add(photo.id)
+
+    if not ad_is_inline:
         content_html.append(advertisement_html(item))
 
     content_html.extend(

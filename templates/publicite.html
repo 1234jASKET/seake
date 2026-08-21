@@ -17,6 +17,7 @@
             <p class="eyebrow">Espace annonceur</p>
             <h2>Votre commerce ici</h2>
             <p>Offre speciale, ouverture, service, restaurant, immobilier, evenement ou annonce communautaire.</p>
+            <p><strong>Email publicite:</strong> <a href="mailto:publicite@seakejournal.com">publicite@seakejournal.com</a></p>
             <a class="button primary" href="{% url 'demande_publicite' %}">Acheter une publicite</a>
         </article>
 
@@ -44,11 +45,46 @@
 </section>
 
 <section class="section">
+    <div class="section-heading">
+        <p class="eyebrow">Annonces publiees</p>
+        <h2>Publicites des annonceurs</h2>
+        <p>Les publicites acceptees dans l'administration apparaissent ici sur le site.</p>
+    </div>
+
+    {% if publicites_approuvees %}
+        <div class="published-ads-grid">
+            {% for publicite in publicites_approuvees %}
+                <article class="published-ad-card">
+                    {% if publicite.photo %}
+                        <img src="{{ publicite.photo.url }}" alt="Publicite de {{ publicite.nom_entreprise|default:publicite.nom_client }}">
+                    {% else %}
+                        <div class="published-ad-placeholder">SEAKE JOURNAL</div>
+                    {% endif %}
+                    <div>
+                        <p class="eyebrow">{{ publicite.get_type_produit_display }}</p>
+                        <h3>{{ publicite.nom_entreprise|default:publicite.nom_client }}</h3>
+                        <p>{{ publicite.message|linebreaksbr }}</p>
+                        {% if publicite.budget %}
+                            <strong>Budget: {{ publicite.budget }}</strong>
+                        {% endif %}
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h3>Aucune publicite publiee pour le moment</h3>
+            <p>Dans l'admin Django, ouvrez une demande publicitaire et choisissez le statut Acceptee pour l'afficher ici.</p>
+        </div>
+    {% endif %}
+</section>
+
+<section class="section">
     <div class="cta-band">
         <div>
             <p class="eyebrow">Formulaire client</p>
             <h2>Un client veut acheter une page, une carte ou un coupon?</h2>
-            <p>Envoyez-le vers le formulaire. Sa demande sera conservee dans l'administration Django.</p>
+            <p>Envoyez-le vers le formulaire ou vers publicite@seakejournal.com. Sa demande sera conservee dans l'administration Django.</p>
         </div>
         <a class="button primary" href="{% url 'demande_publicite' %}">Ouvrir le formulaire</a>
     </div>

@@ -5,6 +5,8 @@ from .feeds import ArticlesFeed
 
 urlpatterns = [
     path("", views.accueil, name="accueil"),
+    path("ca", views.accueil, name="accueil_ca"),
+    path("ca/", views.accueil, name="accueil_ca_slash"),
     path("articles/", views.articles, name="articles"),
     path("ecran/", views.ecran_actualites, name="ecran_actualites"),
     path("articles/<slug:slug>/", views.article, name="article"),

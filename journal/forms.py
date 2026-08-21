@@ -14,6 +14,7 @@ class DemandePubliciteForm(forms.ModelForm):
             "type_produit",
             "budget",
             "date_souhaitee",
+            "photo",
             "message",
         ]
         widgets = {
@@ -33,6 +34,7 @@ class DemandePubliciteForm(forms.ModelForm):
             "type_produit": "Produit souhaite",
             "budget": "Budget approximatif",
             "date_souhaitee": "Date souhaitee",
+            "photo": "Photo de la publicite",
             "message": "Message",
         }
 

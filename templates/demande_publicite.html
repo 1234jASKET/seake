@@ -10,7 +10,7 @@
 </section>
 
 <section class="contact-layout">
-    <form class="contact-form purchase-form" method="post">
+    <form class="contact-form purchase-form" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% for field in form %}
             <label for="{{ field.id_for_label }}">
@@ -33,6 +33,7 @@
             <li>Publication preparee pour TikTok, YouTube, Facebook ou Substack</li>
         </ul>
         <p>Apres l'envoi, la demande apparait dans l'admin Django, section <strong>Demandes publicitaires</strong>.</p>
+        <p><strong>Email direct:</strong> <a href="mailto:publicite@seakejournal.com">publicite@seakejournal.com</a></p>
     </aside>
 </section>
 {% endblock %}

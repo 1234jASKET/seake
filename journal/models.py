@@ -95,7 +95,8 @@ class PhotoArticle(models.Model):
         null=True,
         help_text=(
             "Exemple: 3 affiche la photo apres le 3e paragraphe. "
-            "Laissez vide pour la galerie a la fin."
+            "Pour un placement exact, ajoutez une ligne seule avec ce numero "
+            "dans le texte de l'article. Laissez vide pour la galerie a la fin."
         ),
     )
 
@@ -136,6 +137,11 @@ class DemandePublicite(models.Model):
     type_produit = models.CharField(max_length=20, choices=TYPE_CHOICES)
     budget = models.CharField(max_length=80, blank=True)
     date_souhaitee = models.DateField(blank=True, null=True)
+    photo = models.FileField(
+        upload_to="demandes_publicites/",
+        blank=True,
+        validators=[image_file_validator],
+    )
     message = models.TextField()
     statut = models.CharField(
         max_length=20,
