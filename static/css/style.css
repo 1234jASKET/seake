@@ -731,6 +731,7 @@ p {
 }
 
 .published-ad-card img,
+.published-ad-card video,
 .published-ad-placeholder {
     aspect-ratio: 16 / 10;
     object-fit: cover;

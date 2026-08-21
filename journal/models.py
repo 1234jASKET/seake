@@ -11,6 +11,12 @@ image_file_validator = FileExtensionValidator(
 )
 
 
+video_file_validator = FileExtensionValidator(
+    allowed_extensions=["mp4", "webm", "mov", "m4v"],
+    message="Ajoutez une video valide: MP4, WEBM, MOV ou M4V.",
+)
+
+
 class Categorie(models.Model):
     nom = models.CharField(max_length=120)
     slug = models.SlugField(max_length=140, unique=True)
@@ -141,6 +147,11 @@ class DemandePublicite(models.Model):
         upload_to="demandes_publicites/",
         blank=True,
         validators=[image_file_validator],
+    )
+    video = models.FileField(
+        upload_to="demandes_publicites/videos/",
+        blank=True,
+        validators=[video_file_validator],
     )
     message = models.TextField()
     statut = models.CharField(

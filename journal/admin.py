@@ -163,6 +163,7 @@ class DemandePubliciteAdmin(admin.ModelAdmin):
         "statut",
         "date_creation",
         "photo_preview",
+        "video",
     )
     list_filter = ("type_produit", "statut", "date_creation")
     search_fields = ("nom_client", "nom_entreprise", "email", "telephone", "message")
@@ -177,6 +178,7 @@ class DemandePubliciteAdmin(admin.ModelAdmin):
         "date_souhaitee",
         "photo_preview",
         "photo",
+        "video",
         "message",
         "statut",
         "date_creation",
