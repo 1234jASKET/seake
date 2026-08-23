@@ -9,6 +9,97 @@
     <button class="button primary" type="button" onclick="window.print()">Imprimer le flyer</button>
 </section>
 
+<section class="press-prep">
+    <div class="section-heading">
+        <p class="eyebrow">Pre-presse</p>
+        <h1>Journal pret pour l'imprimerie</h1>
+        <p>Preparez le nombre de pages, le format, les plaques et le PDF final avant d'envoyer le journal sur presse.</p>
+    </div>
+
+    <div class="press-planner">
+        <form class="press-form" id="pressPlanner">
+            <label>
+                Nombre de pages souhaite
+                <input id="pressPages" type="number" min="2" step="1" value="10">
+            </label>
+            <label>
+                Format du journal
+                <select id="pressFormat">
+                    <option value="Lettre plie">Lettre plie</option>
+                    <option value="Tabloid">Tabloid</option>
+                    <option value="Broadsheet">Broadsheet</option>
+                </select>
+            </label>
+            <label>
+                Impression
+                <select id="pressColor">
+                    <option value="Couleur CMYK">Couleur CMYK</option>
+                    <option value="Noir seulement">Noir seulement</option>
+                    <option value="Couverture couleur, interieur noir">Couverture couleur, interieur noir</option>
+                </select>
+            </label>
+            <label>
+                Quantite
+                <input id="pressQuantity" type="number" min="1" step="25" value="500">
+            </label>
+        </form>
+
+        <aside class="press-result" aria-live="polite">
+            <p class="eyebrow">Resultat</p>
+            <h2 id="pressReadyTitle">Calcul en cours</h2>
+            <dl>
+                <div>
+                    <dt>Pages presse</dt>
+                    <dd id="pressFinalPages">12 pages</dd>
+                </div>
+                <div>
+                    <dt>Pages a ajouter</dt>
+                    <dd id="pressBlankPages">2</dd>
+                </div>
+                <div>
+                    <dt>Feuilles pliees</dt>
+                    <dd id="pressSheets">3</dd>
+                </div>
+                <div>
+                    <dt>Mode</dt>
+                    <dd id="pressMode">Couleur CMYK</dd>
+                </div>
+            </dl>
+            <p id="pressAdvice">Pour 10 pages, preparez 12 pages: ajoutez 2 pages blanches, publicites ou annonces.</p>
+        </aside>
+    </div>
+
+    <div class="press-check-grid">
+        <article>
+            <h2>Fichier a fournir</h2>
+            <ul>
+                <li>PDF final en ordre de pages</li>
+                <li>Images en bonne resolution</li>
+                <li>Couleurs converties en CMYK si l'imprimeur le demande</li>
+                <li>Marges et fonds perdus verifies</li>
+            </ul>
+        </article>
+        <article>
+            <h2>Plaques et negatifs</h2>
+            <ul>
+                <li>L'imprimeur prepare les plaques avec le PDF final</li>
+                <li>Pour la couleur: plaques Cyan, Magenta, Jaune et Noir</li>
+                <li>Pour noir seulement: plaque noire</li>
+                <li>Demander une epreuve avant le tirage final</li>
+            </ul>
+        </article>
+        <article>
+            <h2>Avant d'envoyer</h2>
+            <ul>
+                <li>Nombre de pages pair et compatible avec le pliage</li>
+                <li>Textes relus, photos placees, publicites approuvees</li>
+                <li>Nom du fichier avec date et version</li>
+                <li>Validation finale de l'imprimeur</li>
+            </ul>
+        </article>
+    </div>
+</section>
+
 <section class="flyer-page">
     <header class="flyer-header">
         <img src="{% static 'img/logo.png' %}" alt="SEAKE JOURNAL">

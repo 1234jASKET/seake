@@ -1941,6 +1941,111 @@ textarea {
     padding: 30px 22px 0;
 }
 
+.press-prep {
+    margin: 0 auto;
+    max-width: 1160px;
+    padding: 48px 22px 18px;
+}
+
+.press-prep .section-heading h1 {
+    font-size: clamp(2.2rem, 5vw, 4.3rem);
+    line-height: 1.03;
+    margin-bottom: 14px;
+}
+
+.press-planner {
+    display: grid;
+    gap: 22px;
+    grid-template-columns: 1.1fr .9fr;
+    margin-top: 26px;
+}
+
+.press-form,
+.press-result,
+.press-check-grid article {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.press-form {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 24px;
+}
+
+.press-form label {
+    color: var(--ink);
+    display: grid;
+    font-weight: 800;
+    gap: 8px;
+}
+
+.press-form input,
+.press-form select {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--ink);
+    font: inherit;
+    padding: 12px 13px;
+    width: 100%;
+}
+
+.press-result {
+    padding: 24px;
+}
+
+.press-result h2 {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    line-height: 1.1;
+}
+
+.press-result dl {
+    display: grid;
+    gap: 12px;
+    margin: 18px 0;
+}
+
+.press-result dl div {
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+    padding-bottom: 10px;
+}
+
+.press-result dt {
+    color: var(--muted);
+}
+
+.press-result dd {
+    font-weight: 900;
+    margin: 0;
+    text-align: right;
+}
+
+.press-check-grid {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: 22px;
+}
+
+.press-check-grid article {
+    padding: 24px;
+}
+
+.press-check-grid h2 {
+    font-size: 1.35rem;
+}
+
+.press-check-grid li {
+    margin-bottom: 8px;
+}
+
 .flyer-page {
     background: var(--white);
     border: 1px solid var(--line);
@@ -2349,6 +2454,9 @@ textarea {
     .coupon-grid,
     .social-grid,
     .publishing-plan,
+    .press-planner,
+    .press-form,
+    .press-check-grid,
     .article-ad,
     .flyer-columns {
         grid-template-columns: 1fr;
