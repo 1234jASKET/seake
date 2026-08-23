@@ -182,6 +182,25 @@ p {
     color: #2a210c;
 }
 
+.ad-pull-button {
+    animation: adButtonPulse 2.4s ease-in-out infinite;
+    position: relative;
+}
+
+.ad-pull-button::after {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .65), transparent);
+    content: "";
+    inset: 0;
+    opacity: 0;
+    position: absolute;
+    transform: translateX(-120%);
+}
+
+.ad-pull-button:hover::after {
+    animation: adButtonShine .75s ease;
+    opacity: 1;
+}
+
 .button.secondary {
     background: rgba(255, 255, 255, .16);
     color: var(--white);
@@ -721,6 +740,7 @@ p {
 }
 
 .published-ad-card {
+    animation: adCardRise .7s ease both;
     background: var(--white);
     border: 1px solid var(--line);
     border-radius: 8px;
@@ -728,6 +748,36 @@ p {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    position: relative;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.published-ad-card:nth-child(2) {
+    animation-delay: .08s;
+}
+
+.published-ad-card:nth-child(3) {
+    animation-delay: .16s;
+}
+
+.published-ad-card:hover {
+    box-shadow: 0 22px 55px rgba(16, 32, 51, .16);
+    transform: translateY(-5px);
+}
+
+.ad-live-badge {
+    background: var(--brand);
+    border-radius: 0 0 8px 0;
+    color: var(--white);
+    font-size: .72rem;
+    font-weight: 900;
+    left: 0;
+    letter-spacing: .08em;
+    padding: 8px 10px;
+    position: absolute;
+    text-transform: uppercase;
+    top: 0;
+    z-index: 2;
 }
 
 .published-ad-card img,
@@ -760,6 +810,41 @@ p {
 
 .published-ad-card strong {
     color: var(--brand);
+}
+
+@keyframes adButtonPulse {
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 138, 0, .34);
+        transform: translateY(0);
+    }
+
+    50% {
+        box-shadow: 0 0 0 9px rgba(255, 138, 0, 0);
+        transform: translateY(-1px);
+    }
+}
+
+@keyframes adButtonShine {
+    from {
+        transform: translateX(-120%);
+    }
+
+    to {
+        transform: translateX(120%);
+    }
+}
+
+@keyframes adCardRise {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .coupon-card {
