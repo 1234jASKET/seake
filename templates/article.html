@@ -5,35 +5,70 @@
 
 {% block content %}
 <article class="article-page">
-    <header class="article-header">
+    <header class="article-header newspaper-article-header">
+        <div class="newspaper-kicker">
+            <span>{{ article.date_publication|date:"l d F Y" }}</span>
+            <span>{{ article.categorie.nom|upper }}</span>
+            <span>No 004 | 2,00 $</span>
+        </div>
+        <div class="newspaper-masthead">
+            <strong>SEAKE JOURNAL</strong>
+            <small>L'information qui nous rassemble</small>
+        </div>
         <a class="category-pill" href="{{ article.categorie.get_absolute_url }}">{{ article.categorie.nom }}</a>
         <h1>{{ article.titre }}</h1>
-        <p>{{ article.resume }}</p>
+        <p class="article-lede">{{ article.resume }}</p>
         <div class="article-meta">
             <span>Par {{ article.auteur }}</span>
-            <span>{{ article.date_publication|date:"d F Y" }}</span>
+            <span>Edition web • Page article</span>
         </div>
         {% if user.is_staff %}
             <a class="admin-edit-link" href="{% url 'admin:journal_article_change' article.id %}">
                 Modifier cet article
             </a>
         {% endif %}
-        {% if article.image %}
-            <img class="article-main-image" src="{{ article.image.url }}" alt="{{ article.titre }}">
-        {% else %}
-            <img class="article-main-image" src="{% static 'img/banniere.jpg' %}" alt="{{ article.titre }}">
-        {% endif %}
-    </header>
-    <div class="article-body">
-        {% for block in article_blocks %}
-            {% if block.type == "paragraph" %}
-                <p>{{ block.text|linebreaksbr }}</p>
-            {% elif block.type == "photo" %}
-                {% include "partials/article_inline_photo.html" with photo=block.photo %}
-            {% elif block.type == "advertisement" %}
-                {% include "partials/article_ad.html" %}
+        <figure class="article-hero-photo">
+            {% if article.image %}
+                <img class="article-main-image" src="{{ article.image.url }}" alt="{{ article.titre }}">
+            {% else %}
+                <img class="article-main-image" src="{% static 'img/banniere.jpg' %}" alt="{{ article.titre }}">
             {% endif %}
-        {% endfor %}
+            <figcaption>Photo principale • SEAKE JOURNAL</figcaption>
+        </figure>
+    </header>
+
+    <div class="newspaper-layout">
+        <aside class="article-press-sidebar">
+            <p class="eyebrow">Dans cette edition</p>
+            <h2>Repères</h2>
+            <dl>
+                <div>
+                    <dt>Rubrique</dt>
+                    <dd>{{ article.categorie.nom }}</dd>
+                </div>
+                <div>
+                    <dt>Date</dt>
+                    <dd>{{ article.date_publication|date:"d M Y" }}</dd>
+                </div>
+                <div>
+                    <dt>Edition</dt>
+                    <dd>SEAKE Web</dd>
+                </div>
+            </dl>
+            <div class="article-barcode" aria-label="Code-barres decoratif"></div>
+        </aside>
+
+        <div class="article-body newspaper-body">
+            {% for block in article_blocks %}
+                {% if block.type == "paragraph" %}
+                    <p>{{ block.text|linebreaksbr }}</p>
+                {% elif block.type == "photo" %}
+                    {% include "partials/article_inline_photo.html" with photo=block.photo %}
+                {% elif block.type == "advertisement" %}
+                    {% include "partials/article_ad.html" %}
+                {% endif %}
+            {% endfor %}
+        </div>
     </div>
     {% if not advertisement_is_inline %}
         {% include "partials/article_ad.html" %}

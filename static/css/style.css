@@ -450,22 +450,72 @@ p {
 }
 
 .article-page {
-    padding: 70px 22px;
+    margin: 0 auto;
+    max-width: 1160px;
+    padding: 46px 22px 70px;
 }
 
 .article-header {
-    max-width: 820px;
+    max-width: none;
+}
+
+.newspaper-article-header {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    padding: 28px;
+}
+
+.newspaper-kicker {
+    border-bottom: 2px solid var(--ink);
+    border-top: 2px solid var(--ink);
+    display: flex;
+    gap: 14px;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    padding: 8px 0;
+}
+
+.newspaper-kicker span {
+    font-size: .82rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.newspaper-masthead {
+    border-bottom: 1px solid var(--line);
+    display: grid;
+    justify-items: center;
+    margin-bottom: 22px;
+    padding-bottom: 18px;
+    text-align: center;
+}
+
+.newspaper-masthead strong {
+    font-size: clamp(2.4rem, 6vw, 5rem);
+    letter-spacing: 0;
+    line-height: .95;
+}
+
+.newspaper-masthead small {
+    font-weight: 900;
+    text-transform: uppercase;
 }
 
 .article-header h1 {
-    font-size: clamp(2.2rem, 5vw, 4.2rem);
-    line-height: 1.05;
-    margin: 18px 0;
+    font-size: clamp(2.6rem, 6vw, 5.8rem);
+    line-height: .94;
+    margin: 20px 0 16px;
+    max-width: 1040px;
+    text-transform: uppercase;
 }
 
-.article-header > p {
+.article-lede {
     color: var(--muted);
-    font-size: 1.22rem;
+    font-size: clamp(1.15rem, 2vw, 1.45rem);
+    line-height: 1.35;
+    max-width: 920px;
 }
 
 .admin-edit-link {
@@ -483,13 +533,81 @@ p {
     color: var(--white);
 }
 
+.article-hero-photo {
+    margin: 26px 0 0;
+    position: relative;
+}
+
 .article-main-image {
     border-radius: 8px;
-    box-shadow: var(--shadow);
-    margin-top: 26px;
-    max-height: 520px;
+    box-shadow: none;
+    max-height: 560px;
     object-fit: cover;
     width: 100%;
+}
+
+.article-hero-photo figcaption {
+    background: var(--brand-dark);
+    border-radius: 0 0 8px 8px;
+    color: var(--white);
+    font-size: .82rem;
+    font-weight: 800;
+    margin-top: -1px;
+    padding: 9px 12px;
+}
+
+.newspaper-layout {
+    align-items: start;
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 250px minmax(0, 1fr);
+    margin-top: 24px;
+}
+
+.article-press-sidebar {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    padding: 22px;
+    position: sticky;
+    top: 96px;
+}
+
+.article-press-sidebar h2 {
+    font-size: 1.6rem;
+}
+
+.article-press-sidebar dl {
+    display: grid;
+    gap: 12px;
+    margin: 18px 0;
+}
+
+.article-press-sidebar dl div {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 10px;
+}
+
+.article-press-sidebar dt {
+    color: var(--muted);
+    font-size: .8rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.article-press-sidebar dd {
+    margin: 3px 0 0;
+    font-weight: 900;
+}
+
+.article-barcode {
+    background:
+        linear-gradient(90deg, #111 0 4px, transparent 4px 8px, #111 8px 10px, transparent 10px 14px, #111 14px 19px, transparent 19px 23px, #111 23px 26px, transparent 26px 31px, #111 31px 33px, transparent 33px 39px, #111 39px 45px, transparent 45px 50px, #111 50px 53px, transparent 53px 58px, #111 58px 62px, transparent 62px 68px);
+    border: 6px solid var(--ink);
+    height: 64px;
+    margin-top: 20px;
+    width: 150px;
 }
 
 .article-body,
@@ -504,6 +622,22 @@ p {
     padding: 34px;
 }
 
+.newspaper-body {
+    column-gap: 34px;
+    column-rule: 1px solid var(--line);
+    columns: 2 280px;
+    max-width: none;
+}
+
+.newspaper-body > p:first-child::first-letter {
+    color: var(--brand);
+    float: left;
+    font-size: 4.2rem;
+    font-weight: 900;
+    line-height: .78;
+    padding-right: 8px;
+}
+
 .article-body > p {
     margin: 0 0 1.35em;
 }
@@ -513,6 +647,7 @@ p {
 }
 
 .article-inline-photo {
+    break-inside: avoid;
     margin: 28px 0;
 }
 
@@ -542,6 +677,7 @@ p {
     margin-top: 24px;
     max-width: 820px;
     padding: 22px;
+    break-inside: avoid;
 }
 
 .article-body .article-ad {
@@ -2611,6 +2747,7 @@ textarea {
     .contact-layout,
     .comments-layout,
     .gallery-grid,
+    .newspaper-layout,
     .ad-layout,
     .pricing-grid,
     .published-ads-grid,
@@ -2680,6 +2817,19 @@ textarea {
     .site-footer {
         align-items: flex-start;
         flex-direction: column;
+    }
+
+    .newspaper-kicker {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .article-press-sidebar {
+        position: static;
+    }
+
+    .newspaper-body {
+        columns: 1;
     }
 
     .screen-news-header,
