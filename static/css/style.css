@@ -2122,6 +2122,82 @@ textarea {
     text-align: center;
 }
 
+.press-newspaper-example {
+    margin-top: 26px;
+}
+
+.press-newspaper-pages {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.press-newspaper-page {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    min-height: 320px;
+    overflow: hidden;
+    padding: 18px;
+}
+
+.press-newspaper-page span,
+.press-newspaper-page small {
+    color: var(--muted);
+    font-size: .78rem;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.press-newspaper-page img {
+    border-radius: 8px;
+    margin: 12px 0;
+    max-height: 120px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.press-newspaper-page h3 {
+    font-size: 1.2rem;
+    line-height: 1.15;
+}
+
+.press-newspaper-page p {
+    color: var(--muted);
+    font-size: .95rem;
+}
+
+.press-newspaper-page.cover {
+    background: linear-gradient(135deg, rgba(16, 32, 51, .96), rgba(216, 24, 24, .9));
+    color: var(--white);
+}
+
+.press-newspaper-page.cover p,
+.press-newspaper-page.cover span {
+    color: rgba(255, 255, 255, .78);
+}
+
+.press-newspaper-page.cover img {
+    background: var(--white);
+    max-height: 90px;
+    object-fit: contain;
+    padding: 10px;
+}
+
+.press-newspaper-page.ad {
+    background: #fff6e8;
+    border-color: #ffd39a;
+}
+
+.press-newspaper-page.complement {
+    background: #f7f7f7;
+    border-style: dashed;
+}
+
 .press-check-grid article {
     padding: 24px;
 }
@@ -2547,6 +2623,7 @@ textarea {
     .press-check-grid,
     .press-page-grid,
     .press-sheet-grid,
+    .press-newspaper-pages,
     .article-ad,
     .flyer-columns {
         grid-template-columns: 1fr;

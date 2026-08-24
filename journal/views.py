@@ -179,7 +179,7 @@ def a_propos(request):
 
 
 def impression(request):
-    articles = _articles_publies()[:3]
+    articles = _articles_publies()[:10]
     return render(request, "impression.html", {"articles": articles})
 
 

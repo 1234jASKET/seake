@@ -90,9 +90,56 @@
         <div>
             <p class="eyebrow">Pre-presse</p>
             <h2>Planches pour l'imprimeur</h2>
-            <p>Vue simple pour comprendre quelles pages vont ensemble avant l'imposition finale de l'imprimeur.</p>
+            <p>Vue simple pour comprendre quelles pages vont ensemble avant votre imposition finale.</p>
         </div>
         <div class="press-sheet-grid" id="pressSheetGrid"></div>
+    </div>
+
+    <div class="press-newspaper-example">
+        <div class="section-heading">
+            <p class="eyebrow">Exemple final</p>
+            <h2>Journal monte avec les articles du site</h2>
+            <p>Modele de depart pour placer les articles, les publicites et les pages de complement avant de faire votre imposition finale.</p>
+        </div>
+
+        <div class="press-newspaper-pages">
+            <article class="press-newspaper-page cover">
+                <span>Page 1</span>
+                <img src="{% static 'img/logo.png' %}" alt="SEAKE JOURNAL">
+                <h3>SEAKE JOURNAL</h3>
+                <p>Edition locale preparee pour impression.</p>
+            </article>
+
+            {% for article in articles %}
+                <article class="press-newspaper-page">
+                    <span>Page {{ forloop.counter|add:"1" }}</span>
+                    {% if article.image %}
+                        <img src="{{ article.image.url }}" alt="{{ article.titre }}">
+                    {% endif %}
+                    <h3>{{ article.titre }}</h3>
+                    <p>{{ article.resume }}</p>
+                    <small>{{ article.categorie.nom }} • {{ article.date_publication|date:"d M Y" }}</small>
+                </article>
+            {% empty %}
+                <article class="press-newspaper-page">
+                    <span>Page 2</span>
+                    <h3>Article a placer</h3>
+                    <p>Ajoutez des articles dans l'admin pour remplir cet exemple de journal.</p>
+                </article>
+            {% endfor %}
+
+            <article class="press-newspaper-page ad">
+                <span>Publicite</span>
+                <h3>Espace publicitaire</h3>
+                <p>Placez ici une annonce client, un coupon, une maison a vendre ou un appartement a louer.</p>
+            </article>
+
+            <article class="press-newspaper-page complement">
+                <span>Complement</span>
+                <h3>Page a completer</h3>
+                <p>Utilisez cette page pour atteindre le bon multiple de 4 avant la presse.</p>
+            </article>
+        </div>
     </div>
 
     <div class="press-check-grid">
