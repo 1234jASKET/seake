@@ -42,6 +42,10 @@
                 Quantite
                 <input id="pressQuantity" type="number" min="1" step="25" value="500">
             </label>
+            <label>
+                Espaces publicitaires
+                <input id="pressAds" type="number" min="0" step="1" value="5">
+            </label>
         </form>
 
         <aside class="press-result" aria-live="polite">
@@ -64,9 +68,31 @@
                     <dt>Mode</dt>
                     <dd id="pressMode">Couleur CMYK</dd>
                 </div>
+                <div>
+                    <dt>Publicites</dt>
+                    <dd id="pressAdSpaces">5 espaces</dd>
+                </div>
             </dl>
             <p id="pressAdvice">Pour 10 pages, preparez 12 pages: ajoutez 2 pages blanches, publicites ou annonces.</p>
         </aside>
+    </div>
+
+    <div class="press-montage">
+        <div>
+            <p class="eyebrow">Montage automatique</p>
+            <h2>Plan de pages</h2>
+            <p id="pressMontageSummary">Le montage sera calcule selon vos pages et vos espaces publicitaires.</p>
+        </div>
+        <div class="press-page-grid" id="pressPageGrid"></div>
+    </div>
+
+    <div class="press-montage">
+        <div>
+            <p class="eyebrow">Pre-presse</p>
+            <h2>Planches pour l'imprimeur</h2>
+            <p>Vue simple pour comprendre quelles pages vont ensemble avant l'imposition finale de l'imprimeur.</p>
+        </div>
+        <div class="press-sheet-grid" id="pressSheetGrid"></div>
     </div>
 
     <div class="press-check-grid">
