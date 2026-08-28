@@ -1243,6 +1243,56 @@ p {
     padding: 26px;
 }
 
+.conversion-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.conversion-grid article {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    min-height: 230px;
+    padding: 22px;
+}
+
+.conversion-grid span {
+    color: var(--brand);
+    display: block;
+    font-size: .78rem;
+    font-weight: 900;
+    letter-spacing: .12em;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+}
+
+.conversion-grid h3 {
+    font-size: 1.2rem;
+    line-height: 1.15;
+    margin-bottom: 10px;
+}
+
+.conversion-grid p {
+    color: var(--muted);
+}
+
+.conversion-warning {
+    align-items: flex-start;
+    background: #102033;
+    border-radius: 8px;
+    color: var(--white);
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;
+    padding: 18px 20px;
+}
+
+.conversion-warning span {
+    color: rgba(255, 255, 255, .76);
+}
+
 .client-satisfaction-card {
     align-self: start;
     background: linear-gradient(135deg, #ffffff, #fff4e5);
@@ -2872,6 +2922,8 @@ textarea {
     .training-layout,
     .lesson-board,
     .lesson-steps,
+    .conversion-grid,
+    .conversion-warning,
     .material-grid,
     .recipe-grid,
     .chemistry-grid,
