@@ -1057,6 +1057,153 @@ p {
     grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.seake-guide-section {
+    padding-bottom: 18px;
+    padding-top: 18px;
+}
+
+.seake-guide {
+    align-items: center;
+    animation: seakeGuideIn .7s ease-out both;
+    background: #f8f5ef;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    display: grid;
+    gap: 20px;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    margin: 0 auto;
+    max-width: 1160px;
+    padding: 20px;
+    position: relative;
+}
+
+.seake-guide.is-hidden {
+    display: none;
+}
+
+.seake-character {
+    align-items: center;
+    display: grid;
+    justify-items: center;
+    width: 112px;
+}
+
+.seake-character-head {
+    animation: seakeHeadTalk 2.4s ease-in-out infinite;
+    background: #ffd9b0;
+    border: 4px solid #102033;
+    border-radius: 50%;
+    height: 76px;
+    position: relative;
+    width: 76px;
+}
+
+.seake-character-eye {
+    background: #102033;
+    border-radius: 50%;
+    height: 9px;
+    position: absolute;
+    top: 29px;
+    width: 9px;
+}
+
+.seake-character-eye.left {
+    left: 22px;
+}
+
+.seake-character-eye.right {
+    right: 22px;
+}
+
+.seake-character-mouth {
+    animation: seakeMouthTalk .55s ease-in-out infinite;
+    background: var(--brand);
+    border-radius: 0 0 18px 18px;
+    bottom: 17px;
+    height: 7px;
+    left: 50%;
+    position: absolute;
+    transform: translateX(-50%);
+    width: 24px;
+}
+
+.seake-character-body {
+    background: #102033;
+    border-radius: 8px 8px 18px 18px;
+    color: var(--white);
+    font-size: .78rem;
+    font-weight: 900;
+    letter-spacing: .08em;
+    margin-top: -4px;
+    padding: 20px 16px 16px;
+    text-align: center;
+    width: 88px;
+}
+
+.seake-speech h2 {
+    font-size: 1.55rem;
+    margin-bottom: 6px;
+}
+
+.seake-speech p:not(.eyebrow) {
+    color: var(--muted);
+    margin: 0;
+    max-width: 760px;
+}
+
+.seake-guide-close {
+    align-items: center;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--ink);
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 1.5rem;
+    font-weight: 800;
+    height: 38px;
+    justify-content: center;
+    line-height: 1;
+    width: 38px;
+}
+
+@keyframes seakeGuideIn {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes seakeHeadTalk {
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    45% {
+        transform: translateY(-3px) rotate(-2deg);
+    }
+    70% {
+        transform: translateY(1px) rotate(2deg);
+    }
+}
+
+@keyframes seakeMouthTalk {
+    0%,
+    100% {
+        height: 5px;
+        width: 22px;
+    }
+    50% {
+        height: 15px;
+        width: 18px;
+    }
+}
+
 .ink-academy-section {
     background: #102033;
     color: var(--white);

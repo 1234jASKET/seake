@@ -22,6 +22,15 @@ document.querySelectorAll(".copy-link").forEach((button) => {
     });
 });
 
+const seakeGuide = document.querySelector("[data-seake-guide]");
+const seakeGuideClose = document.querySelector("[data-seake-guide-close]");
+
+if (seakeGuide && seakeGuideClose) {
+    seakeGuideClose.addEventListener("click", () => {
+        seakeGuide.classList.add("is-hidden");
+    });
+}
+
 const pressPlanner = document.querySelector("#pressPlanner");
 
 if (pressPlanner) {
