@@ -1057,6 +1057,83 @@ p {
     grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.ink-academy-section {
+    background: #102033;
+    color: var(--white);
+}
+
+.ink-academy-hero {
+    align-items: end;
+    display: flex;
+    gap: 24px;
+    justify-content: space-between;
+    margin-bottom: 28px;
+}
+
+.ink-academy-hero h2 {
+    color: var(--white);
+    font-size: clamp(2rem, 4vw, 3.8rem);
+    line-height: .98;
+    max-width: 820px;
+}
+
+.ink-academy-hero p:not(.eyebrow) {
+    color: rgba(255, 255, 255, .78);
+    max-width: 760px;
+}
+
+.ink-course-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ink-course-card,
+.lesson-note,
+.course-timeline article {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+}
+
+.ink-course-card {
+    background: rgba(255, 255, 255, .08);
+    border-color: rgba(255, 255, 255, .16);
+    min-height: 220px;
+    padding: 22px;
+}
+
+.ink-course-card.featured {
+    background: #f8f5ef;
+    color: var(--ink);
+    grid-row: span 2;
+}
+
+.ink-course-card span,
+.course-timeline span {
+    color: var(--brand);
+    display: block;
+    font-size: .78rem;
+    font-weight: 900;
+    letter-spacing: .12em;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+}
+
+.ink-course-card h3 {
+    color: inherit;
+    font-size: 1.45rem;
+    line-height: 1.1;
+    margin-bottom: 10px;
+}
+
+.ink-course-card p {
+    color: rgba(255, 255, 255, .72);
+}
+
+.ink-course-card.featured p {
+    color: var(--muted);
+}
+
 .training-workflow {
     display: grid;
     gap: 18px;
@@ -1117,6 +1194,53 @@ p {
 .material-card,
 .client-satisfaction-card {
     padding: 24px;
+}
+
+.lesson-board {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1.25fr .75fr;
+}
+
+.lesson-main {
+    background: #f8f5ef;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 28px;
+}
+
+.lesson-main > p:not(.eyebrow) {
+    color: var(--muted);
+    max-width: 760px;
+}
+
+.lesson-steps {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 22px;
+}
+
+.lesson-steps div {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    display: grid;
+    gap: 8px;
+    padding: 16px;
+}
+
+.lesson-steps span,
+.course-timeline p,
+.lesson-note p {
+    color: var(--muted);
+}
+
+.lesson-note {
+    align-self: start;
+    background: #fff1f1;
+    border-color: rgba(216, 24, 24, .25);
+    padding: 26px;
 }
 
 .client-satisfaction-card {
@@ -1198,6 +1322,24 @@ p {
     background: linear-gradient(135deg, #fff, #fff1f1);
     border-color: rgba(216, 24, 24, .25);
     padding: 26px;
+}
+
+.course-timeline {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.course-timeline article {
+    background: var(--white);
+    box-shadow: var(--shadow);
+    padding: 22px;
+}
+
+.course-timeline h3 {
+    font-size: 1.18rem;
+    line-height: 1.15;
+    margin-bottom: 8px;
 }
 
 .color-sample-grid {
@@ -2724,12 +2866,17 @@ textarea {
     .category-grid,
     .home-feature-grid,
     .color-control-intro,
+    .ink-academy-hero,
+    .ink-course-grid,
     .training-workflow,
     .training-layout,
+    .lesson-board,
+    .lesson-steps,
     .material-grid,
     .recipe-grid,
     .chemistry-grid,
     .chemistry-protocol,
+    .course-timeline,
     .chemistry-check-grid,
     .color-sample-grid,
     .studio-grid,
@@ -2806,6 +2953,11 @@ textarea {
     }
 
     .studio-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .ink-academy-hero {
         align-items: flex-start;
         flex-direction: column;
     }
