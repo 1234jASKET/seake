@@ -1086,59 +1086,16 @@ p {
     align-items: center;
     display: grid;
     justify-items: center;
-    width: 112px;
+    width: clamp(120px, 16vw, 190px);
 }
 
-.seake-character-head {
-    animation: seakeHeadTalk 2.4s ease-in-out infinite;
-    background: #ffd9b0;
-    border: 4px solid #102033;
-    border-radius: 50%;
-    height: 76px;
-    position: relative;
-    width: 76px;
-}
-
-.seake-character-eye {
-    background: #102033;
-    border-radius: 50%;
-    height: 9px;
-    position: absolute;
-    top: 29px;
-    width: 9px;
-}
-
-.seake-character-eye.left {
-    left: 22px;
-}
-
-.seake-character-eye.right {
-    right: 22px;
-}
-
-.seake-character-mouth {
-    animation: seakeMouthTalk .55s ease-in-out infinite;
-    background: var(--brand);
-    border-radius: 0 0 18px 18px;
-    bottom: 17px;
-    height: 7px;
-    left: 50%;
-    position: absolute;
-    transform: translateX(-50%);
-    width: 24px;
-}
-
-.seake-character-body {
-    background: #102033;
-    border-radius: 8px 8px 18px 18px;
-    color: var(--white);
-    font-size: .78rem;
-    font-weight: 900;
-    letter-spacing: .08em;
-    margin-top: -4px;
-    padding: 20px 16px 16px;
-    text-align: center;
-    width: 88px;
+.seake-character img {
+    animation: seakeProfessorFloat 3.2s ease-in-out infinite;
+    display: block;
+    height: auto;
+    max-height: 220px;
+    max-width: 100%;
+    object-fit: contain;
 }
 
 .seake-speech h2 {
@@ -1179,28 +1136,13 @@ p {
     }
 }
 
-@keyframes seakeHeadTalk {
+@keyframes seakeProfessorFloat {
     0%,
     100% {
-        transform: translateY(0) rotate(0deg);
-    }
-    45% {
-        transform: translateY(-3px) rotate(-2deg);
-    }
-    70% {
-        transform: translateY(1px) rotate(2deg);
-    }
-}
-
-@keyframes seakeMouthTalk {
-    0%,
-    100% {
-        height: 5px;
-        width: 22px;
+        transform: translateY(0) rotate(-1deg);
     }
     50% {
-        height: 15px;
-        width: 18px;
+        transform: translateY(-5px) rotate(1deg);
     }
 }
 

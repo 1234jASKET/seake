@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}SEAKE Color Control{% endblock %}
 
@@ -12,14 +13,7 @@
 <section class="section seake-guide-section" data-seake-guide>
     <div class="seake-guide">
         <div class="seake-character" aria-hidden="true">
-            <div class="seake-character-head">
-                <span class="seake-character-eye left"></span>
-                <span class="seake-character-eye right"></span>
-                <span class="seake-character-mouth"></span>
-            </div>
-            <div class="seake-character-body">
-                <span>SEAKE</span>
-            </div>
+            <img src="{% static 'img/professeur-seake.png' %}" alt="">
         </div>
         <div class="seake-speech">
             <p class="eyebrow">Professeur SEAKE</p>
