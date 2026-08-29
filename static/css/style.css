@@ -1146,6 +1146,109 @@ p {
     }
 }
 
+.color-book-section {
+    background: #ffffff;
+}
+
+.color-book-layout {
+    display: grid;
+    gap: 28px;
+    grid-template-columns: .82fr 1.18fr;
+}
+
+.color-book-cover {
+    background:
+        linear-gradient(135deg, rgba(216, 24, 24, .9), rgba(16, 32, 51, .95)),
+        linear-gradient(90deg, #00a6d6 0 25%, #e5007d 25% 50%, #f5d000 50% 75%, #111 75%);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 470px;
+    overflow: hidden;
+    padding: 32px;
+    position: relative;
+}
+
+.color-book-cover::before {
+    background:
+        repeating-linear-gradient(90deg, rgba(255,255,255,.18) 0 1px, transparent 1px 18px),
+        repeating-linear-gradient(0deg, rgba(255,255,255,.1) 0 1px, transparent 1px 18px);
+    content: "";
+    inset: 0;
+    opacity: .45;
+    position: absolute;
+}
+
+.color-book-cover > * {
+    position: relative;
+}
+
+.color-book-cover h2 {
+    color: var(--white);
+    font-size: clamp(2.2rem, 4.5vw, 4.6rem);
+    line-height: .9;
+    margin-bottom: 18px;
+}
+
+.color-book-cover p {
+    color: rgba(255, 255, 255, .82);
+    font-weight: 700;
+    max-width: 430px;
+}
+
+.color-book-cover span {
+    align-self: flex-start;
+    background: rgba(255, 255, 255, .15);
+    border: 1px solid rgba(255, 255, 255, .25);
+    border-radius: 999px;
+    color: var(--white);
+    font-size: .78rem;
+    font-weight: 900;
+    letter-spacing: .12em;
+    padding: 10px 14px;
+    text-transform: uppercase;
+}
+
+.color-book-content {
+    min-width: 0;
+}
+
+.book-chapter-grid {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.book-chapter-grid article {
+    background: #f8f5ef;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.book-chapter-grid span {
+    color: var(--brand);
+    display: block;
+    font-size: .76rem;
+    font-weight: 900;
+    letter-spacing: .12em;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+
+.book-chapter-grid h3 {
+    font-size: 1.22rem;
+    line-height: 1.15;
+    margin-bottom: 8px;
+}
+
+.book-chapter-grid p {
+    color: var(--muted);
+}
+
 .ink-academy-section {
     background: #102033;
     color: var(--white);
@@ -3005,6 +3108,8 @@ textarea {
     .category-grid,
     .home-feature-grid,
     .color-control-intro,
+    .color-book-layout,
+    .book-chapter-grid,
     .ink-academy-hero,
     .ink-course-grid,
     .training-workflow,
