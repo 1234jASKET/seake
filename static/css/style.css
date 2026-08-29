@@ -1216,37 +1216,112 @@ p {
     min-width: 0;
 }
 
-.book-chapter-grid {
+.swatch-book {
     display: grid;
-    gap: 14px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.book-chapter-grid article {
+.swatch-page {
+    align-items: stretch;
     background: #f8f5ef;
     border: 1px solid var(--line);
     border-radius: 8px;
-    padding: 20px;
+    box-shadow: var(--shadow);
+    display: grid;
+    grid-template-rows: 120px 1fr;
+    min-height: 265px;
+    overflow: hidden;
+    position: relative;
 }
 
-.book-chapter-grid span {
+.swatch-page::before {
+    background: var(--brand);
+    border-radius: 0 0 0 8px;
+    color: var(--white);
+    content: "";
+    height: 42px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 22px;
+}
+
+.swatch-color {
+    background: #00a6d6;
+    border-bottom: 1px solid var(--line);
+}
+
+.swatch-page > div:last-child {
+    display: grid;
+    gap: 5px;
+    padding: 18px;
+}
+
+.swatch-page span {
     color: var(--brand);
     display: block;
     font-size: .76rem;
     font-weight: 900;
     letter-spacing: .12em;
-    margin-bottom: 12px;
     text-transform: uppercase;
 }
 
-.book-chapter-grid h3 {
+.swatch-page h3 {
     font-size: 1.22rem;
     line-height: 1.15;
-    margin-bottom: 8px;
 }
 
-.book-chapter-grid p {
+.swatch-page p {
     color: var(--muted);
+    margin: 0;
+}
+
+.swatch-page.cyan .swatch-color,
+.swatch-page.cyan::before {
+    background: #008fcb;
+}
+
+.swatch-page.magenta .swatch-color,
+.swatch-page.magenta::before {
+    background: #d91d5c;
+}
+
+.swatch-page.yellow .swatch-color,
+.swatch-page.yellow::before {
+    background: #f3d21b;
+}
+
+.swatch-page.black .swatch-color,
+.swatch-page.black::before {
+    background: #111820;
+}
+
+.swatch-page.green .swatch-color,
+.swatch-page.green::before {
+    background: #249849;
+}
+
+.swatch-page.foil .swatch-color,
+.swatch-page.foil::before {
+    background:
+        linear-gradient(135deg, #8a6921, #fff4a8 38%, #bd8f2c 62%, #7a5a18),
+        #c99a2e;
+}
+
+.swatch-book-note {
+    align-items: flex-start;
+    background: #102033;
+    border-radius: 8px;
+    color: var(--white);
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+    padding: 16px 18px;
+}
+
+.swatch-book-note span {
+    color: rgba(255, 255, 255, .76);
 }
 
 .ink-academy-section {
@@ -3109,7 +3184,8 @@ textarea {
     .home-feature-grid,
     .color-control-intro,
     .color-book-layout,
-    .book-chapter-grid,
+    .swatch-book,
+    .swatch-book-note,
     .ink-academy-hero,
     .ink-course-grid,
     .training-workflow,
