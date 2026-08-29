@@ -72,8 +72,14 @@
                 <p>Ce nuancier aide a parler la meme langue avec le client: on montre la couleur, on note le code, puis on valide sur le vrai papier, foil, film ou plastique.</p>
             </div>
 
+            <div class="swatch-search" data-swatch-search>
+                <label for="swatchSearch">Chercher une couleur</label>
+                <input id="swatchSearch" type="search" placeholder="Ex: bleu, rouge, foil, SK-C, CMYK 100..." data-swatch-search-input>
+                <p data-swatch-search-count>6 couleurs disponibles</p>
+            </div>
+
             <div class="swatch-book">
-                <article class="swatch-page cyan">
+                <article class="swatch-page cyan" data-swatch-page data-search-text="sk-c 100 bleu editorial cyan cmyk 100 18 0 6 lab papier journal">
                     <div class="swatch-color"></div>
                     <div>
                         <span>SK-C 100</span>
@@ -82,7 +88,7 @@
                         <p>Lab 55 / -18 / -44</p>
                     </div>
                 </article>
-                <article class="swatch-page magenta">
+                <article class="swatch-page magenta" data-swatch-page data-search-text="sk-m 205 rouge annonce magenta publicite cmyk 0 92 62 4 lab">
                     <div class="swatch-color"></div>
                     <div>
                         <span>SK-M 205</span>
@@ -91,7 +97,7 @@
                         <p>Lab 49 / 69 / 22</p>
                     </div>
                 </article>
-                <article class="swatch-page yellow">
+                <article class="swatch-page yellow" data-swatch-page data-search-text="sk-y 310 jaune promo yellow publicite cmyk 0 14 96 0 lab">
                     <div class="swatch-color"></div>
                     <div>
                         <span>SK-Y 310</span>
@@ -100,7 +106,7 @@
                         <p>Lab 88 / -5 / 82</p>
                     </div>
                 </article>
-                <article class="swatch-page black">
+                <article class="swatch-page black" data-swatch-page data-search-text="sk-k 900 noir journal black riche texte cmyk 45 35 35 100 lab">
                     <div class="swatch-color"></div>
                     <div>
                         <span>SK-K 900</span>
@@ -109,7 +115,7 @@
                         <p>Lab 11 / 0 / -2</p>
                     </div>
                 </article>
-                <article class="swatch-page green">
+                <article class="swatch-page green" data-swatch-page data-search-text="sk-g 420 vert communautaire green cmyk 76 0 86 12 lab">
                     <div class="swatch-color"></div>
                     <div>
                         <span>SK-G 420</span>
@@ -118,7 +124,7 @@
                         <p>Lab 53 / -55 / 42</p>
                     </div>
                 </article>
-                <article class="swatch-page foil">
+                <article class="swatch-page foil" data-swatch-page data-search-text="sk-f 700 or foil chaud metallise gold dorure support sample physique">
                     <div class="swatch-color"></div>
                     <div>
                         <span>SK-F 700</span>
@@ -128,6 +134,8 @@
                     </div>
                 </article>
             </div>
+
+            <p class="swatch-empty" data-swatch-empty>Aucune couleur trouvee. Essayez un nom, un code SEAKE, une famille ou une valeur CMYK.</p>
 
             <div class="swatch-book-note">
                 <strong>Important:</strong>

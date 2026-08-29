@@ -31,6 +31,37 @@ if (seakeGuide && seakeGuideClose) {
     });
 }
 
+const swatchSearch = document.querySelector("[data-swatch-search]");
+
+if (swatchSearch) {
+    const input = swatchSearch.querySelector("[data-swatch-search-input]");
+    const count = swatchSearch.querySelector("[data-swatch-search-count]");
+    const swatches = Array.from(document.querySelectorAll("[data-swatch-page]"));
+    const empty = document.querySelector("[data-swatch-empty]");
+
+    const updateSwatches = () => {
+        const query = input.value.trim().toLowerCase();
+        let visibleCount = 0;
+
+        swatches.forEach((swatch) => {
+            const text = `${swatch.dataset.searchText || ""} ${swatch.textContent}`.toLowerCase();
+            const isVisible = !query || text.includes(query);
+            swatch.classList.toggle("is-hidden", !isVisible);
+            if (isVisible) {
+                visibleCount += 1;
+            }
+        });
+
+        count.textContent = `${visibleCount} couleur${visibleCount > 1 ? "s" : ""} trouvee${visibleCount > 1 ? "s" : ""}`;
+        if (empty) {
+            empty.classList.toggle("is-visible", visibleCount === 0);
+        }
+    };
+
+    input.addEventListener("input", updateSwatches);
+    updateSwatches();
+}
+
 const pressPlanner = document.querySelector("#pressPlanner");
 
 if (pressPlanner) {

@@ -1216,6 +1216,38 @@ p {
     min-width: 0;
 }
 
+.swatch-search {
+    background: #f8f5ef;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    display: grid;
+    gap: 8px;
+    margin-bottom: 14px;
+    padding: 16px;
+}
+
+.swatch-search label {
+    color: var(--ink);
+    font-weight: 900;
+}
+
+.swatch-search input {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--ink);
+    font: inherit;
+    min-height: 48px;
+    padding: 12px 14px;
+    width: 100%;
+}
+
+.swatch-search p {
+    color: var(--muted);
+    font-size: .92rem;
+    margin: 0;
+}
+
 .swatch-book {
     display: grid;
     gap: 12px;
@@ -1275,6 +1307,25 @@ p {
 .swatch-page p {
     color: var(--muted);
     margin: 0;
+}
+
+.swatch-page.is-hidden {
+    display: none;
+}
+
+.swatch-empty {
+    background: #fff1f1;
+    border: 1px solid rgba(216, 24, 24, .25);
+    border-radius: 8px;
+    color: #8c1d1d;
+    display: none;
+    font-weight: 800;
+    margin-top: 12px;
+    padding: 14px 16px;
+}
+
+.swatch-empty.is-visible {
+    display: block;
 }
 
 .swatch-page.cyan .swatch-color,
