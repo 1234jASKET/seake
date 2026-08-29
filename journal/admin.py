@@ -9,6 +9,7 @@ from .models import (
     CorrectionFormule,
     DemandePublicite,
     EchantillonCouleur,
+    InfoDuJour,
     LectureCouleur,
     PhotoArticle,
 )
@@ -186,6 +187,62 @@ class DemandePubliciteAdmin(admin.ModelAdmin):
 
     @admin.display(description="Photo")
     def photo_preview(self, obj):
+        return render_image_preview(obj.photo if obj else None)
+
+
+@admin.register(InfoDuJour)
+class InfoDuJourAdmin(admin.ModelAdmin):
+    list_display = (
+        "titre",
+        "date_affichage",
+        "publie",
+        "meteo",
+        "trafic",
+        "image_preview",
+        "date_modification",
+    )
+    list_filter = ("publie", "date_affichage", "date_creation")
+    search_fields = ("titre", "sous_titre", "meteo", "trafic", "evenement", "alerte", "message")
+    readonly_fields = ("image_preview", "date_creation", "date_modification")
+    fieldsets = (
+        (
+            "Page Aujourd'hui",
+            {
+                "fields": (
+                    "titre",
+                    "sous_titre",
+                    "image_preview",
+                    "photo",
+                    "message",
+                )
+            },
+        ),
+        (
+            "Infos rapides",
+            {
+                "fields": (
+                    "meteo",
+                    "trafic",
+                    "evenement",
+                    "alerte",
+                )
+            },
+        ),
+        (
+            "Publication",
+            {
+                "fields": (
+                    "publie",
+                    "date_affichage",
+                    "date_creation",
+                    "date_modification",
+                )
+            },
+        ),
+    )
+
+    @admin.display(description="Photo")
+    def image_preview(self, obj):
         return render_image_preview(obj.photo if obj else None)
 
 

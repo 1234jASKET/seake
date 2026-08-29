@@ -168,6 +168,43 @@ class DemandePublicite(models.Model):
         return f"{self.nom_client} - {self.get_type_produit_display()}"
 
 
+class InfoDuJour(models.Model):
+    titre = models.CharField(
+        max_length=180,
+        default="Aujourd'hui sur SEAKE",
+    )
+    sous_titre = models.TextField(
+        blank=True,
+        default=(
+            "Les nouvelles, annonces, coupons, cours et services utiles au meme "
+            "endroit pour garder la communaute branchee."
+        ),
+    )
+    photo = models.FileField(
+        upload_to="infos_du_jour/",
+        blank=True,
+        validators=[image_file_validator],
+        help_text="Photo principale pour la page Aujourd'hui sur SEAKE.",
+    )
+    meteo = models.CharField(max_length=220, blank=True)
+    trafic = models.CharField(max_length=220, blank=True)
+    evenement = models.CharField(max_length=220, blank=True)
+    alerte = models.CharField(max_length=220, blank=True)
+    message = models.TextField(blank=True)
+    publie = models.BooleanField(default=True)
+    date_affichage = models.DateField(default=timezone.localdate)
+    date_creation = models.DateTimeField(auto_now_add=True)
+    date_modification = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-date_affichage", "-date_modification"]
+        verbose_name = "Info du jour"
+        verbose_name_plural = "Infos du jour"
+
+    def __str__(self):
+        return f"{self.date_affichage} - {self.titre}"
+
+
 class EchantillonCouleur(models.Model):
     STATUT_PREPARATION = "preparation"
     STATUT_APPROUVER = "a_approuver"

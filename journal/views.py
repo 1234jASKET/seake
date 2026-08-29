@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
 from .forms import CommentaireForm, DemandePubliciteForm
-from .models import Article, Categorie, DemandePublicite, EchantillonCouleur
+from .models import Article, Categorie, DemandePublicite, EchantillonCouleur, InfoDuJour
 
 
 def _articles_publies():
@@ -85,6 +85,7 @@ def accueil(request):
 
 
 def aujourd_hui(request):
+    info_du_jour = InfoDuJour.objects.filter(publie=True).first()
     articles_recents = _articles_publies().prefetch_related("photos")[:6]
     article_principal = articles_recents[0] if articles_recents else None
     articles_secondaires = articles_recents[1:6] if articles_recents else []
@@ -124,6 +125,7 @@ def aujourd_hui(request):
         {
             "article_principal": article_principal,
             "articles_secondaires": articles_secondaires,
+            "info_du_jour": info_du_jour,
             "publicites": publicites,
             "date_du_jour": date_du_jour,
             "capsules": capsules,

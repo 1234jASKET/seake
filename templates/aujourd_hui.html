@@ -3,14 +3,51 @@
 {% block title %}Aujourd'hui sur SEAKE JOURNAL{% endblock %}
 
 {% block content %}
-<section class="today-hero">
+<section class="today-hero{% if info_du_jour and info_du_jour.photo %} has-custom-photo{% endif %}"{% if info_du_jour and info_du_jour.photo %} style="background-image: linear-gradient(90deg, rgba(16, 32, 51, .92), rgba(16, 32, 51, .52)), url('{{ info_du_jour.photo.url }}');"{% endif %}>
     <div>
         <p class="eyebrow">A consulter chaque jour</p>
-        <h1>Aujourd'hui sur SEAKE</h1>
-        <p>Les nouvelles, annonces, coupons, cours et services utiles au meme endroit pour garder la communaute branchee.</p>
+        <h1>{{ info_du_jour.titre|default:"Aujourd'hui sur SEAKE" }}</h1>
+        <p>{{ info_du_jour.sous_titre|default:"Les nouvelles, annonces, coupons, cours et services utiles au meme endroit pour garder la communaute branchee." }}</p>
     </div>
     <time datetime="{{ date_du_jour|date:'Y-m-d' }}">{{ date_du_jour|date:"d F Y" }}</time>
 </section>
+
+{% if info_du_jour %}
+<section class="section today-info-section">
+    <div class="today-info-strip">
+        {% if info_du_jour.meteo %}
+            <article>
+                <span>Meteo</span>
+                <p>{{ info_du_jour.meteo }}</p>
+            </article>
+        {% endif %}
+        {% if info_du_jour.trafic %}
+            <article>
+                <span>Trafic</span>
+                <p>{{ info_du_jour.trafic }}</p>
+            </article>
+        {% endif %}
+        {% if info_du_jour.evenement %}
+            <article>
+                <span>Evenement</span>
+                <p>{{ info_du_jour.evenement }}</p>
+            </article>
+        {% endif %}
+        {% if info_du_jour.alerte %}
+            <article>
+                <span>Alerte</span>
+                <p>{{ info_du_jour.alerte }}</p>
+            </article>
+        {% endif %}
+        {% if info_du_jour.message %}
+            <article class="wide">
+                <span>Message du jour</span>
+                <p>{{ info_du_jour.message }}</p>
+            </article>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
 
 <section class="section">
     <div class="today-layout">
@@ -73,7 +110,7 @@
             <div class="today-mini-card">
                 <span>Info utile</span>
                 <h3>Meteo, trafic et evenements</h3>
-                <p>Cette zone peut devenir le tableau quotidien: meteo, routes, evenements, ecoles, sport et annonces rapides.</p>
+                <p>Ajoutez ou modifiez ces informations dans Django admin, section Infos du jour.</p>
             </div>
         </aside>
     </div>
