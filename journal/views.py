@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 
 from .forms import CommentaireForm, DemandePubliciteForm
 from .models import Article, Categorie, DemandePublicite, EchantillonCouleur
@@ -80,6 +81,53 @@ def accueil(request):
         request,
         "accueil.html",
         {"articles": articles, "categories": categories},
+    )
+
+
+def aujourd_hui(request):
+    articles_recents = _articles_publies().prefetch_related("photos")[:6]
+    article_principal = articles_recents[0] if articles_recents else None
+    articles_secondaires = articles_recents[1:6] if articles_recents else []
+    publicites = DemandePublicite.objects.filter(
+        statut=DemandePublicite.STATUT_ACCEPTEE,
+    )[:3]
+    date_du_jour = timezone.localdate()
+    capsules = [
+        {
+            "titre": "Nouvelles du jour",
+            "texte": "Les articles les plus recents publies par SEAKE JOURNAL.",
+            "lien": "articles",
+            "bouton": "Lire les nouvelles",
+        },
+        {
+            "titre": "Coupons et aubaines",
+            "texte": "Offres locales, annonces, rabais et commerces a decouvrir.",
+            "lien": "coupons",
+            "bouton": "Voir les coupons",
+        },
+        {
+            "titre": "Publicites locales",
+            "texte": "Maisons, logements, services, restaurants, outils et annonces client.",
+            "lien": "publicite",
+            "bouton": "Voir les annonces",
+        },
+        {
+            "titre": "Cours couleur",
+            "texte": "Livre couleur SEAKE, nuancier, encres, foil, papier et prépresse.",
+            "lien": "color_control",
+            "bouton": "Apprendre",
+        },
+    ]
+    return render(
+        request,
+        "aujourd_hui.html",
+        {
+            "article_principal": article_principal,
+            "articles_secondaires": articles_secondaires,
+            "publicites": publicites,
+            "date_du_jour": date_du_jour,
+            "capsules": capsules,
+        },
     )
 
 

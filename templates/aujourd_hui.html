@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}Aujourd'hui sur SEAKE JOURNAL{% endblock %}
+
+{% block content %}
+<section class="today-hero">
+    <div>
+        <p class="eyebrow">A consulter chaque jour</p>
+        <h1>Aujourd'hui sur SEAKE</h1>
+        <p>Les nouvelles, annonces, coupons, cours et services utiles au meme endroit pour garder la communaute branchee.</p>
+    </div>
+    <time datetime="{{ date_du_jour|date:'Y-m-d' }}">{{ date_du_jour|date:"d F Y" }}</time>
+</section>
+
+<section class="section">
+    <div class="today-layout">
+        <div class="today-main">
+            {% if article_principal %}
+                <article class="today-lead">
+                    {% if article_principal.image %}
+                        <img src="{{ article_principal.image.url }}" alt="{{ article_principal.titre }}">
+                    {% endif %}
+                    <div>
+                        <p class="eyebrow">A la une</p>
+                        <h2>{{ article_principal.titre }}</h2>
+                        <p>{{ article_principal.resume }}</p>
+                        <a class="button primary" href="{{ article_principal.get_absolute_url }}">Lire l'article</a>
+                    </div>
+                </article>
+            {% else %}
+                <article class="today-lead empty">
+                    <div>
+                        <p class="eyebrow">A la une</p>
+                        <h2>Aucun article publie pour le moment</h2>
+                        <p>Publiez un article dans l'administration pour remplir automatiquement cette page.</p>
+                    </div>
+                </article>
+            {% endif %}
+
+            <div class="section-heading compact-heading">
+                <p class="eyebrow">Dernieres nouvelles</p>
+                <h2>Ce qu'il faut lire maintenant</h2>
+            </div>
+            <div class="today-news-list">
+                {% for article in articles_secondaires %}
+                    <article>
+                        <span>{{ article.categorie.nom }}</span>
+                        <h3><a href="{{ article.get_absolute_url }}">{{ article.titre }}</a></h3>
+                        <p>{{ article.resume }}</p>
+                    </article>
+                {% empty %}
+                    <article>
+                        <span>SEAKE</span>
+                        <h3>Ajoutez plus d'articles</h3>
+                        <p>Les prochains articles publies apparaîtront ici automatiquement.</p>
+                    </article>
+                {% endfor %}
+            </div>
+        </div>
+
+        <aside class="today-sidebar">
+            <div class="today-return-card">
+                <p class="eyebrow">Pourquoi revenir?</p>
+                <h2>Chaque jour, quelque chose de nouveau</h2>
+                <ul>
+                    <li>Nouvelles locales et internationales</li>
+                    <li>Publicites et annonces de la communaute</li>
+                    <li>Coupons, rabais et offres utiles</li>
+                    <li>Cours SEAKE sur couleur, impression et prépresse</li>
+                </ul>
+            </div>
+
+            <div class="today-mini-card">
+                <span>Info utile</span>
+                <h3>Meteo, trafic et evenements</h3>
+                <p>Cette zone peut devenir le tableau quotidien: meteo, routes, evenements, ecoles, sport et annonces rapides.</p>
+            </div>
+        </aside>
+    </div>
+</section>
+
+<section class="section muted">
+    <div class="today-capsules">
+        {% for capsule in capsules %}
+            <article>
+                <span>{{ capsule.titre }}</span>
+                <p>{{ capsule.texte }}</p>
+                <a href="{% url capsule.lien %}">{{ capsule.bouton }}</a>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-heading">
+        <p class="eyebrow">Annonces en vedette</p>
+        <h2>Publicites locales a decouvrir</h2>
+        <p>Les publicites acceptees dans l'administration peuvent apparaître ici pour donner plus de visibilite aux clients.</p>
+    </div>
+
+    <div class="today-ad-grid">
+        {% for publicite in publicites %}
+            <article>
+                {% if publicite.video %}
+                    <video controls muted playsinline>
+                        <source src="{{ publicite.video.url }}">
+                    </video>
+                {% elif publicite.photo %}
+                    <img src="{{ publicite.photo.url }}" alt="Publicite de {{ publicite.nom_entreprise|default:publicite.nom_client }}">
+                {% endif %}
+                <div>
+                    <span>{{ publicite.get_type_produit_display }}</span>
+                    <h3>{{ publicite.nom_entreprise|default:publicite.nom_client }}</h3>
+                    <p>{{ publicite.message|truncatewords:24 }}</p>
+                </div>
+            </article>
+        {% empty %}
+            <article class="today-ad-empty">
+                <div>
+                    <span>Publicite</span>
+                    <h3>Votre annonce ici</h3>
+                    <p>Ajoutez une publicite acceptee dans l'administration pour l'afficher sur la page Aujourd'hui.</p>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section today-subscribe-section">
+    <div class="today-subscribe">
+        <div>
+            <p class="eyebrow">Habitude quotidienne</p>
+            <h2>Ouvrez SEAKE chaque matin</h2>
+            <p>Ajoutez cette page aux favoris et revenez pour voir les nouveaux articles, annonces, coupons et cours publies par SEAKE JOURNAL.</p>
+        </div>
+        <div class="hero-actions">
+            <a class="button primary" href="{% url 'articles' %}">Voir tous les articles</a>
+            <a class="button secondary" href="{% url 'demande_publicite' %}">Annoncer ici</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
