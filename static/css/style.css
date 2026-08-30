@@ -3142,6 +3142,7 @@ textarea {
 .press-newspaper-page.cover {
     background: linear-gradient(135deg, rgba(16, 32, 51, .96), rgba(216, 24, 24, .9));
     color: var(--white);
+    gap: 12px;
 }
 
 .press-newspaper-page.cover p,
@@ -3149,11 +3150,51 @@ textarea {
     color: rgba(255, 255, 255, .78);
 }
 
-.press-newspaper-page.cover img {
+.cover-news-top {
+    min-height: 46%;
+}
+
+.cover-news-top img {
     background: var(--white);
     max-height: 90px;
     object-fit: contain;
     padding: 10px;
+}
+
+.cover-premium-ad {
+    background: rgba(255, 255, 255, .94);
+    border: 2px solid rgba(255, 255, 255, .55);
+    border-radius: 8px;
+    color: var(--ink);
+    display: grid;
+    flex: 1;
+    min-height: 48%;
+    overflow: hidden;
+    place-items: center;
+    text-align: center;
+}
+
+.cover-premium-ad img {
+    border-radius: 0;
+    height: 100%;
+    margin: 0;
+    max-height: none;
+    object-fit: cover;
+    padding: 0;
+    width: 100%;
+}
+
+.cover-premium-ad strong {
+    color: var(--brand);
+    display: block;
+    font-size: 1.05rem;
+    padding: 12px 12px 0;
+}
+
+.cover-premium-ad p {
+    color: var(--muted);
+    margin: 0;
+    padding: 0 12px 12px;
 }
 
 .press-newspaper-page.ad {

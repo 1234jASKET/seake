@@ -230,7 +230,18 @@ def a_propos(request):
 
 def impression(request):
     articles = _articles_publies()[:10]
-    return render(request, "impression.html", {"articles": articles})
+    page1_publicite = DemandePublicite.objects.filter(
+        type_produit=DemandePublicite.TYPE_PREMIERE_PAGE,
+        statut=DemandePublicite.STATUT_ACCEPTEE,
+    ).first()
+    return render(
+        request,
+        "impression.html",
+        {
+            "articles": articles,
+            "page1_publicite": page1_publicite,
+        },
+    )
 
 
 def publicite(request):

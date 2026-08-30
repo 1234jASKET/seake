@@ -156,9 +156,27 @@
         <div class="press-newspaper-pages">
             <article class="press-newspaper-page cover">
                 <span>Page 1</span>
-                <img src="{% static 'img/logo.png' %}" alt="SEAKE JOURNAL">
-                <h3>SEAKE JOURNAL</h3>
-                <p>Edition locale preparee pour impression.</p>
+                <div class="cover-news-top">
+                    <img src="{% static 'img/logo.png' %}" alt="SEAKE JOURNAL">
+                    <h3>SEAKE JOURNAL</h3>
+                    <p>Edition locale preparee pour impression.</p>
+                </div>
+                <div class="cover-premium-ad">
+                    {% if page1_publicite %}
+                        {% if page1_publicite.photo %}
+                            <img src="{{ page1_publicite.photo.url }}" alt="Publicite premiere page de {{ page1_publicite.nom_entreprise|default:page1_publicite.nom_client }}">
+                        {% elif page1_publicite.video %}
+                            <strong>{{ page1_publicite.nom_entreprise|default:page1_publicite.nom_client }}</strong>
+                            <p>Publicite video acceptee. Ajoutez aussi une photo pour l'epreuve papier.</p>
+                        {% else %}
+                            <strong>{{ page1_publicite.nom_entreprise|default:page1_publicite.nom_client }}</strong>
+                            <p>{{ page1_publicite.message|truncatewords:22 }}</p>
+                        {% endif %}
+                    {% else %}
+                        <strong>Publicite premium demi-page</strong>
+                        <p>Ajoutez dans l'admin une publicite acceptee avec le type Demi-page premiere page.</p>
+                    {% endif %}
+                </div>
             </article>
 
             {% for article in articles %}

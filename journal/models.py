@@ -115,11 +115,13 @@ class PhotoArticle(models.Model):
 
 class DemandePublicite(models.Model):
     TYPE_PAGE = "page"
+    TYPE_PREMIERE_PAGE = "premiere_page"
     TYPE_CARTE = "carte"
     TYPE_COUPON = "coupon"
     TYPE_RESEAUX = "reseaux"
     TYPE_CHOICES = [
         (TYPE_PAGE, "Page publicitaire"),
+        (TYPE_PREMIERE_PAGE, "Demi-page premiere page"),
         (TYPE_CARTE, "Carte d'affaire"),
         (TYPE_COUPON, "Coupon rabais"),
         (TYPE_RESEAUX, "Campagne reseaux sociaux"),
