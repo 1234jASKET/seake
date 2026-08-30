@@ -3733,6 +3733,16 @@ textarea {
         display: none;
     }
 
+    .press-prep > .section-heading,
+    .press-planner,
+    .press-montage,
+    .press-workflow-checklist,
+    .press-check-grid,
+    .press-newspaper-example .section-heading,
+    .flyer-page {
+        display: none;
+    }
+
     .page-hero,
     .section {
         padding: 18px 0;
@@ -3740,6 +3750,27 @@ textarea {
 
     .coupon-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .press-prep {
+        max-width: none;
+        padding: 0;
+    }
+
+    .press-newspaper-example {
+        margin: 0;
+    }
+
+    .press-newspaper-pages {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .press-newspaper-page {
+        border: 0;
+        box-shadow: none;
+        break-inside: avoid;
+        min-height: 260px;
+        page-break-inside: avoid;
     }
 
     .flyer-page {
