@@ -3030,6 +3030,66 @@ textarea {
     text-align: center;
 }
 
+.press-workflow-checklist {
+    background: #102033;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    color: var(--white);
+    margin-top: 22px;
+    padding: 26px;
+}
+
+.press-workflow-checklist h2 {
+    color: var(--white);
+}
+
+.press-workflow-checklist p:not(.eyebrow) {
+    color: rgba(255, 255, 255, .78);
+    max-width: 820px;
+}
+
+.press-stage-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: 20px;
+}
+
+.press-stage-grid article {
+    background: rgba(255, 255, 255, .08);
+    border: 1px solid rgba(255, 255, 255, .16);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.press-stage-grid span {
+    align-items: center;
+    background: var(--brand);
+    border-radius: 999px;
+    color: var(--white);
+    display: inline-flex;
+    font-weight: 900;
+    height: 34px;
+    justify-content: center;
+    margin-bottom: 12px;
+    width: 34px;
+}
+
+.press-stage-grid h3 {
+    color: var(--white);
+    font-size: 1.18rem;
+    line-height: 1.15;
+}
+
+.press-stage-grid ul {
+    padding-left: 18px;
+}
+
+.press-stage-grid li {
+    color: rgba(255, 255, 255, .78);
+    margin-bottom: 8px;
+}
+
 .press-newspaper-example {
     margin-top: 26px;
 }
@@ -3549,6 +3609,7 @@ textarea {
     .press-check-grid,
     .press-page-grid,
     .press-sheet-grid,
+    .press-stage-grid,
     .press-newspaper-pages,
     .article-ad,
     .flyer-columns {

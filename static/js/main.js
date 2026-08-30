@@ -144,7 +144,7 @@ if (pressPlanner) {
             advice.textContent = `${contentPages} pages fonctionne bien pour un journal plie. Preparez un PDF final ${formatInput.value}, ${colorInput.value}, pour environ ${quantity.toLocaleString("fr-CA")} copies.`;
         } else {
             readyTitle.textContent = "Ajouter des pages pour le prépresse";
-            advice.textContent = `Pour ${requestedPages} pages et ${requestedAds} publicite${requestedAds > 1 ? "s" : ""}, vous utilisez ${contentPages} pages. Preparez ${roundedPages} pages: ajoutez ${missingPages} page${missingPages > 1 ? "s" : ""} blanche${missingPages > 1 ? "s" : ""}, publicite${missingPages > 1 ? "s" : ""} ou annonce${missingPages > 1 ? "s" : ""} avant d'envoyer le PDF a l'imprimeur.`;
+            advice.textContent = `Pour ${requestedPages} pages et ${requestedAds} publicite${requestedAds > 1 ? "s" : ""}, vous utilisez ${contentPages} pages. Preparez ${roundedPages} pages: ajoutez ${missingPages} page${missingPages > 1 ? "s" : ""} blanche${missingPages > 1 ? "s" : ""}, publicite${missingPages > 1 ? "s" : ""} ou annonce${missingPages > 1 ? "s" : ""} avant d'envoyer le PDF au prépresse.`;
         }
     };
 
