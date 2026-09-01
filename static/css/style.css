@@ -1313,6 +1313,84 @@ p {
     padding: 26px;
 }
 
+.subscribe-hero {
+    background:
+        linear-gradient(90deg, rgba(16, 32, 51, .94), rgba(16, 32, 51, .62)),
+        url("/static/img/logo.png");
+    background-position: right 8% center;
+    background-repeat: no-repeat;
+    background-size: min(340px, 42vw) auto;
+    color: var(--white);
+    padding: 78px 7vw 62px;
+}
+
+.subscribe-hero h1 {
+    color: var(--white);
+    font-size: clamp(3rem, 7vw, 6.4rem);
+    line-height: .9;
+    max-width: 900px;
+}
+
+.subscribe-hero p:not(.eyebrow) {
+    color: rgba(255, 255, 255, .82);
+    font-size: 1.12rem;
+    max-width: 680px;
+}
+
+.subscribe-layout {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr);
+}
+
+.subscribe-form h2 {
+    margin-bottom: 8px;
+}
+
+.checkbox-label {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.checkbox-label input {
+    width: auto;
+}
+
+.form-error {
+    color: #9b1c1c;
+    font-size: .9rem;
+    font-weight: 800;
+}
+
+.subscribe-panel {
+    align-self: start;
+    background: #102033;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    color: var(--white);
+    padding: 28px;
+}
+
+.subscribe-panel h2 {
+    color: var(--white);
+}
+
+.subscribe-panel ul {
+    padding-left: 20px;
+}
+
+.subscribe-panel li {
+    color: rgba(255, 255, 255, .78);
+    margin-bottom: 10px;
+}
+
+.subscribe-note {
+    color: rgba(255, 255, 255, .68);
+    font-weight: 800;
+}
+
 .color-control-intro {
     display: grid;
     gap: 18px;
@@ -3603,6 +3681,7 @@ textarea {
     .today-capsules,
     .today-ad-grid,
     .today-subscribe,
+    .subscribe-layout,
     .color-control-intro,
     .color-book-layout,
     .swatch-book,

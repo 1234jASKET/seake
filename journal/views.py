@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
-from .forms import CommentaireForm, DemandePubliciteForm
+from .forms import AbonneForm, CommentaireForm, DemandePubliciteForm
 from .models import Article, Categorie, DemandePublicite, EchantillonCouleur, InfoDuJour
 
 
@@ -135,6 +135,30 @@ def aujourd_hui(request):
 
 def articles(request):
     return render(request, "articles.html", {"articles": _articles_publies()})
+
+
+def abonnement(request):
+    if request.method == "POST":
+        form = AbonneForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(
+                request,
+                "Merci. Votre abonnement a ete ajoute a SEAKE JOURNAL.",
+            )
+            return redirect("abonnement")
+    else:
+        form = AbonneForm()
+
+    articles_recents = _articles_publies()[:3]
+    return render(
+        request,
+        "abonnement.html",
+        {
+            "form": form,
+            "articles_recents": articles_recents,
+        },
+    )
 
 
 def ecran_actualites(request):

@@ -8,6 +8,7 @@ urlpatterns = [
     path("ca", views.accueil, name="accueil_ca"),
     path("ca/", views.accueil, name="accueil_ca_slash"),
     path("aujourdhui/", views.aujourd_hui, name="aujourd_hui"),
+    path("abonnement/", views.abonnement, name="abonnement"),
     path("articles/", views.articles, name="articles"),
     path("ecran/", views.ecran_actualites, name="ecran_actualites"),
     path("articles/<slug:slug>/", views.article, name="article"),

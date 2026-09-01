@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Abonnement - SEAKE JOURNAL{% endblock %}
+
+{% block content %}
+<section class="subscribe-hero">
+    <div>
+        <p class="eyebrow">Restez informe</p>
+        <h1>Recevez SEAKE JOURNAL</h1>
+        <p>Inscrivez-vous pour recevoir les nouvelles, les annonces, les coupons, les videos et les editions importantes de SEAKE JOURNAL.</p>
+    </div>
+</section>
+
+<section class="section subscribe-layout">
+    <form class="contact-form subscribe-form" method="post">
+        {% csrf_token %}
+        <h2>Ajouter mon abonnement</h2>
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <label{% if field.field.widget.input_type == "checkbox" %} class="checkbox-label"{% endif %}>
+                {{ field.label }}
+                {{ field }}
+                {% if field.errors %}
+                    <span class="form-error">{{ field.errors|striptags }}</span>
+                {% endif %}
+            </label>
+        {% endfor %}
+        <button class="button primary" type="submit">M'abonner</button>
+    </form>
+
+    <aside class="subscribe-panel">
+        <p class="eyebrow">Pourquoi s'abonner?</p>
+        <h2>Une habitude simple pour suivre la communaute</h2>
+        <ul>
+            <li>Resume du jour et articles importants</li>
+            <li>Coupons, rabais et offres locales</li>
+            <li>Publicites, logements, maisons et services</li>
+            <li>Cours SEAKE: couleur, impression et prépresse</li>
+        </ul>
+        <p class="subscribe-note">Vous pouvez demander le retrait de votre contact en tout temps.</p>
+    </aside>
+</section>
+
+<section class="section muted">
+    <div class="section-heading">
+        <p class="eyebrow">A lire aussi</p>
+        <h2>Derniers articles</h2>
+    </div>
+    <div class="today-news-list">
+        {% for article in articles_recents %}
+            <article>
+                <span>{{ article.categorie.nom }}</span>
+                <h3><a href="{{ article.get_absolute_url }}">{{ article.titre }}</a></h3>
+                <p>{{ article.resume }}</p>
+            </article>
+        {% empty %}
+            <article>
+                <span>SEAKE</span>
+                <h3>Articles a venir</h3>
+                <p>Les prochains articles publies apparaîtront ici.</p>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

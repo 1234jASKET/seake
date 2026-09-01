@@ -207,6 +207,37 @@ class InfoDuJour(models.Model):
         return f"{self.date_affichage} - {self.titre}"
 
 
+class Abonne(models.Model):
+    SOURCE_SITE = "site"
+    SOURCE_PAPIER = "papier"
+    SOURCE_TELEPHONE = "telephone"
+    SOURCE_CHOICES = [
+        (SOURCE_SITE, "Site web"),
+        (SOURCE_PAPIER, "Journal papier"),
+        (SOURCE_TELEPHONE, "Telephone"),
+    ]
+
+    nom = models.CharField(max_length=160)
+    email = models.EmailField(blank=True)
+    telephone = models.CharField(max_length=40, blank=True)
+    ville = models.CharField(max_length=120, blank=True)
+    souhaite_courriel = models.BooleanField(default=True)
+    souhaite_sms = models.BooleanField(default=False)
+    source = models.CharField(max_length=20, choices=SOURCE_CHOICES, default=SOURCE_SITE)
+    actif = models.BooleanField(default=True)
+    note = models.TextField(blank=True)
+    date_creation = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-date_creation"]
+        verbose_name = "Abonne"
+        verbose_name_plural = "Abonnes"
+
+    def __str__(self):
+        contact = self.email or self.telephone or "sans contact"
+        return f"{self.nom} - {contact}"
+
+
 class EchantillonCouleur(models.Model):
     STATUT_PREPARATION = "preparation"
     STATUT_APPROUVER = "a_approuver"

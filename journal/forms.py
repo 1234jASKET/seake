@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Commentaire, DemandePublicite
+from .models import Abonne, Commentaire, DemandePublicite
 
 
 class DemandePubliciteForm(forms.ModelForm):
@@ -58,3 +58,39 @@ class CommentaireForm(forms.ModelForm):
             "email": "Email facultatif",
             "message": "Commentaire ou question",
         }
+
+
+class AbonneForm(forms.ModelForm):
+    consentement = forms.BooleanField(
+        required=True,
+        label="J'accepte de recevoir les nouvelles et communications de SEAKE JOURNAL.",
+    )
+
+    class Meta:
+        model = Abonne
+        fields = [
+            "nom",
+            "email",
+            "telephone",
+            "ville",
+            "souhaite_courriel",
+            "souhaite_sms",
+        ]
+        labels = {
+            "nom": "Votre nom",
+            "email": "Email",
+            "telephone": "Telephone",
+            "ville": "Ville ou quartier",
+            "souhaite_courriel": "Recevoir par courriel",
+            "souhaite_sms": "Recevoir par texto",
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get("email")
+        telephone = cleaned_data.get("telephone")
+        if not email and not telephone:
+            raise forms.ValidationError(
+                "Ajoutez au moins un email ou un numero de telephone."
+            )
+        return cleaned_data

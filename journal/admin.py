@@ -3,6 +3,7 @@ from django import forms
 from django.utils.html import format_html
 
 from .models import (
+    Abonne,
     Article,
     Categorie,
     Commentaire,
@@ -62,6 +63,51 @@ class CategorieAdmin(admin.ModelAdmin):
     list_display = ("nom", "slug")
     prepopulated_fields = {"slug": ("nom",)}
     search_fields = ("nom", "description")
+
+
+@admin.register(Abonne)
+class AbonneAdmin(admin.ModelAdmin):
+    list_display = (
+        "nom",
+        "email",
+        "telephone",
+        "ville",
+        "souhaite_courriel",
+        "souhaite_sms",
+        "actif",
+        "source",
+        "date_creation",
+    )
+    list_filter = ("actif", "souhaite_courriel", "souhaite_sms", "source", "date_creation")
+    search_fields = ("nom", "email", "telephone", "ville", "note")
+    list_editable = ("actif",)
+    readonly_fields = ("date_creation",)
+    fieldsets = (
+        (
+            "Contact",
+            {
+                "fields": (
+                    "nom",
+                    "email",
+                    "telephone",
+                    "ville",
+                )
+            },
+        ),
+        (
+            "Abonnement",
+            {
+                "fields": (
+                    "souhaite_courriel",
+                    "souhaite_sms",
+                    "source",
+                    "actif",
+                    "note",
+                    "date_creation",
+                )
+            },
+        ),
+    )
 
 
 class PhotoArticleInline(ImagePreviewAdminMixin, admin.TabularInline):
