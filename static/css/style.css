@@ -869,6 +869,101 @@ p {
     outline: 3px solid rgba(216, 24, 24, .12);
 }
 
+.advertiser-studio-section {
+    padding-top: 18px;
+}
+
+.advertiser-studio {
+    align-items: center;
+    background: #102033;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    color: var(--white);
+    display: grid;
+    gap: 22px;
+    grid-template-columns: auto minmax(0, 1fr) minmax(260px, .75fr);
+    overflow: hidden;
+    padding: 24px;
+}
+
+.advertiser-character {
+    align-self: end;
+    width: clamp(145px, 18vw, 230px);
+}
+
+.advertiser-character img {
+    animation: seakeProfessorFloat 3.2s ease-in-out infinite;
+    display: block;
+    height: auto;
+    max-height: 260px;
+    object-fit: contain;
+    width: 100%;
+}
+
+.advertiser-story h2 {
+    color: var(--white);
+    font-size: clamp(2rem, 4vw, 3.7rem);
+    line-height: .96;
+    max-width: 740px;
+}
+
+.advertiser-story p:not(.eyebrow) {
+    color: rgba(255, 255, 255, .78);
+    max-width: 680px;
+}
+
+.advertiser-clips {
+    display: grid;
+    gap: 12px;
+}
+
+.advertiser-clips article {
+    animation: adClipFloat 2.8s ease-in-out infinite;
+    background: rgba(255, 255, 255, .09);
+    border: 1px solid rgba(255, 255, 255, .16);
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.advertiser-clips article:nth-child(2) {
+    animation-delay: .25s;
+}
+
+.advertiser-clips article:nth-child(3) {
+    animation-delay: .5s;
+}
+
+.advertiser-clips span {
+    color: var(--accent);
+    display: block;
+    font-size: .72rem;
+    font-weight: 900;
+    letter-spacing: .12em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.advertiser-clips strong {
+    color: var(--white);
+    display: block;
+    font-size: 1.08rem;
+}
+
+.advertiser-clips p {
+    color: rgba(255, 255, 255, .72);
+    margin: 4px 0 0;
+}
+
+@keyframes adClipFloat {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(-5px);
+    }
+}
+
 .published-ads-grid {
     display: grid;
     gap: 22px;
@@ -3716,6 +3811,7 @@ textarea {
     .contact-layout,
     .comments-layout,
     .gallery-grid,
+    .advertiser-studio,
     .newspaper-layout,
     .ad-layout,
     .pricing-grid,

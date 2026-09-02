@@ -44,8 +44,42 @@
     </div>
 </section>
 
+<section class="section advertiser-studio-section">
+    <div class="advertiser-studio">
+        <div class="advertiser-character">
+            <img src="{% static 'img/professeur-seake.png' %}" alt="Professeur SEAKE presente les publicites">
+        </div>
+        <div class="advertiser-story">
+            <p class="eyebrow">Studio clips annonceurs</p>
+            <h2>Un bonhomme SEAKE pour faire cliquer les visiteurs</h2>
+            <p>SEAKE peut presenter les annonces comme des petits clips: commerce, offre, telephone, action claire. Le visiteur comprend vite et clique plus facilement.</p>
+            <div class="hero-actions">
+                <a class="button primary ad-pull-button" href="#annonces-publiees">Voir les annonces</a>
+                <a class="button secondary dark" href="{% url 'demande_publicite' %}">Creer une publicite</a>
+            </div>
+        </div>
+        <div class="advertiser-clips" aria-label="Exemples de clips publicitaires">
+            <article>
+                <span>Clip 01</span>
+                <strong>Maison a vendre</strong>
+                <p>Photo, prix, telephone, bouton appeler.</p>
+            </article>
+            <article>
+                <span>Clip 02</span>
+                <strong>Appartement a louer</strong>
+                <p>Video courte, quartier, pieces, visite.</p>
+            </article>
+            <article>
+                <span>Clip 03</span>
+                <strong>Commerce local</strong>
+                <p>Coupon, adresse, message et reseaux.</p>
+            </article>
+        </div>
+    </div>
+</section>
+
 <section class="section">
-    <div class="section-heading">
+    <div class="section-heading" id="annonces-publiees">
         <p class="eyebrow">Annonces publiees</p>
         <h2>Publicites des annonceurs</h2>
         <p>Les publicites acceptees dans l'administration apparaissent ici sur le site.</p>
