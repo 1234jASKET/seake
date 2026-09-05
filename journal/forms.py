@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Abonne, Commentaire, DemandePublicite
+from .models import Abonne, Commentaire, DemandePublicite, ReponseSondageElection
 
 
 class DemandePubliciteForm(forms.ModelForm):
@@ -92,5 +92,57 @@ class AbonneForm(forms.ModelForm):
         if not email and not telephone:
             raise forms.ValidationError(
                 "Ajoutez au moins un email ou un numero de telephone."
+            )
+        return cleaned_data
+
+
+class ReponseSondageElectionForm(forms.ModelForm):
+    consentement = forms.BooleanField(
+        required=True,
+        label=(
+            "J'accepte que ma reponse anonyme soit utilisee pour un resume "
+            "journalistique de SEAKE JOURNAL."
+        ),
+    )
+
+    class Meta:
+        model = ReponseSondageElection
+        fields = [
+            "region",
+            "enjeu_important",
+            "intention_vote",
+            "certitude",
+            "commentaire",
+            "veut_resultats",
+            "email",
+        ]
+        widgets = {
+            "commentaire": forms.Textarea(
+                attrs={
+                    "rows": 5,
+                    "placeholder": "Votre commentaire facultatif.",
+                }
+            ),
+            "intention_vote": forms.RadioSelect,
+            "enjeu_important": forms.RadioSelect,
+            "certitude": forms.RadioSelect,
+        }
+        labels = {
+            "region": "Ville ou region",
+            "enjeu_important": "Quel enjeu est le plus important pour vous?",
+            "intention_vote": "Quel parti vous interesse le plus en ce moment?",
+            "certitude": "Votre choix est-il certain?",
+            "commentaire": "Commentaire facultatif",
+            "veut_resultats": "Je veux recevoir les resultats",
+            "email": "Email facultatif pour recevoir les resultats",
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        veut_resultats = cleaned_data.get("veut_resultats")
+        email = cleaned_data.get("email")
+        if veut_resultats and not email:
+            raise forms.ValidationError(
+                "Ajoutez votre email si vous voulez recevoir les resultats."
             )
         return cleaned_data

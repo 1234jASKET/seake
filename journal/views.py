@@ -2,7 +2,12 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
-from .forms import AbonneForm, CommentaireForm, DemandePubliciteForm
+from .forms import (
+    AbonneForm,
+    CommentaireForm,
+    DemandePubliciteForm,
+    ReponseSondageElectionForm,
+)
 from .models import Article, Categorie, DemandePublicite, EchantillonCouleur, InfoDuJour
 
 
@@ -154,6 +159,30 @@ def abonnement(request):
     return render(
         request,
         "abonnement.html",
+        {
+            "form": form,
+            "articles_recents": articles_recents,
+        },
+    )
+
+
+def sondage_election(request):
+    if request.method == "POST":
+        form = ReponseSondageElectionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(
+                request,
+                "Merci. Votre reponse au sondage SEAKE JOURNAL a ete recue.",
+            )
+            return redirect("sondage_election")
+    else:
+        form = ReponseSondageElectionForm()
+
+    articles_recents = _articles_publies()[:3]
+    return render(
+        request,
+        "sondage_election.html",
         {
             "form": form,
             "articles_recents": articles_recents,

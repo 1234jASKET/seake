@@ -238,6 +238,79 @@ class Abonne(models.Model):
         return f"{self.nom} - {contact}"
 
 
+class ReponseSondageElection(models.Model):
+    ENJEU_SANTE = "sante"
+    ENJEU_LOGEMENT = "logement"
+    ENJEU_ECONOMIE = "economie"
+    ENJEU_EDUCATION = "education"
+    ENJEU_SECURITE = "securite"
+    ENJEU_ENVIRONNEMENT = "environnement"
+    ENJEU_AUTRE = "autre"
+    ENJEU_CHOICES = [
+        (ENJEU_SANTE, "Sante"),
+        (ENJEU_LOGEMENT, "Logement"),
+        (ENJEU_ECONOMIE, "Economie"),
+        (ENJEU_EDUCATION, "Education"),
+        (ENJEU_SECURITE, "Securite"),
+        (ENJEU_ENVIRONNEMENT, "Environnement"),
+        (ENJEU_AUTRE, "Autre"),
+    ]
+
+    PARTI_CAQ = "caq"
+    PARTI_PLQ = "plq"
+    PARTI_PQ = "pq"
+    PARTI_QS = "qs"
+    PARTI_PCQ = "pcq"
+    PARTI_AUTRE = "autre"
+    PARTI_INDECIS = "indecis"
+    PARTI_PREFERE_PAS = "prefere_pas"
+    PARTI_CHOICES = [
+        (PARTI_CAQ, "CAQ"),
+        (PARTI_PLQ, "Parti liberal du Quebec"),
+        (PARTI_PQ, "Parti quebecois"),
+        (PARTI_QS, "Quebec solidaire"),
+        (PARTI_PCQ, "Parti conservateur du Quebec"),
+        (PARTI_AUTRE, "Autre parti"),
+        (PARTI_INDECIS, "Indecis"),
+        (PARTI_PREFERE_PAS, "Je prefere ne pas repondre"),
+    ]
+
+    CERTITUDE_TRES = "tres"
+    CERTITUDE_ASSEZ = "assez"
+    CERTITUDE_PEU = "peu"
+    CERTITUDE_INDECIS = "indecis"
+    CERTITUDE_CHOICES = [
+        (CERTITUDE_TRES, "Tres certain"),
+        (CERTITUDE_ASSEZ, "Assez certain"),
+        (CERTITUDE_PEU, "Pas encore certain"),
+        (CERTITUDE_INDECIS, "Je suis encore indecis"),
+    ]
+
+    region = models.CharField(max_length=140)
+    enjeu_important = models.CharField(max_length=30, choices=ENJEU_CHOICES)
+    intention_vote = models.CharField(
+        max_length=30,
+        choices=PARTI_CHOICES,
+        blank=True,
+    )
+    certitude = models.CharField(max_length=30, choices=CERTITUDE_CHOICES)
+    commentaire = models.TextField(blank=True)
+    veut_resultats = models.BooleanField(
+        default=False,
+        verbose_name="Souhaite recevoir les resultats",
+    )
+    email = models.EmailField(blank=True)
+    date_creation = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-date_creation"]
+        verbose_name = "Reponse sondage election"
+        verbose_name_plural = "Reponses sondage election"
+
+    def __str__(self):
+        return f"{self.region} - {self.get_enjeu_important_display()}"
+
+
 class EchantillonCouleur(models.Model):
     STATUT_PREPARATION = "preparation"
     STATUT_APPROUVER = "a_approuver"

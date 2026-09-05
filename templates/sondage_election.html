@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Sondage election - SEAKE JOURNAL{% endblock %}
+
+{% block content %}
+<section class="subscribe-hero survey-hero">
+    <div>
+        <p class="eyebrow">Sondage maison</p>
+        <h1>Election Quebec</h1>
+        <p>Partagez votre opinion sur les enjeux de l'election. Les reponses aideront SEAKE JOURNAL a mieux comprendre les priorites des lecteurs.</p>
+    </div>
+</section>
+
+<section class="section subscribe-layout survey-layout">
+    <form class="contact-form subscribe-form survey-form" method="post">
+        {% csrf_token %}
+        <h2>Repondre au sondage</h2>
+        <p class="form-help">Ce sondage est anonyme et non scientifique. Il sert seulement a preparer un resume journalistique pour SEAKE JOURNAL.</p>
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <label{% if field.field.widget.input_type == "checkbox" %} class="checkbox-label"{% endif %}>
+                {{ field.label }}
+                {{ field }}
+                {% if field.help_text %}
+                    <span class="form-help">{{ field.help_text }}</span>
+                {% endif %}
+                {% if field.errors %}
+                    <span class="form-error">{{ field.errors|striptags }}</span>
+                {% endif %}
+            </label>
+        {% endfor %}
+        <button class="button primary" type="submit">Envoyer ma reponse</button>
+    </form>
+
+    <aside class="subscribe-panel survey-panel">
+        <p class="eyebrow">Pour publier</p>
+        <h2>Comment utiliser les resultats</h2>
+        <ul>
+            <li>Regarder les reponses dans Django admin.</li>
+            <li>Compter les enjeux les plus importants.</li>
+            <li>Publier un resume clair avec la mention non scientifique.</li>
+            <li>Partager le lien sur Facebook, TikTok, YouTube, Substack et le journal papier.</li>
+        </ul>
+        <p class="subscribe-note">SEAKE JOURNAL ne demande pas le nom complet des participants.</p>
+    </aside>
+</section>
+
+<section class="section muted">
+    <div class="section-heading">
+        <p class="eyebrow">A lire aussi</p>
+        <h2>Derniers articles</h2>
+    </div>
+    <div class="today-news-list">
+        {% for article in articles_recents %}
+            <article>
+                <span>{{ article.categorie.nom }}</span>
+                <h3><a href="{{ article.get_absolute_url }}">{{ article.titre }}</a></h3>
+                <p>{{ article.resume }}</p>
+            </article>
+        {% empty %}
+            <article>
+                <span>SEAKE</span>
+                <h3>Articles a venir</h3>
+                <p>Les prochains articles publies apparaîtront ici.</p>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

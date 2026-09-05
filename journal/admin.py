@@ -13,6 +13,7 @@ from .models import (
     InfoDuJour,
     LectureCouleur,
     PhotoArticle,
+    ReponseSondageElection,
 )
 
 
@@ -103,6 +104,52 @@ class AbonneAdmin(admin.ModelAdmin):
                     "source",
                     "actif",
                     "note",
+                    "date_creation",
+                )
+            },
+        ),
+    )
+
+
+@admin.register(ReponseSondageElection)
+class ReponseSondageElectionAdmin(admin.ModelAdmin):
+    list_display = (
+        "region",
+        "enjeu_important",
+        "intention_vote",
+        "certitude",
+        "veut_resultats",
+        "email",
+        "date_creation",
+    )
+    list_filter = (
+        "enjeu_important",
+        "intention_vote",
+        "certitude",
+        "veut_resultats",
+        "date_creation",
+    )
+    search_fields = ("region", "commentaire", "email")
+    readonly_fields = ("date_creation",)
+    fieldsets = (
+        (
+            "Reponse",
+            {
+                "fields": (
+                    "region",
+                    "enjeu_important",
+                    "intention_vote",
+                    "certitude",
+                    "commentaire",
+                )
+            },
+        ),
+        (
+            "Resultats",
+            {
+                "fields": (
+                    "veut_resultats",
+                    "email",
                     "date_creation",
                 )
             },
