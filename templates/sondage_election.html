@@ -15,21 +15,93 @@
     <form class="contact-form subscribe-form survey-form" method="post">
         {% csrf_token %}
         <h2>Repondre au sondage</h2>
+        <p class="survey-lead">Votre opinion compte. Repondez en 20 secondes.</p>
         <p class="form-help">Ce sondage est anonyme et non scientifique. Il sert seulement a preparer un resume journalistique pour SEAKE JOURNAL.</p>
         {{ form.non_field_errors }}
-        {% for field in form %}
-            <label{% if field.field.widget.input_type == "checkbox" %} class="checkbox-label"{% endif %}>
-                {{ field.label }}
-                {{ field }}
-                {% if field.help_text %}
-                    <span class="form-help">{{ field.help_text }}</span>
-                {% endif %}
-                {% if field.errors %}
-                    <span class="form-error">{{ field.errors|striptags }}</span>
-                {% endif %}
-            </label>
-        {% endfor %}
-        <button class="button primary" type="submit">Envoyer ma reponse</button>
+
+        <label>
+            {{ form.region.label }}
+            {{ form.region }}
+            {% if form.region.errors %}
+                <span class="form-error">{{ form.region.errors|striptags }}</span>
+            {% endif %}
+        </label>
+
+        <fieldset class="survey-question">
+            <legend>{{ form.enjeu_important.label }}</legend>
+            <div class="survey-options">
+                {% for choice in form.enjeu_important %}
+                    <label class="survey-option">
+                        {{ choice.tag }}
+                        <span>{{ choice.choice_label }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+            {% if form.enjeu_important.errors %}
+                <span class="form-error">{{ form.enjeu_important.errors|striptags }}</span>
+            {% endif %}
+        </fieldset>
+
+        <fieldset class="survey-question">
+            <legend>{{ form.intention_vote.label }}</legend>
+            <div class="survey-options">
+                {% for choice in form.intention_vote %}
+                    <label class="survey-option">
+                        {{ choice.tag }}
+                        <span>{{ choice.choice_label }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+            {% if form.intention_vote.errors %}
+                <span class="form-error">{{ form.intention_vote.errors|striptags }}</span>
+            {% endif %}
+        </fieldset>
+
+        <fieldset class="survey-question">
+            <legend>{{ form.certitude.label }}</legend>
+            <div class="survey-options">
+                {% for choice in form.certitude %}
+                    <label class="survey-option">
+                        {{ choice.tag }}
+                        <span>{{ choice.choice_label }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+            {% if form.certitude.errors %}
+                <span class="form-error">{{ form.certitude.errors|striptags }}</span>
+            {% endif %}
+        </fieldset>
+
+        <label>
+            {{ form.commentaire.label }}
+            {{ form.commentaire }}
+            {% if form.commentaire.errors %}
+                <span class="form-error">{{ form.commentaire.errors|striptags }}</span>
+            {% endif %}
+        </label>
+
+        <label class="checkbox-label survey-check">
+            {{ form.veut_resultats }}
+            <span>{{ form.veut_resultats.label }}</span>
+        </label>
+
+        <label>
+            {{ form.email.label }}
+            {{ form.email }}
+            {% if form.email.errors %}
+                <span class="form-error">{{ form.email.errors|striptags }}</span>
+            {% endif %}
+        </label>
+
+        <label class="checkbox-label survey-check">
+            {{ form.consentement }}
+            <span>{{ form.consentement.label }}</span>
+            {% if form.consentement.errors %}
+                <span class="form-error">{{ form.consentement.errors|striptags }}</span>
+            {% endif %}
+        </label>
+
+        <button class="button primary survey-submit" type="submit">Je vote dans le sondage</button>
     </form>
 
     <aside class="subscribe-panel survey-panel">

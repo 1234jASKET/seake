@@ -1514,8 +1514,85 @@ p {
 
 .survey-form input[type="radio"],
 .survey-form input[type="checkbox"] {
+    accent-color: var(--brand);
     flex: 0 0 auto;
     width: auto;
+}
+
+.survey-lead {
+    color: var(--brand-dark);
+    font-size: 1.18rem;
+    font-weight: 900;
+    margin-bottom: 8px;
+}
+
+.survey-question {
+    border: 0;
+    margin: 0 0 22px;
+    padding: 0;
+}
+
+.survey-question legend {
+    color: var(--ink);
+    font-weight: 900;
+    line-height: 1.25;
+    margin-bottom: 10px;
+}
+
+.survey-options {
+    display: grid;
+    gap: 10px;
+}
+
+.survey-option {
+    align-items: center;
+    background: #f8fbfc;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    font-weight: 800;
+    gap: 12px;
+    line-height: 1.25;
+    margin: 0;
+    min-height: 52px;
+    padding: 13px 14px;
+    transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+.survey-option:has(input:checked) {
+    background: rgba(31, 111, 139, .1);
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px rgba(31, 111, 139, .12);
+}
+
+.survey-option input {
+    flex: 0 0 auto;
+    height: 20px;
+    margin: 0;
+    width: 20px;
+}
+
+.survey-option span {
+    flex: 1 1 auto;
+}
+
+.survey-check {
+    align-items: flex-start;
+    background: #fff8ef;
+    border: 1px solid #f0d8b5;
+    border-radius: 8px;
+    padding: 13px 14px;
+}
+
+.survey-check input {
+    margin-top: 3px;
+}
+
+.survey-submit {
+    font-size: 1.05rem;
+    min-height: 54px;
+    width: 100%;
 }
 
 .form-help {
