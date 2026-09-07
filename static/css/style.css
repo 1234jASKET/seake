@@ -182,6 +182,37 @@ p {
     color: #2a210c;
 }
 
+.survey-direct-button {
+    box-shadow: 0 12px 26px rgba(212, 159, 23, .24);
+    min-height: 52px;
+    padding-inline: 22px;
+}
+
+.home-survey-callout {
+    align-items: center;
+    background: #102033;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    color: var(--white);
+    display: flex;
+    gap: 24px;
+    justify-content: space-between;
+    margin-top: -34px;
+    padding: 26px;
+    position: relative;
+    z-index: 2;
+}
+
+.home-survey-callout h2 {
+    color: var(--white);
+    margin-bottom: 8px;
+}
+
+.home-survey-callout p:not(.eyebrow) {
+    color: rgba(255, 255, 255, .78);
+    margin-bottom: 0;
+}
+
 .ad-pull-button {
     animation: adButtonPulse 2.4s ease-in-out infinite;
     position: relative;
@@ -1188,6 +1219,10 @@ p {
 .today-hero.has-custom-photo {
     background-position: center;
     background-size: cover;
+}
+
+.today-hero-actions {
+    margin-top: 22px;
 }
 
 .today-info-section {
@@ -3954,6 +3989,7 @@ textarea {
 
     .flyer-header,
     .flyer-footer,
+    .home-survey-callout,
     .print-toolbar,
     .cta-band {
         align-items: flex-start;
@@ -3998,6 +4034,15 @@ textarea {
         flex-direction: column;
         min-height: auto;
         padding: 52px 22px 38px;
+    }
+
+    .home-survey-callout {
+        margin-top: 0;
+    }
+
+    .home-survey-callout .button,
+    .today-hero-actions .button {
+        width: 100%;
     }
 
     .today-subscribe {

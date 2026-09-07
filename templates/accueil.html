@@ -11,10 +11,20 @@
         <h1>Bienvenue dans SEAKE JOURNAL</h1>
         <p>Articles, coupons, publicites et fil d'actualites en continu pour informer la communaute et garder les lecteurs engages.</p>
         <div class="hero-actions">
+            <a class="button primary survey-direct-button" href="{% url 'sondage_election' %}">Voter au sondage</a>
             <a class="button primary" href="{% url 'articles' %}">Lire les articles</a>
             <a class="button secondary" href="https://www.seakejournal.com/">S'abonner</a>
         </div>
     </div>
+</section>
+
+<section class="section home-survey-callout">
+    <div>
+        <p class="eyebrow">Election Quebec</p>
+        <h2>Quel enjeu compte le plus pour vous?</h2>
+        <p>Sante, logement, economie, education, securite ou environnement: repondez au sondage maison SEAKE en 20 secondes.</p>
+    </div>
+    <a class="button primary survey-direct-button" href="{% url 'sondage_election' %}">Je vote maintenant</a>
 </section>
 
 <section class="section home-dashboard" aria-label="Services SEAKE JOURNAL">
