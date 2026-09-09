@@ -1,4 +1,6 @@
 from django.contrib import messages
+from django.conf import settings
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
@@ -87,6 +89,16 @@ def accueil(request):
         "accueil.html",
         {"articles": articles, "categories": categories},
     )
+
+
+def robots_txt(request):
+    site_url = settings.PUBLIC_SITE_URL.rstrip("/")
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        f"Sitemap: {site_url}/sitemap.xml",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
 
 
 def aujourd_hui(request):

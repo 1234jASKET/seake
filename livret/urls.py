@@ -17,10 +17,23 @@ Including another URLconf
 from django.contrib import admin
 from django.conf import settings
 from django.urls import include, path, re_path
+from django.contrib.sitemaps.views import sitemap
 from django.views.static import serve
+
+from journal import views as journal_views
+from journal.sitemaps import ArticleSitemap, CategorieSitemap, StaticViewSitemap
+
+
+sitemaps = {
+    "articles": ArticleSitemap,
+    "categories": CategorieSitemap,
+    "static": StaticViewSitemap,
+}
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("robots.txt", journal_views.robots_txt, name="robots_txt"),
+    path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
     path('', include('journal.urls')),
 ]
 
