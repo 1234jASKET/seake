@@ -10,6 +10,7 @@ from .feeds import article_html
 from .models import (
     Article,
     Categorie,
+    InfoDuJour,
     PhotoArticle,
     QuestionDuJour,
     ReponseQuestionDuJour,
@@ -127,3 +128,46 @@ class QuestionDuJourTests(TestCase):
             reverse("question_du_jour"),
             status_code=301,
         )
+
+
+class AccueilQuotidienTests(TestCase):
+    def setUp(self):
+        categorie = Categorie.objects.create(
+            nom="Actualites",
+            slug="actualites-accueil",
+        )
+        self.article = Article.objects.create(
+            titre="La nouvelle principale du jour",
+            slug="nouvelle-principale-du-jour",
+            categorie=categorie,
+            resume="Le resume quotidien de SEAKE JOURNAL.",
+            contenu="Le contenu de la nouvelle.",
+            publie=True,
+        )
+        self.info = InfoDuJour.objects.create(
+            titre="Aujourd'hui a Montreal",
+            sous_titre="Le point quotidien pour les lecteurs.",
+            meteo="Soleil et maximum de 22 degres.",
+            trafic="Circulation dense sur les grands axes.",
+            evenement="Un evenement a surveiller.",
+            publie=True,
+        )
+
+    def test_accueil_uses_daily_information_and_latest_article(self):
+        response = self.client.get(reverse("accueil"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "SEAKE JOURNAL")
+        self.assertContains(response, self.article.titre)
+        self.assertContains(response, self.info.meteo)
+        self.assertContains(response, self.info.trafic)
+        self.assertContains(response, "La chaîne YouTube")
+
+    def test_accueil_still_renders_without_daily_content(self):
+        Article.objects.all().delete()
+        InfoDuJour.objects.all().delete()
+
+        response = self.client.get(reverse("accueil"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "La prochaine edition se prepare")

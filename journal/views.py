@@ -97,15 +97,25 @@ def _article_layout(article_obj):
 
 
 def accueil(request):
-    articles = _articles_publies()[:3]
+    articles_recents = list(_articles_publies().prefetch_related("photos")[:7])
+    article_principal = articles_recents[0] if articles_recents else None
+    articles = articles_recents[1:7]
     categories = Categorie.objects.all()[:4]
+    info_du_jour = InfoDuJour.objects.filter(publie=True).first()
     question_du_jour = _question_du_jour()
+    publicites = DemandePublicite.objects.filter(
+        statut=DemandePublicite.STATUT_ACCEPTEE,
+    )[:3]
     return render(
         request,
         "accueil.html",
         {
+            "article_principal": article_principal,
             "articles": articles,
             "categories": categories,
+            "date_du_jour": timezone.localdate(),
+            "info_du_jour": info_du_jour,
+            "publicites": publicites,
             "question_du_jour": question_du_jour,
         },
     )

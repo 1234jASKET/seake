@@ -4,72 +4,100 @@
 {% block title %}Accueil - SEAKE JOURNAL{% endblock %}
 
 {% block content %}
-<section class="hero" style="background-image: linear-gradient(90deg, rgba(8, 30, 49, .84), rgba(8, 30, 49, .34)), url('/media/articles/publicites/seake-journal-livre-stylo.png');">
-    <div class="hero-content">
-        <img class="hero-logo" src="{% static 'img/logo.png' %}" alt="SEAKE JOURNAL">
-        <p class="eyebrow">Votre journal local</p>
-        <h1>Bienvenue dans SEAKE JOURNAL</h1>
-        <p>Articles, coupons, publicites et fil d'actualites en continu pour informer la communaute et garder les lecteurs engages.</p>
-        <div class="hero-actions">
-            <a class="button primary survey-direct-button" href="{% url 'question_du_jour' %}">Question du jour</a>
-            <a class="button primary" href="{% url 'articles' %}">Lire les articles</a>
-            <a class="button secondary" href="https://www.seakejournal.com/">S'abonner</a>
+<section class="daily-masthead">
+    <div class="daily-masthead-inner">
+        <div>
+            <p class="eyebrow">Edition quotidienne</p>
+            <h1>SEAKE JOURNAL</h1>
+            <p class="daily-deck">{{ info_du_jour.sous_titre|default:"L'essentiel de Montreal, du Quebec, du Canada et du monde, mis a jour chaque jour." }}</p>
+        </div>
+        <div class="daily-edition-meta">
+            <time datetime="{{ date_du_jour|date:'Y-m-d' }}">{{ date_du_jour|date:"l d F Y" }}</time>
+            {% if info_du_jour %}
+                <span>Mis a jour a {{ info_du_jour.date_modification|date:"H \h i" }}</span>
+            {% else %}
+                <span>Edition du jour</span>
+            {% endif %}
         </div>
     </div>
 </section>
 
-<section class="section home-survey-callout">
+<section class="section daily-lead-section">
+    <div class="daily-lead-layout">
+        {% if article_principal %}
+            <article class="daily-lead-story">
+                <a class="daily-lead-image" href="{{ article_principal.get_absolute_url }}">
+                    {% if info_du_jour and info_du_jour.photo %}
+                        <img src="{{ info_du_jour.photo.url }}" alt="{{ info_du_jour.titre }}">
+                    {% elif article_principal.image %}
+                        <img src="{{ article_principal.image.url }}" alt="{{ article_principal.titre }}">
+                    {% else %}
+                        <img src="{% static 'img/banniere.jpg' %}" alt="SEAKE JOURNAL">
+                    {% endif %}
+                </a>
+                <div class="daily-lead-copy">
+                    <div class="daily-story-meta">
+                        <a href="{{ article_principal.categorie.get_absolute_url }}">{{ article_principal.categorie.nom }}</a>
+                        <time datetime="{{ article_principal.date_publication|date:'c' }}">{{ article_principal.date_publication|date:"d F Y - H \h i" }}</time>
+                    </div>
+                    <h2><a href="{{ article_principal.get_absolute_url }}">{{ article_principal.titre }}</a></h2>
+                    <p>{{ article_principal.resume }}</p>
+                    <a class="button primary" href="{{ article_principal.get_absolute_url }}">Lire la nouvelle</a>
+                </div>
+            </article>
+        {% else %}
+            <article class="daily-lead-story daily-lead-empty">
+                <div class="daily-lead-copy">
+                    <p class="eyebrow">A la une</p>
+                    <h2>La prochaine edition se prepare</h2>
+                    <p>Le premier article publie depuis l'administration apparaîtra ici automatiquement.</p>
+                </div>
+            </article>
+        {% endif %}
+
+        <aside class="daily-briefing" aria-label="Informations pratiques du jour">
+            <div class="daily-briefing-heading">
+                <p class="eyebrow">En un coup d'oeil</p>
+                <h2>{{ info_du_jour.titre|default:"Aujourd'hui sur SEAKE" }}</h2>
+            </div>
+            <article>
+                <span>Meteo</span>
+                <p>{{ info_du_jour.meteo|default:"La meteo locale sera ajoutee dans Infos du jour." }}</p>
+            </article>
+            <article>
+                <span>Circulation</span>
+                <p>{{ info_du_jour.trafic|default:"Consultez les conditions routieres avant votre depart." }}</p>
+            </article>
+            {% if info_du_jour.evenement %}
+                <article>
+                    <span>A surveiller</span>
+                    <p>{{ info_du_jour.evenement }}</p>
+                </article>
+            {% endif %}
+            {% if info_du_jour.alerte %}
+                <article class="daily-alert">
+                    <span>Alerte</span>
+                    <p>{{ info_du_jour.alerte }}</p>
+                </article>
+            {% endif %}
+            <a class="daily-briefing-link" href="{% url 'aujourd_hui' %}">Ouvrir la page Aujourd'hui</a>
+        </aside>
+    </div>
+</section>
+
+<section class="daily-question-band">
     <div>
-        <p class="eyebrow">Votre opinion</p>
-        <h2>{{ question_du_jour.question|default:"Participez a la question du jour" }}</h2>
-        <p>Une question simple et rapide pour entendre la voix des lecteurs de SEAKE JOURNAL.</p>
+        <p class="eyebrow">Question du jour</p>
+        <h2>{{ question_du_jour.question|default:"Quelle information aimeriez-vous voir davantage sur SEAKE?" }}</h2>
+        <p>{{ question_du_jour.message|default:"Une question rapide pour entendre la voix des lecteurs." }}</p>
     </div>
-    <a class="button primary survey-direct-button" href="{% url 'question_du_jour' %}">Je reponds</a>
+    <a class="button primary" href="{% url 'question_du_jour' %}">Je participe</a>
 </section>
 
-<section class="section home-dashboard" aria-label="Services SEAKE JOURNAL">
+<section class="section daily-news-section">
     <div class="section-heading">
-        <p class="eyebrow">Espace lecteurs</p>
-        <h2>Tout SEAKE JOURNAL au meme endroit</h2>
-    </div>
-    <div class="home-feature-grid">
-        <a class="home-feature-card feature-articles" href="{% url 'articles' %}">
-            <span>Articles</span>
-            <h3>Lire les dernieres nouvelles</h3>
-            <p>Actualites locales, nationales et internationales publiees depuis l'admin.</p>
-            <strong>Ouvrir les articles</strong>
-        </a>
-        <a class="home-feature-card feature-coupons" href="{% url 'coupons' %}">
-            <span>Coupons rabais</span>
-            <h3>Economiser localement</h3>
-            <p>Offres, codes promo et rabais que les lecteurs peuvent garder ou montrer.</p>
-            <strong>Voir les coupons</strong>
-        </a>
-        <a class="home-feature-card feature-publicite" href="{% url 'publicite' %}">
-            <span>Publicites</span>
-            <h3>Promouvoir un commerce</h3>
-            <p>Une vitrine simple pour les annonces, les campagnes et les partenaires locaux.</p>
-            <strong>Devenir annonceur</strong>
-        </a>
-        <a class="home-feature-card feature-ecran" href="{% url 'ecran_actualites' %}">
-            <span>Page ecran</span>
-            <h3>Afficher le fil d'actualites</h3>
-            <p>Une presentation type television pour maison, commerce ou salle d'attente.</p>
-            <strong>Ouvrir l'ecran</strong>
-        </a>
-        <a class="home-feature-card feature-abonnement" href="https://www.seakejournal.com/">
-            <span>Abonnement</span>
-            <h3>Recevoir SEAKE JOURNAL</h3>
-            <p>Le lien Substack pour suivre les publications et ne pas manquer les prochains articles.</p>
-            <strong>S'abonner</strong>
-        </a>
-    </div>
-</section>
-
-<section class="section">
-    <div class="section-heading">
-        <p class="eyebrow">Selection</p>
-        <h2>Articles recents</h2>
+        <p class="eyebrow">Fil d'actualite</p>
+        <h2>Les nouvelles a lire maintenant</h2>
     </div>
     <div class="article-grid">
         {% for article in articles %}
@@ -81,19 +109,73 @@
             </article>
         {% endfor %}
     </div>
+    <div class="daily-section-action">
+        <a class="button secondary dark" href="{% url 'articles' %}">Voir tous les articles</a>
+    </div>
 </section>
 
-<section class="section muted">
-    <div class="section-heading">
-        <p class="eyebrow">Classement</p>
-        <h2>Categories principales</h2>
-    </div>
-    <div class="category-list">
-        {% for categorie in categories %}
-            <a class="category-pill" href="{{ categorie.get_absolute_url }}">{{ categorie.nom }}</a>
-        {% empty %}
-            <p>Les categories apparaitront ici apres leur creation.</p>
-        {% endfor %}
+<section class="section muted daily-media-section">
+    <div class="daily-media-layout">
+        <div class="daily-video">
+            <div class="section-heading">
+                <p class="eyebrow">SEAKE en video</p>
+                <h2>La chaîne YouTube</h2>
+                <p>Retrouvez les nouvelles courtes, les explications et les prochaines editions video.</p>
+            </div>
+            <div class="daily-video-frame">
+                <iframe src="https://www.youtube.com/embed/videoseries?list=UUhejxiJ-ksaKl0IzoE4ahJw" title="Dernieres videos de SEAKE JOURNAL" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <a class="daily-channel-link" href="https://www.youtube.com/@Seakejournal-s5e">Voir la chaîne YouTube</a>
+        </div>
+        <aside class="daily-follow-panel">
+            <p class="eyebrow">Ne manquez rien</p>
+            <h2>Recevez SEAKE JOURNAL</h2>
+            <p>Abonnez-vous pour retrouver les nouvelles, les annonces, les coupons et les editions importantes.</p>
+            <div class="daily-follow-actions">
+                <a class="button primary" href="{% url 'abonnement' %}">M'abonner</a>
+                <a class="button secondary" href="{% url 'reseaux_sociaux' %}">Tous les reseaux</a>
+            </div>
+            <ul>
+                <li>Resume quotidien</li>
+                <li>Nouvelles locales et internationales</li>
+                <li>Videos et publications sociales</li>
+            </ul>
+        </aside>
     </div>
 </section>
+
+{% if publicites %}
+<section class="section daily-ads-section">
+    <div class="section-heading">
+        <p class="eyebrow">Partenaires locaux</p>
+        <h2>Publicites et offres a decouvrir</h2>
+    </div>
+    <div class="today-ad-grid">
+        {% for publicite in publicites %}
+            <article>
+                {% if publicite.video %}
+                    <video controls muted playsinline><source src="{{ publicite.video.url }}"></video>
+                {% elif publicite.photo %}
+                    <img src="{{ publicite.photo.url }}" alt="Publicite de {{ publicite.nom_entreprise|default:publicite.nom_client }}">
+                {% endif %}
+                <div>
+                    <span>Publicite</span>
+                    <h3>{{ publicite.nom_entreprise|default:publicite.nom_client }}</h3>
+                    <p>{{ publicite.message|truncatewords:22 }}</p>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+    <div class="daily-section-action">
+        <a class="button secondary dark" href="{% url 'demande_publicite' %}">Annoncer sur SEAKE</a>
+    </div>
+</section>
+{% endif %}
+
+<nav class="daily-service-nav" aria-label="Services SEAKE JOURNAL">
+    <a href="{% url 'coupons' %}"><span>Economiser</span><strong>Coupons et aubaines</strong></a>
+    <a href="{% url 'publicite' %}"><span>Decouvrir</span><strong>Publicites locales</strong></a>
+    <a href="{% url 'color_control' %}"><span>Apprendre</span><strong>Couleur et impression</strong></a>
+    <a href="{% url 'impression' %}"><span>Produire</span><strong>Journal et prépresse</strong></a>
+</nav>
 {% endblock %}
