@@ -8,13 +8,28 @@ from .forms import (
     AbonneForm,
     CommentaireForm,
     DemandePubliciteForm,
-    ReponseSondageElectionForm,
+    QuestionDuJourForm,
 )
-from .models import Article, Categorie, DemandePublicite, EchantillonCouleur, InfoDuJour
+from .models import (
+    Article,
+    Categorie,
+    DemandePublicite,
+    EchantillonCouleur,
+    InfoDuJour,
+    QuestionDuJour,
+    ReponseQuestionDuJour,
+)
 
 
 def _articles_publies():
     return Article.objects.filter(publie=True).select_related("categorie")
+
+
+def _question_du_jour():
+    return QuestionDuJour.objects.filter(
+        active=True,
+        date_affichage__lte=timezone.localdate(),
+    ).first()
 
 
 def _article_layout(article_obj):
@@ -84,10 +99,15 @@ def _article_layout(article_obj):
 def accueil(request):
     articles = _articles_publies()[:3]
     categories = Categorie.objects.all()[:4]
+    question_du_jour = _question_du_jour()
     return render(
         request,
         "accueil.html",
-        {"articles": articles, "categories": categories},
+        {
+            "articles": articles,
+            "categories": categories,
+            "question_du_jour": question_du_jour,
+        },
     )
 
 
@@ -103,6 +123,7 @@ def robots_txt(request):
 
 def aujourd_hui(request):
     info_du_jour = InfoDuJour.objects.filter(publie=True).first()
+    question_du_jour = _question_du_jour()
     articles_recents = _articles_publies().prefetch_related("photos")[:6]
     article_principal = articles_recents[0] if articles_recents else None
     articles_secondaires = articles_recents[1:6] if articles_recents else []
@@ -143,6 +164,7 @@ def aujourd_hui(request):
             "article_principal": article_principal,
             "articles_secondaires": articles_secondaires,
             "info_du_jour": info_du_jour,
+            "question_du_jour": question_du_jour,
             "publicites": publicites,
             "date_du_jour": date_du_jour,
             "capsules": capsules,
@@ -179,23 +201,33 @@ def abonnement(request):
 
 
 def sondage_election(request):
-    if request.method == "POST":
-        form = ReponseSondageElectionForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(
-                request,
-                "Merci. Votre reponse au sondage SEAKE JOURNAL a ete recue.",
-            )
-            return redirect("sondage_election")
-    else:
-        form = ReponseSondageElectionForm()
+    return redirect("question_du_jour", permanent=True)
+
+
+def question_du_jour(request):
+    question = _question_du_jour()
+    form = QuestionDuJourForm(question, request.POST or None) if question else None
+
+    if question and request.method == "POST" and form.is_valid():
+        if not request.session.session_key:
+            request.session.create()
+        _, created = ReponseQuestionDuJour.objects.get_or_create(
+            question=question,
+            session=request.session.session_key,
+            defaults={"choix": form.cleaned_data["choix"]},
+        )
+        if created:
+            messages.success(request, "Merci. Votre reponse a ete enregistree.")
+        else:
+            messages.info(request, "Vous avez deja repondu a cette question.")
+        return redirect("question_du_jour")
 
     articles_recents = _articles_publies()[:3]
     return render(
         request,
-        "sondage_election.html",
+        "question_du_jour.html",
         {
+            "question": question,
             "form": form,
             "articles_recents": articles_recents,
         },

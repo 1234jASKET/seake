@@ -9,7 +9,7 @@
         <h1>{{ info_du_jour.titre|default:"Aujourd'hui sur SEAKE" }}</h1>
         <p>{{ info_du_jour.sous_titre|default:"Les nouvelles, annonces, coupons, cours et services utiles au meme endroit pour garder la communaute branchee." }}</p>
         <div class="hero-actions today-hero-actions">
-            <a class="button primary survey-direct-button" href="{% url 'sondage_election' %}">Voter au sondage</a>
+            <a class="button primary survey-direct-button" href="{% url 'question_du_jour' %}">Question du jour</a>
             <a class="button secondary" href="{% url 'articles' %}">Lire les nouvelles</a>
         </div>
     </div>

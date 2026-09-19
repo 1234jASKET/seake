@@ -34,7 +34,7 @@ class StaticViewSitemap(Sitemap):
         return [
             "accueil",
             "aujourd_hui",
-            "sondage_election",
+            "question_du_jour",
             "articles",
             "publicite",
             "abonnement",

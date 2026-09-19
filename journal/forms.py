@@ -1,6 +1,25 @@
 from django import forms
 
-from .models import Abonne, Commentaire, DemandePublicite, ReponseSondageElection
+from .models import (
+    Abonne,
+    Commentaire,
+    DemandePublicite,
+    ReponseSondageElection,
+)
+
+
+class QuestionDuJourForm(forms.Form):
+    choix = forms.TypedChoiceField(
+        label="Votre reponse",
+        choices=(),
+        coerce=int,
+        empty_value=None,
+        widget=forms.RadioSelect,
+    )
+
+    def __init__(self, question, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["choix"].choices = question.choix_disponibles()
 
 
 class DemandePubliciteForm(forms.ModelForm):

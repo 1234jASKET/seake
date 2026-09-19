@@ -7,7 +7,13 @@ from django.urls import reverse
 from django.utils import timezone
 
 from .feeds import article_html
-from .models import Article, Categorie, PhotoArticle
+from .models import (
+    Article,
+    Categorie,
+    PhotoArticle,
+    QuestionDuJour,
+    ReponseQuestionDuJour,
+)
 
 
 GIF_IMAGE = (
@@ -80,3 +86,44 @@ class ArticleMediaPlacementTests(TestCase):
         self.assertLess(html.index("Abonnez-vous."), html.index("Troisieme paragraphe."))
         self.assertNotIn("<p>1</p>", html)
         self.assertNotIn("<p>2</p>", html)
+
+
+class QuestionDuJourTests(TestCase):
+    def setUp(self):
+        self.question = QuestionDuJour.objects.create(
+            question="Quel sujet voulez-vous lire?",
+            choix_1="Actualite locale",
+            choix_2="Economie",
+            choix_3="Sport",
+            active=True,
+            date_affichage=timezone.localdate(),
+        )
+
+    def test_question_is_visible_on_public_pages(self):
+        question_response = self.client.get(reverse("question_du_jour"))
+        accueil_response = self.client.get(reverse("accueil"))
+        aujourd_hui_response = self.client.get(reverse("aujourd_hui"))
+
+        self.assertContains(question_response, self.question.question)
+        self.assertContains(accueil_response, self.question.question)
+        self.assertContains(aujourd_hui_response, "Question du jour")
+
+    def test_answer_is_saved_only_once_per_session(self):
+        url = reverse("question_du_jour")
+
+        first_response = self.client.post(url, {"choix": "2"})
+        second_response = self.client.post(url, {"choix": "1"})
+
+        self.assertRedirects(first_response, url)
+        self.assertRedirects(second_response, url)
+        self.assertEqual(ReponseQuestionDuJour.objects.count(), 1)
+        self.assertEqual(ReponseQuestionDuJour.objects.get().choix, 2)
+
+    def test_old_survey_link_redirects_to_question_of_the_day(self):
+        response = self.client.get(reverse("sondage_election"))
+
+        self.assertRedirects(
+            response,
+            reverse("question_du_jour"),
+            status_code=301,
+        )

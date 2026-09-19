@@ -13,6 +13,8 @@ from .models import (
     InfoDuJour,
     LectureCouleur,
     PhotoArticle,
+    QuestionDuJour,
+    ReponseQuestionDuJour,
     ReponseSondageElection,
 )
 
@@ -155,6 +157,86 @@ class ReponseSondageElectionAdmin(admin.ModelAdmin):
             },
         ),
     )
+
+
+class ReponseQuestionDuJourInline(admin.TabularInline):
+    model = ReponseQuestionDuJour
+    extra = 0
+    can_delete = False
+    fields = ("choix_affiche", "date_creation")
+    readonly_fields = fields
+
+    @admin.display(description="Reponse")
+    def choix_affiche(self, obj):
+        return obj.choix_texte
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(QuestionDuJour)
+class QuestionDuJourAdmin(admin.ModelAdmin):
+    list_display = (
+        "question",
+        "date_affichage",
+        "active",
+        "nombre_reponses",
+    )
+    list_filter = ("active", "date_affichage")
+    search_fields = ("question", "message")
+    list_editable = ("active",)
+    inlines = [ReponseQuestionDuJourInline]
+    fieldsets = (
+        (
+            "Question",
+            {
+                "fields": (
+                    "question",
+                    "message",
+                )
+            },
+        ),
+        (
+            "Choix de reponse",
+            {
+                "fields": (
+                    "choix_1",
+                    "choix_2",
+                    "choix_3",
+                    "choix_4",
+                    "choix_5",
+                    "choix_6",
+                )
+            },
+        ),
+        (
+            "Publication",
+            {
+                "fields": (
+                    "active",
+                    "date_affichage",
+                )
+            },
+        ),
+    )
+
+    @admin.display(description="Reponses")
+    def nombre_reponses(self, obj):
+        return obj.reponses.count()
+
+
+@admin.register(ReponseQuestionDuJour)
+class ReponseQuestionDuJourAdmin(admin.ModelAdmin):
+    list_display = ("question", "choix_affiche", "date_creation")
+    list_filter = ("question", "choix", "date_creation")
+    readonly_fields = ("question", "choix", "session", "date_creation")
+
+    @admin.display(description="Reponse")
+    def choix_affiche(self, obj):
+        return obj.choix_texte
+
+    def has_add_permission(self, request):
+        return False
 
 
 class PhotoArticleInline(ImagePreviewAdminMixin, admin.TabularInline):

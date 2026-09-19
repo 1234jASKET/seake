@@ -311,6 +311,80 @@ class ReponseSondageElection(models.Model):
         return f"{self.region} - {self.get_enjeu_important_display()}"
 
 
+class QuestionDuJour(models.Model):
+    question = models.CharField(max_length=240)
+    choix_1 = models.CharField(max_length=160)
+    choix_2 = models.CharField(max_length=160)
+    choix_3 = models.CharField(max_length=160, blank=True)
+    choix_4 = models.CharField(max_length=160, blank=True)
+    choix_5 = models.CharField(max_length=160, blank=True)
+    choix_6 = models.CharField(max_length=160, blank=True)
+    message = models.TextField(
+        blank=True,
+        help_text="Court texte affiche sous la question.",
+    )
+    active = models.BooleanField(default=True)
+    date_affichage = models.DateField(default=timezone.localdate)
+    date_creation = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-date_affichage", "-date_creation"]
+        verbose_name = "Question du jour"
+        verbose_name_plural = "Questions du jour"
+
+    def __str__(self):
+        return f"{self.date_affichage} - {self.question}"
+
+    def choix_disponibles(self):
+        return [
+            (index, texte)
+            for index, texte in enumerate(
+                [
+                    self.choix_1,
+                    self.choix_2,
+                    self.choix_3,
+                    self.choix_4,
+                    self.choix_5,
+                    self.choix_6,
+                ],
+                start=1,
+            )
+            if texte
+        ]
+
+
+class ReponseQuestionDuJour(models.Model):
+    question = models.ForeignKey(
+        QuestionDuJour,
+        on_delete=models.CASCADE,
+        related_name="reponses",
+    )
+    choix = models.PositiveSmallIntegerField()
+    session = models.CharField(max_length=40, blank=True)
+    date_creation = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-date_creation"]
+        verbose_name = "Reponse a la question du jour"
+        verbose_name_plural = "Reponses aux questions du jour"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["question", "session"],
+                name="une_reponse_par_session_et_question",
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.question.date_affichage} - choix {self.choix}"
+
+    @property
+    def choix_texte(self):
+        return dict(self.question.choix_disponibles()).get(
+            self.choix,
+            "Choix retire",
+        )
+
+
 class EchantillonCouleur(models.Model):
     STATUT_PREPARATION = "preparation"
     STATUT_APPROUVER = "a_approuver"

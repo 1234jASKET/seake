@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Question du jour - SEAKE JOURNAL{% endblock %}
+
+{% block content %}
+<section class="subscribe-hero survey-hero">
+    <div>
+        <p class="eyebrow">Votre opinion</p>
+        <h1>Question du jour</h1>
+        <p>Une question simple et rapide pour entendre la voix des lecteurs de SEAKE JOURNAL.</p>
+    </div>
+</section>
+
+<section class="section subscribe-layout survey-layout">
+    {% if question %}
+        <form class="contact-form subscribe-form survey-form" method="post">
+            {% csrf_token %}
+            <p class="eyebrow">{{ question.date_affichage|date:"d F Y" }}</p>
+            <h2>{{ question.question }}</h2>
+            {% if question.message %}<p class="survey-lead">{{ question.message }}</p>{% endif %}
+            {{ form.non_field_errors }}
+
+            <fieldset class="survey-question">
+                <legend>{{ form.choix.label }}</legend>
+                <div class="survey-options">
+                    {% for choice in form.choix %}
+                        <label class="survey-option">
+                            {{ choice.tag }}
+                            <span>{{ choice.choice_label }}</span>
+                        </label>
+                    {% endfor %}
+                </div>
+                {% if form.choix.errors %}
+                    <span class="form-error">{{ form.choix.errors|striptags }}</span>
+                {% endif %}
+            </fieldset>
+
+            <button class="button primary survey-submit" type="submit">Envoyer ma reponse</button>
+            <p class="form-help">Aucun nom ni courriel n'est demande.</p>
+        </form>
+    {% else %}
+        <article class="contact-form subscribe-form">
+            <p class="eyebrow">A venir</p>
+            <h2>La prochaine question sera publiee bientot</h2>
+            <p>Revenez sur SEAKE JOURNAL pour participer.</p>
+        </article>
+    {% endif %}
+
+    <aside class="subscribe-panel survey-panel">
+        <p class="eyebrow">SEAKE JOURNAL</p>
+        <h2>Pourquoi participer?</h2>
+        <ul>
+            <li>Faire connaitre les sujets qui vous interessent.</li>
+            <li>Aider SEAKE JOURNAL a mieux servir ses lecteurs.</li>
+            <li>Decouvrir une nouvelle question regulierement.</li>
+        </ul>
+        <p class="subscribe-note">Une seule reponse est acceptee par question sur cet appareil.</p>
+    </aside>
+</section>
+
+<section class="section muted">
+    <div class="section-heading">
+        <p class="eyebrow">A lire aussi</p>
+        <h2>Derniers articles</h2>
+    </div>
+    <div class="today-news-list">
+        {% for article in articles_recents %}
+            <article>
+                <span>{{ article.categorie.nom }}</span>
+                <h3><a href="{{ article.get_absolute_url }}">{{ article.titre }}</a></h3>
+                <p>{{ article.resume }}</p>
+            </article>
+        {% empty %}
+            <article>
+                <span>SEAKE</span>
+                <h3>Articles a venir</h3>
+                <p>Les prochains articles publies apparaitront ici.</p>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
