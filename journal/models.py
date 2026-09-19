@@ -17,6 +17,12 @@ video_file_validator = FileExtensionValidator(
 )
 
 
+pdf_file_validator = FileExtensionValidator(
+    allowed_extensions=["pdf"],
+    message="Ajoutez un fichier PDF valide.",
+)
+
+
 class Categorie(models.Model):
     nom = models.CharField(max_length=120)
     slug = models.SlugField(max_length=140, unique=True)
@@ -78,6 +84,78 @@ class Article(models.Model):
 
     def get_absolute_url(self):
         return reverse("article", kwargs={"slug": self.slug})
+
+
+class NumeroMagazine(models.Model):
+    FORMAT_TABLOID = "tabloid"
+    FORMAT_BROADSHEET = "broadsheet"
+    FORMAT_LETTRE = "lettre"
+    FORMAT_PERSONNALISE = "personnalise"
+    FORMAT_CHOICES = [
+        (FORMAT_TABLOID, "Tabloid"),
+        (FORMAT_BROADSHEET, "Grand format"),
+        (FORMAT_LETTRE, "Lettre ou A4"),
+        (FORMAT_PERSONNALISE, "Format personnalise"),
+    ]
+
+    titre = models.CharField(max_length=180)
+    slug = models.SlugField(max_length=200, unique=True)
+    sous_titre = models.CharField(max_length=240, blank=True)
+    numero_edition = models.CharField(
+        max_length=60,
+        help_text="Exemple: Volume 1, numero 1.",
+    )
+    date_publication = models.DateField(default=timezone.localdate)
+    couverture = models.FileField(
+        upload_to="magazines/couvertures/",
+        blank=True,
+        validators=[image_file_validator],
+    )
+    editorial = models.TextField(blank=True)
+    articles = models.ManyToManyField(
+        Article,
+        blank=True,
+        related_name="numeros_magazine",
+        help_text="Choisissez les articles inclus dans ce numero.",
+    )
+    nombre_pages = models.PositiveSmallIntegerField(default=8)
+    format_papier = models.CharField(
+        max_length=20,
+        choices=FORMAT_CHOICES,
+        default=FORMAT_TABLOID,
+    )
+    prix = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        blank=True,
+        null=True,
+    )
+    pdf_numerique = models.FileField(
+        upload_to="magazines/numeriques/",
+        blank=True,
+        validators=[pdf_file_validator],
+        help_text="PDF leger pour la lecture a l'ecran.",
+    )
+    pdf_presse = models.FileField(
+        upload_to="magazines/presse/",
+        blank=True,
+        validators=[pdf_file_validator],
+        help_text="PDF haute resolution valide pour le prépresse.",
+    )
+    publie = models.BooleanField(default=False)
+    date_creation = models.DateTimeField(auto_now_add=True)
+    date_modification = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-date_publication", "-date_creation"]
+        verbose_name = "Numero de magazine"
+        verbose_name_plural = "Numeros de magazine"
+
+    def __str__(self):
+        return f"{self.numero_edition} - {self.titre}"
+
+    def get_absolute_url(self):
+        return reverse("magazine", kwargs={"slug": self.slug})
 
 
 class PhotoArticle(models.Model):

@@ -1,7 +1,7 @@
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
 
-from .models import Article, Categorie
+from .models import Article, Categorie, NumeroMagazine
 
 
 class ArticleSitemap(Sitemap):
@@ -25,6 +25,18 @@ class CategorieSitemap(Sitemap):
         return Categorie.objects.all()
 
 
+class MagazineSitemap(Sitemap):
+    changefreq = "monthly"
+    priority = 0.8
+    protocol = "https"
+
+    def items(self):
+        return NumeroMagazine.objects.filter(publie=True)
+
+    def lastmod(self, obj):
+        return obj.date_modification
+
+
 class StaticViewSitemap(Sitemap):
     changefreq = "daily"
     priority = 0.7
@@ -36,6 +48,7 @@ class StaticViewSitemap(Sitemap):
             "aujourd_hui",
             "question_du_jour",
             "articles",
+            "magazines",
             "publicite",
             "abonnement",
             "contact",

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ numero.titre }} - SEAKE MAGAZINE{% endblock %}
+
+{% block content %}
+<article class="magazine-issue">
+    <header class="magazine-issue-header">
+        <div class="magazine-issue-cover">
+            {% if numero.couverture %}
+                <img src="{{ numero.couverture.url }}" alt="Couverture de {{ numero.titre }}">
+            {% else %}
+                <div class="magazine-cover-placeholder">
+                    <img src="{% static 'img/logo.png' %}" alt="SEAKE JOURNAL">
+                    <strong>{{ numero.titre }}</strong>
+                    <span>{{ numero.numero_edition }}</span>
+                </div>
+            {% endif %}
+        </div>
+        <div class="magazine-issue-intro">
+            <p class="eyebrow">SEAKE MAGAZINE · {{ numero.numero_edition }}</p>
+            <h1>{{ numero.titre }}</h1>
+            {% if numero.sous_titre %}<p class="magazine-deck">{{ numero.sous_titre }}</p>{% endif %}
+            <div class="magazine-issue-meta">
+                <span>{{ numero.date_publication|date:"d F Y" }}</span>
+                <span>{{ numero.nombre_pages }} pages</span>
+                <span>{{ numero.get_format_papier_display }}</span>
+                {% if numero.prix %}<span>{{ numero.prix }} $</span>{% endif %}
+            </div>
+            <div class="magazine-actions">
+                {% if numero.pdf_numerique %}
+                    <a class="button primary" href="{{ numero.pdf_numerique.url }}" target="_blank" rel="noopener">Lire l'edition numerique</a>
+                {% endif %}
+                {% if request.user.is_staff and numero.pdf_presse %}
+                    <a class="button secondary dark" href="{{ numero.pdf_presse.url }}" target="_blank" rel="noopener">PDF prépresse - equipe</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    {% if numero.editorial %}
+    <section class="magazine-editorial">
+        <p class="eyebrow">Mot de l'editeur</p>
+        <h2>Bienvenue dans ce numero</h2>
+        {{ numero.editorial|linebreaks }}
+    </section>
+    {% endif %}
+
+    <section class="magazine-contents">
+        <div class="section-heading">
+            <p class="eyebrow">Sommaire</p>
+            <h2>Dans cette edition</h2>
+        </div>
+        <div class="magazine-story-list">
+            {% for article in numero.articles.all %}
+                <article>
+                    <span>{{ forloop.counter|stringformat:"02d" }}</span>
+                    <div>
+                        <p>{{ article.categorie.nom }}</p>
+                        <h3><a href="{{ article.get_absolute_url }}">{{ article.titre }}</a></h3>
+                        <p>{{ article.resume }}</p>
+                    </div>
+                    {% if article.image %}<img src="{{ article.image.url }}" alt="{{ article.titre }}">{% endif %}
+                </article>
+            {% empty %}
+                <div class="empty-state">
+                    <h3>Sommaire en preparation</h3>
+                    <p>Choisissez les articles de ce numero dans Django admin.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+</article>
+
+<nav class="magazine-back-nav">
+    <a href="{% url 'magazines' %}">Voir tous les numeros de SEAKE MAGAZINE</a>
+</nav>
+{% endblock %}

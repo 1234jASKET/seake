@@ -12,6 +12,7 @@ from .models import (
     EchantillonCouleur,
     InfoDuJour,
     LectureCouleur,
+    NumeroMagazine,
     PhotoArticle,
     QuestionDuJour,
     ReponseQuestionDuJour,
@@ -313,6 +314,75 @@ class ArticleAdmin(ImagePreviewAdminMixin, admin.ModelAdmin):
     @admin.display(description="Apercu publicite")
     def publicite_image_preview(self, obj):
         return render_image_preview(obj.publicite_image if obj else None)
+
+
+@admin.register(NumeroMagazine)
+class NumeroMagazineAdmin(admin.ModelAdmin):
+    list_display = (
+        "numero_edition",
+        "titre",
+        "date_publication",
+        "nombre_pages",
+        "format_papier",
+        "publie",
+        "couverture_preview",
+    )
+    list_filter = ("publie", "format_papier", "date_publication")
+    search_fields = ("titre", "sous_titre", "numero_edition", "editorial")
+    prepopulated_fields = {"slug": ("titre",)}
+    filter_horizontal = ("articles",)
+    readonly_fields = ("couverture_preview", "date_creation", "date_modification")
+    fieldsets = (
+        (
+            "Edition",
+            {
+                "fields": (
+                    "titre",
+                    "slug",
+                    "sous_titre",
+                    "numero_edition",
+                    "date_publication",
+                    "editorial",
+                )
+            },
+        ),
+        (
+            "Couverture et contenu",
+            {
+                "fields": (
+                    "couverture_preview",
+                    "couverture",
+                    "articles",
+                )
+            },
+        ),
+        (
+            "Edition papier",
+            {
+                "fields": (
+                    "nombre_pages",
+                    "format_papier",
+                    "prix",
+                    "pdf_numerique",
+                    "pdf_presse",
+                )
+            },
+        ),
+        (
+            "Publication",
+            {
+                "fields": (
+                    "publie",
+                    "date_creation",
+                    "date_modification",
+                )
+            },
+        ),
+    )
+
+    @admin.display(description="Couverture")
+    def couverture_preview(self, obj):
+        return render_image_preview(obj.couverture if obj else None)
 
 
 @admin.register(PhotoArticle)

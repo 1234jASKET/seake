@@ -16,6 +16,7 @@ from .models import (
     DemandePublicite,
     EchantillonCouleur,
     InfoDuJour,
+    NumeroMagazine,
     QuestionDuJour,
     ReponseQuestionDuJour,
 )
@@ -184,6 +185,31 @@ def aujourd_hui(request):
 
 def articles(request):
     return render(request, "articles.html", {"articles": _articles_publies()})
+
+
+def magazines(request):
+    numeros = NumeroMagazine.objects.filter(publie=True).prefetch_related(
+        "articles__categorie"
+    )
+    numero_vedette = numeros.first()
+    archives = numeros[1:]
+    return render(
+        request,
+        "magazines.html",
+        {
+            "numero_vedette": numero_vedette,
+            "archives": archives,
+        },
+    )
+
+
+def magazine(request, slug):
+    numero = get_object_or_404(
+        NumeroMagazine.objects.prefetch_related("articles__categorie"),
+        slug=slug,
+        publie=True,
+    )
+    return render(request, "magazine.html", {"numero": numero})
 
 
 def abonnement(request):

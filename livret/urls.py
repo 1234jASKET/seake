@@ -21,12 +21,18 @@ from django.contrib.sitemaps.views import sitemap
 from django.views.static import serve
 
 from journal import views as journal_views
-from journal.sitemaps import ArticleSitemap, CategorieSitemap, StaticViewSitemap
+from journal.sitemaps import (
+    ArticleSitemap,
+    CategorieSitemap,
+    MagazineSitemap,
+    StaticViewSitemap,
+)
 
 
 sitemaps = {
     "articles": ArticleSitemap,
     "categories": CategorieSitemap,
+    "magazines": MagazineSitemap,
     "static": StaticViewSitemap,
 }
 

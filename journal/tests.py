@@ -11,6 +11,7 @@ from .models import (
     Article,
     Categorie,
     InfoDuJour,
+    NumeroMagazine,
     PhotoArticle,
     QuestionDuJour,
     ReponseQuestionDuJour,
@@ -171,3 +172,51 @@ class AccueilQuotidienTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "La prochaine edition se prepare")
+
+
+class MagazineTests(TestCase):
+    def setUp(self):
+        categorie = Categorie.objects.create(
+            nom="Magazine",
+            slug="magazine-test",
+        )
+        self.article = Article.objects.create(
+            titre="Un grand dossier SEAKE",
+            slug="grand-dossier-seake",
+            categorie=categorie,
+            resume="Un dossier retenu pour le magazine.",
+            contenu="Contenu du dossier.",
+            publie=True,
+        )
+        self.numero = NumeroMagazine.objects.create(
+            titre="Le premier magazine SEAKE",
+            slug="premier-magazine-seake",
+            sous_titre="Une edition numerique et papier.",
+            numero_edition="Volume 1, numero 1",
+            editorial="Bienvenue dans ce premier numero.",
+            nombre_pages=8,
+            publie=True,
+        )
+        self.numero.articles.add(self.article)
+
+    def test_magazine_list_shows_published_issue(self):
+        response = self.client.get(reverse("magazines"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.numero.titre)
+        self.assertContains(response, self.numero.numero_edition)
+
+    def test_magazine_detail_shows_selected_articles(self):
+        response = self.client.get(self.numero.get_absolute_url())
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.numero.editorial)
+        self.assertContains(response, self.article.titre)
+
+    def test_unpublished_issue_is_not_public(self):
+        self.numero.publie = False
+        self.numero.save(update_fields=["publie"])
+
+        response = self.client.get(self.numero.get_absolute_url())
+
+        self.assertEqual(response.status_code, 404)

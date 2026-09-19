@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}SEAKE MAGAZINE{% endblock %}
+
+{% block content %}
+<section class="magazine-masthead">
+    <div>
+        <p class="eyebrow">Dossiers, entrevues et grands sujets</p>
+        <h1>SEAKE MAGAZINE</h1>
+        <p>Une edition numerique et papier pour prendre le temps de comprendre, decouvrir et conserver les meilleures histoires de SEAKE.</p>
+    </div>
+</section>
+
+{% if numero_vedette %}
+<section class="section magazine-feature">
+    <div class="magazine-cover-stage">
+        {% if numero_vedette.couverture %}
+            <img src="{{ numero_vedette.couverture.url }}" alt="Couverture de {{ numero_vedette.titre }}">
+        {% else %}
+            <div class="magazine-cover-placeholder">
+                <img src="{% static 'img/logo.png' %}" alt="SEAKE JOURNAL">
+                <strong>{{ numero_vedette.titre }}</strong>
+                <span>{{ numero_vedette.numero_edition }}</span>
+            </div>
+        {% endif %}
+    </div>
+    <div class="magazine-feature-copy">
+        <p class="eyebrow">Nouveau numero</p>
+        <h2>{{ numero_vedette.titre }}</h2>
+        {% if numero_vedette.sous_titre %}<p class="magazine-deck">{{ numero_vedette.sous_titre }}</p>{% endif %}
+        <dl class="magazine-facts">
+            <div><dt>Edition</dt><dd>{{ numero_vedette.numero_edition }}</dd></div>
+            <div><dt>Date</dt><dd>{{ numero_vedette.date_publication|date:"d F Y" }}</dd></div>
+            <div><dt>Pages</dt><dd>{{ numero_vedette.nombre_pages }}</dd></div>
+            <div><dt>Format</dt><dd>{{ numero_vedette.get_format_papier_display }}</dd></div>
+        </dl>
+        <div class="magazine-actions">
+            <a class="button primary" href="{{ numero_vedette.get_absolute_url }}">Decouvrir le numero</a>
+            {% if numero_vedette.pdf_numerique %}
+                <a class="button secondary dark" href="{{ numero_vedette.pdf_numerique.url }}" target="_blank" rel="noopener">Lire le PDF</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% else %}
+<section class="section magazine-empty">
+    <p class="eyebrow">Premier numero</p>
+    <h2>SEAKE MAGAZINE est en preparation</h2>
+    <p>Ajoutez un numero dans Django admin pour publier sa couverture, ses articles et ses fichiers PDF.</p>
+</section>
+{% endif %}
+
+{% if archives %}
+<section class="section muted">
+    <div class="section-heading">
+        <p class="eyebrow">Collection</p>
+        <h2>Les numeros precedents</h2>
+    </div>
+    <div class="magazine-archive-grid">
+        {% for numero in archives %}
+            <article class="magazine-archive-card">
+                <a href="{{ numero.get_absolute_url }}">
+                    {% if numero.couverture %}
+                        <img src="{{ numero.couverture.url }}" alt="Couverture de {{ numero.titre }}">
+                    {% else %}
+                        <img src="{% static 'img/banniere.jpg' %}" alt="{{ numero.titre }}">
+                    {% endif %}
+                </a>
+                <div>
+                    <span>{{ numero.numero_edition }}</span>
+                    <h3><a href="{{ numero.get_absolute_url }}">{{ numero.titre }}</a></h3>
+                    <p>{{ numero.date_publication|date:"F Y" }} · {{ numero.nombre_pages }} pages</p>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<section class="section magazine-paper-band">
+    <div>
+        <p class="eyebrow">Du web a la presse</p>
+        <h2>Une edition faite pour etre lue, partagee et imprimee</h2>
+        <p>Chaque numero peut offrir un PDF numerique leger et un fichier haute resolution reserve au prépresse.</p>
+    </div>
+    <a class="button secondary" href="{% url 'impression' %}">Voir l'espace impression</a>
+</section>
+{% endblock %}
