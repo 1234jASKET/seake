@@ -285,6 +285,45 @@ class InfoDuJour(models.Model):
         return f"{self.date_affichage} - {self.titre}"
 
 
+class EnBref(models.Model):
+    titre = models.CharField(
+        max_length=180,
+        help_text="Titre court de la nouvelle urgente.",
+    )
+    texte = models.TextField(
+        blank=True,
+        help_text="Resume rapide en quelques phrases.",
+    )
+    photo = models.FileField(
+        upload_to="en_bref/photos/",
+        blank=True,
+        validators=[image_file_validator],
+    )
+    video = models.FileField(
+        upload_to="en_bref/videos/",
+        blank=True,
+        validators=[video_file_validator],
+        help_text="Video MP4, WEBM, MOV ou M4V enregistree avec le telephone.",
+    )
+    lien = models.URLField(
+        blank=True,
+        help_text="Lien facultatif vers un article complet ou une source.",
+    )
+    urgent = models.BooleanField(default=False)
+    publie = models.BooleanField(default=True)
+    date_publication = models.DateTimeField(default=timezone.now)
+    date_creation = models.DateTimeField(auto_now_add=True)
+    date_modification = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-date_publication", "-date_creation"]
+        verbose_name = "En bref"
+        verbose_name_plural = "En bref"
+
+    def __str__(self):
+        return self.titre
+
+
 class Abonne(models.Model):
     SOURCE_SITE = "site"
     SOURCE_PAPIER = "papier"

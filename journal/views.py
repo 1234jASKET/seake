@@ -15,6 +15,7 @@ from .models import (
     Categorie,
     DemandePublicite,
     EchantillonCouleur,
+    EnBref,
     InfoDuJour,
     NumeroMagazine,
     QuestionDuJour,
@@ -31,6 +32,13 @@ def _question_du_jour():
         active=True,
         date_affichage__lte=timezone.localdate(),
     ).first()
+
+
+def _nouvelles_en_bref():
+    return EnBref.objects.filter(
+        publie=True,
+        date_publication__lte=timezone.now(),
+    )[:6]
 
 
 def _article_layout(article_obj):
@@ -104,6 +112,7 @@ def accueil(request):
     categories = Categorie.objects.all()[:4]
     info_du_jour = InfoDuJour.objects.filter(publie=True).first()
     question_du_jour = _question_du_jour()
+    nouvelles_en_bref = _nouvelles_en_bref()
     publicites = DemandePublicite.objects.filter(
         statut=DemandePublicite.STATUT_ACCEPTEE,
     )[:3]
@@ -118,6 +127,7 @@ def accueil(request):
             "info_du_jour": info_du_jour,
             "publicites": publicites,
             "question_du_jour": question_du_jour,
+            "nouvelles_en_bref": nouvelles_en_bref,
         },
     )
 
@@ -135,6 +145,7 @@ def robots_txt(request):
 def aujourd_hui(request):
     info_du_jour = InfoDuJour.objects.filter(publie=True).first()
     question_du_jour = _question_du_jour()
+    nouvelles_en_bref = _nouvelles_en_bref()
     articles_recents = _articles_publies().prefetch_related("photos")[:6]
     article_principal = articles_recents[0] if articles_recents else None
     articles_secondaires = articles_recents[1:6] if articles_recents else []
@@ -176,6 +187,7 @@ def aujourd_hui(request):
             "articles_secondaires": articles_secondaires,
             "info_du_jour": info_du_jour,
             "question_du_jour": question_du_jour,
+            "nouvelles_en_bref": nouvelles_en_bref,
             "publicites": publicites,
             "date_du_jour": date_du_jour,
             "capsules": capsules,

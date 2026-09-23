@@ -1,6 +1,7 @@
 import shutil
 import tempfile
 
+from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from django.urls import reverse
@@ -10,6 +11,7 @@ from .feeds import article_html
 from .models import (
     Article,
     Categorie,
+    EnBref,
     InfoDuJour,
     NumeroMagazine,
     PhotoArticle,
@@ -153,6 +155,12 @@ class AccueilQuotidienTests(TestCase):
             evenement="Un evenement a surveiller.",
             publie=True,
         )
+        self.en_bref = EnBref.objects.create(
+            titre="Accident sur une route locale",
+            texte="Les services d'urgence sont sur place.",
+            urgent=True,
+            publie=True,
+        )
 
     def test_accueil_uses_daily_information_and_latest_article(self):
         response = self.client.get(reverse("accueil"))
@@ -163,6 +171,22 @@ class AccueilQuotidienTests(TestCase):
         self.assertContains(response, self.info.meteo)
         self.assertContains(response, self.info.trafic)
         self.assertContains(response, "La chaîne YouTube")
+        self.assertContains(response, self.en_bref.titre)
+
+    def test_en_bref_is_visible_on_today_page(self):
+        response = self.client.get(reverse("aujourd_hui"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.en_bref.titre)
+        self.assertContains(response, "Urgent")
+
+    def test_unpublished_en_bref_is_hidden(self):
+        self.en_bref.publie = False
+        self.en_bref.save(update_fields=["publie"])
+
+        response = self.client.get(reverse("accueil"))
+
+        self.assertNotContains(response, self.en_bref.titre)
 
     def test_accueil_still_renders_without_daily_content(self):
         Article.objects.all().delete()
@@ -172,6 +196,22 @@ class AccueilQuotidienTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "La prochaine edition se prepare")
+
+
+class EnBrefAdminTests(TestCase):
+    def setUp(self):
+        self.admin = get_user_model().objects.create_superuser(
+            username="admin-en-bref",
+            email="admin@example.com",
+            password="mot-de-passe-test",
+        )
+        self.client.force_login(self.admin)
+
+    def test_add_page_opens(self):
+        response = self.client.get(reverse("admin:journal_enbref_add"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Publication rapide")
 
 
 class MagazineTests(TestCase):

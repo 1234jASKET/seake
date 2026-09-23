@@ -16,6 +16,33 @@
     <time datetime="{{ date_du_jour|date:'Y-m-d' }}">{{ date_du_jour|date:"d F Y" }}</time>
 </section>
 
+{% if nouvelles_en_bref %}
+<section class="section breaking-briefs-section" aria-labelledby="today-en-bref-title">
+    <div class="section-heading compact-heading">
+        <p class="eyebrow">Derniere heure</p>
+        <h2 id="today-en-bref-title">En bref</h2>
+    </div>
+    <div class="breaking-briefs-grid">
+        {% for bref in nouvelles_en_bref %}
+            <article class="breaking-brief{% if bref.urgent %} is-urgent{% endif %}">
+                <div class="breaking-brief-meta">
+                    <span>{% if bref.urgent %}Urgent{% else %}En bref{% endif %}</span>
+                    <time datetime="{{ bref.date_publication|date:'c' }}">{{ bref.date_publication|date:"H \h i" }}</time>
+                </div>
+                {% if bref.video %}
+                    <video controls playsinline preload="metadata"><source src="{{ bref.video.url }}"></video>
+                {% elif bref.photo %}
+                    <img src="{{ bref.photo.url }}" alt="{{ bref.titre }}">
+                {% endif %}
+                <h3>{{ bref.titre }}</h3>
+                {% if bref.texte %}<p>{{ bref.texte|linebreaksbr }}</p>{% endif %}
+                {% if bref.lien %}<a href="{{ bref.lien }}">Voir les details</a>{% endif %}
+            </article>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
 {% if info_du_jour %}
 <section class="section today-info-section">
     <div class="today-info-strip">

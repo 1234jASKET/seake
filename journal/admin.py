@@ -10,6 +10,7 @@ from .models import (
     CorrectionFormule,
     DemandePublicite,
     EchantillonCouleur,
+    EnBref,
     InfoDuJour,
     LectureCouleur,
     NumeroMagazine,
@@ -41,6 +42,20 @@ class ArticleAdminForm(forms.ModelForm):
                 attrs={
                     "rows": 8,
                     "style": "width: 100%; max-width: 980px;",
+                }
+            ),
+        }
+
+
+class EnBrefAdminForm(forms.ModelForm):
+    class Meta:
+        model = EnBref
+        fields = "__all__"
+        widgets = {
+            "texte": forms.Textarea(
+                attrs={
+                    "rows": 5,
+                    "style": "width: 100%; max-width: 760px; font-size: 17px; line-height: 1.5;",
                 }
             ),
         }
@@ -489,6 +504,83 @@ class InfoDuJourAdmin(admin.ModelAdmin):
     @admin.display(description="Photo")
     def image_preview(self, obj):
         return render_image_preview(obj.photo if obj else None)
+
+
+@admin.register(EnBref)
+class EnBrefAdmin(admin.ModelAdmin):
+    form = EnBrefAdminForm
+    list_display = (
+        "titre",
+        "urgent",
+        "publie",
+        "date_publication",
+        "type_media",
+    )
+    list_filter = ("urgent", "publie", "date_publication")
+    search_fields = ("titre", "texte")
+    list_editable = ("urgent", "publie")
+    date_hierarchy = "date_publication"
+    save_on_top = True
+    readonly_fields = ("photo_preview", "video_preview", "date_creation", "date_modification")
+    fieldsets = (
+        (
+            "Publication rapide",
+            {
+                "fields": (
+                    "titre",
+                    "texte",
+                    "urgent",
+                    "publie",
+                    "date_publication",
+                ),
+                "description": (
+                    "Ecrivez une nouvelle courte, ajoutez une photo ou une video, "
+                    "puis enregistrez. Si Publie est coche, elle apparait immediatement."
+                ),
+            },
+        ),
+        (
+            "Photo ou video",
+            {
+                "fields": (
+                    "photo_preview",
+                    "photo",
+                    "video_preview",
+                    "video",
+                    "lien",
+                )
+            },
+        ),
+        (
+            "Suivi",
+            {
+                "fields": ("date_creation", "date_modification"),
+                "classes": ("collapse",),
+            },
+        ),
+    )
+
+    @admin.display(description="Media")
+    def type_media(self, obj):
+        if obj.video:
+            return "Video"
+        if obj.photo:
+            return "Photo"
+        return "Texte"
+
+    @admin.display(description="Apercu photo")
+    def photo_preview(self, obj):
+        return render_image_preview(obj.photo if obj else None)
+
+    @admin.display(description="Apercu video")
+    def video_preview(self, obj):
+        if not obj or not obj.video:
+            return "Aucune video"
+        return format_html(
+            '<video controls playsinline style="width: 280px; max-height: 180px;">'
+            '<source src="{}"></video>',
+            obj.video.url,
+        )
 
 
 @admin.register(EchantillonCouleur)
