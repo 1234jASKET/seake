@@ -214,6 +214,32 @@ class EnBrefAdminTests(TestCase):
         self.assertContains(response, "Publication rapide")
 
 
+@override_settings(
+    STORAGES={
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
+)
+class ColorCourseTests(TestCase):
+    def test_numbered_chemistry_course_is_available(self):
+        response = self.client.get(reverse("color_control_courses"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Chimie de la couleur")
+        self.assertContains(response, "Leçon 01")
+        self.assertContains(response, "Leçon 08")
+        self.assertContains(response, "Sécurité chimique")
+
+    def test_color_control_links_to_course(self):
+        response = self.client.get(reverse("color_control"))
+
+        self.assertContains(response, reverse("color_control_courses"))
+
+
 class MagazineTests(TestCase):
     def setUp(self):
         categorie = Categorie.objects.create(

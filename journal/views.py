@@ -434,6 +434,10 @@ def color_control(request):
     )
 
 
+def color_control_courses(request):
+    return render(request, "color_control_courses.html")
+
+
 def color_control_studio(request):
     return render(request, "color_control_studio.html")
 

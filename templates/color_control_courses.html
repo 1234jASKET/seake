@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Cours de chimie couleur - SEAKE{% endblock %}
+
+{% block content %}
+<section class="page-hero compact color-course-hero">
+    <p class="eyebrow">SEAKE Académie</p>
+    <h1>Chimie de la couleur</h1>
+    <p>Un parcours en huit leçons pour comprendre les encres, les supports et les contrôles utilisés en impression.</p>
+    <div class="hero-actions">
+        <a class="button primary" href="#programme">Commencer la leçon 1</a>
+        <a class="button secondary dark" href="{% url 'color_control' %}">Retour à Couleur</a>
+    </div>
+</section>
+
+<section class="section course-orientation">
+    <div class="course-orientation-copy">
+        <p class="eyebrow">Avec Professeur SEAKE</p>
+        <h2>Apprendre dans le bon ordre</h2>
+        <p>Chaque leçon présente un objectif, la théorie essentielle, une pratique sécuritaire et les informations à conserver. Commencez par les bases avant de passer aux mesures et au diagnostic.</p>
+    </div>
+    <img src="{% static 'img/professeur-seake.png' %}" alt="Professeur SEAKE présente le programme de chimie de la couleur">
+</section>
+
+<section class="section muted" id="programme">
+    <div class="section-heading">
+        <p class="eyebrow">Programme progressif</p>
+        <h2>Les huit leçons</h2>
+        <p>Une leçon à la fois, avec une vérification simple avant de continuer.</p>
+    </div>
+
+    <nav class="course-index" aria-label="Liste des leçons">
+        <a href="#lecon-1"><span>01</span>Voir la couleur</a>
+        <a href="#lecon-2"><span>02</span>Composer une encre</a>
+        <a href="#lecon-3"><span>03</span>Familles d'encres</a>
+        <a href="#lecon-4"><span>04</span>Séchage</a>
+        <a href="#lecon-5"><span>05</span>Viscosité et pH</a>
+        <a href="#lecon-6"><span>06</span>Supports</a>
+        <a href="#lecon-7"><span>07</span>Mesurer</a>
+        <a href="#lecon-8"><span>08</span>Diagnostiquer</a>
+    </nav>
+
+    <div class="course-lessons">
+        <article class="course-lesson" id="lecon-1">
+            <header><span>Leçon 01</span><h3>Comment nous voyons la couleur</h3></header>
+            <div class="course-lesson-body">
+                <div><h4>Objectif</h4><p>Comprendre la différence entre la lumière, les pigments et la couleur imprimée.</p></div>
+                <div><h4>Notions</h4><p>RGB produit la couleur avec la lumière. CMYK travaille par absorption sur un support. L'éclairage, le blanc du support et le fini changent l'apparence.</p></div>
+                <div><h4>Pratique sécuritaire</h4><p>Comparer le même échantillon sous une lumière contrôlée, près d'une fenêtre et sous l'éclairage de l'atelier.</p></div>
+                <div><h4>À noter</h4><p>Type de lumière, support, fini, heure, observation et référence couleur.</p></div>
+            </div>
+        </article>
+
+        <article class="course-lesson" id="lecon-2">
+            <header><span>Leçon 02</span><h3>Les composants d'une encre</h3></header>
+            <div class="course-lesson-body">
+                <div><h4>Objectif</h4><p>Reconnaître le rôle du pigment, du liant, du véhicule et des additifs.</p></div>
+                <div><h4>Notions</h4><p>Le pigment colore, le liant forme le film, le véhicule permet le transfert et les additifs corrigent une propriété précise.</p></div>
+                <div><h4>Pratique sécuritaire</h4><p>Lire une fiche technique et repérer ces quatre fonctions sans ouvrir ni modifier le produit.</p></div>
+                <div><h4>À noter</h4><p>Code produit, famille, support recommandé, stockage, durée de vie et restrictions.</p></div>
+            </div>
+        </article>
+
+        <article class="course-lesson" id="lecon-3">
+            <header><span>Leçon 03</span><h3>Eau, solvant et UV</h3></header>
+            <div class="course-lesson-body">
+                <div><h4>Objectif</h4><p>Distinguer les grandes familles d'encres et leur domaine d'utilisation.</p></div>
+                <div><h4>Notions</h4><p>Une encre à l'eau, une encre à base de solvant et une encre UV ne sèchent pas de la même façon et ne sont pas interchangeables.</p></div>
+                <div><h4>Pratique sécuritaire</h4><p>Classer des fiches techniques par famille, support et méthode de séchage.</p></div>
+                <div><h4>À noter</h4><p>Presse, support, ventilation, énergie de séchage et produits autorisés par le fournisseur.</p></div>
+            </div>
+        </article>
+
+        <article class="course-lesson" id="lecon-4">
+            <header><span>Leçon 04</span><h3>La chimie du séchage</h3></header>
+            <div class="course-lesson-body">
+                <div><h4>Objectif</h4><p>Comprendre pourquoi une couche d'encre devient stable après l'impression.</p></div>
+                <div><h4>Notions</h4><p>Le séchage peut dépendre de l'évaporation, de l'absorption, de l'oxydation ou d'une polymérisation UV. Une surface sèche n'est pas toujours durcie à cœur.</p></div>
+                <div><h4>Pratique sécuritaire</h4><p>Comparer des échantillons préparés selon la procédure approuvée après différents temps de repos.</p></div>
+                <div><h4>À noter</h4><p>Temps, température, vitesse, énergie, ventilation, toucher et résistance au frottement.</p></div>
+            </div>
+        </article>
+
+        <article class="course-lesson" id="lecon-5">
+            <header><span>Leçon 05</span><h3>Viscosité, pH et température</h3></header>
+            <div class="course-lesson-body">
+                <div><h4>Objectif</h4><p>Comprendre les trois mesures qui influencent fortement le transfert et la stabilité.</p></div>
+                <div><h4>Notions</h4><p>La viscosité décrit l'écoulement. Le pH influence certaines encres à l'eau. La température peut modifier les lectures et le comportement en presse.</p></div>
+                <div><h4>Pratique sécuritaire</h4><p>Mesurer un produit approuvé avec les instruments prévus, sans ajouter de correcteur.</p></div>
+                <div><h4>À noter</h4><p>Méthode, appareil, unité, température, heure, limite fournisseur et résultat.</p></div>
+            </div>
+        </article>
+
+        <article class="course-lesson" id="lecon-6">
+            <header><span>Leçon 06</span><h3>Adhésion sur papier, film et foil</h3></header>
+            <div class="course-lesson-body">
+                <div><h4>Objectif</h4><p>Relier la chimie de l'encre à l'énergie et à l'état de la surface.</p></div>
+                <div><h4>Notions</h4><p>Absorption, traitement corona, contamination, primer, blanc de soutien et finition peuvent changer l'adhésion et la couleur.</p></div>
+                <div><h4>Pratique sécuritaire</h4><p>Faire un test d'adhésion approuvé sur le vrai support, après le temps de séchage recommandé.</p></div>
+                <div><h4>À noter</h4><p>Lot du support, côté imprimé, traitement, dyne déclaré, primer, délai et résultat.</p></div>
+            </div>
+        </article>
+
+        <article class="course-lesson" id="lecon-7">
+            <header><span>Leçon 07</span><h3>Mesurer Lab, Delta E et densité</h3></header>
+            <div class="course-lesson-body">
+                <div><h4>Objectif</h4><p>Transformer une impression visuelle en données comparables.</p></div>
+                <div><h4>Notions</h4><p>Lab décrit la couleur, Delta E mesure l'écart avec la cible et la densité aide à suivre la force d'impression. La méthode doit rester identique.</p></div>
+                <div><h4>Pratique sécuritaire</h4><p>Faire trois lectures du même drawdown et comparer la moyenne avec la tolérance client.</p></div>
+                <div><h4>À noter</h4><p>Instrument, calibration, illuminant, observateur, fond de mesure, cible et lectures.</p></div>
+            </div>
+        </article>
+
+        <article class="course-lesson" id="lecon-8">
+            <header><span>Leçon 08</span><h3>Diagnostiquer sans improviser</h3></header>
+            <div class="course-lesson-body">
+                <div><h4>Objectif</h4><p>Suivre une méthode lorsqu'une couleur, un séchage ou une adhésion pose problème.</p></div>
+                <div><h4>Notions</h4><p>Identifier un seul problème, vérifier les données, isoler une variable, tester à petite échelle puis mesurer de nouveau.</p></div>
+                <div><h4>Pratique sécuritaire</h4><p>Préparer une fiche de diagnostic à partir d'un ancien problème sans refaire de mélange chimique.</p></div>
+                <div><h4>À noter</h4><p>Symptôme, hypothèse, variable testée, autorisation, résultat, décision et approbation.</p></div>
+            </div>
+        </article>
+    </div>
+</section>
+
+<section class="section">
+    <div class="course-safety">
+        <div>
+            <p class="eyebrow">Sécurité chimique</p>
+            <h2>Comprendre avant de manipuler</h2>
+            <p>Ces cours enseignent les principes et la méthode de contrôle. Ils ne remplacent jamais la formation du fabricant, la FDS/SDS, les EPI, la ventilation, les procédures de l'entreprise ni l'autorisation du responsable.</p>
+        </div>
+        <ul>
+            <li>Ne jamais mélanger des produits inconnus.</li>
+            <li>Ne jamais chauffer un produit sans procédure approuvée.</li>
+            <li>Faire les essais autorisés sur de petites quantités.</li>
+            <li>Étiqueter, mesurer et documenter chaque test.</li>
+        </ul>
+    </div>
+</section>
+
+<section class="section">
+    <div class="cta-band">
+        <div>
+            <p class="eyebrow">Après les leçons</p>
+            <h2>Pratiquer avec les outils SEAKE</h2>
+            <p>Utilisez le studio Lab, le Phone Scan et le Sample Timer pour appliquer les méthodes de mesure.</p>
+        </div>
+        <div class="hero-actions">
+            <a class="button primary" href="{% url 'color_control_studio' %}">Ouvrir le studio</a>
+            <a class="button secondary dark" href="{% url 'color_control_sample_timer' %}">Sample Timer</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -26,6 +26,7 @@ urlpatterns = [
     path("coupons/", views.coupons, name="coupons"),
     path("reseaux-sociaux/", views.reseaux_sociaux, name="reseaux_sociaux"),
     path("color-control/", views.color_control, name="color_control"),
+    path("color-control/cours/", views.color_control_courses, name="color_control_courses"),
     path("color-control/studio/", views.color_control_studio, name="color_control_studio"),
     path("color-control/phone-scan/", views.color_control_phone_scan, name="color_control_phone_scan"),
     path("color-control/sample-timer/", views.color_control_sample_timer, name="color_control_sample_timer"),
