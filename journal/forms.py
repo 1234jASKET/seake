@@ -8,6 +8,24 @@ from .models import (
 )
 
 
+class SpamProtectedFormMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["website"] = forms.CharField(
+            required=False,
+            label="",
+            widget=forms.HiddenInput(
+                attrs={"autocomplete": "off", "tabindex": "-1"}
+            ),
+        )
+
+    def clean_website(self):
+        value = self.cleaned_data.get("website", "")
+        if value:
+            raise forms.ValidationError("Envoi refuse.")
+        return value
+
+
 class QuestionDuJourForm(forms.Form):
     choix = forms.TypedChoiceField(
         label="Votre reponse",
@@ -22,7 +40,7 @@ class QuestionDuJourForm(forms.Form):
         self.fields["choix"].choices = question.choix_disponibles()
 
 
-class DemandePubliciteForm(forms.ModelForm):
+class DemandePubliciteForm(SpamProtectedFormMixin, forms.ModelForm):
     class Meta:
         model = DemandePublicite
         fields = [
@@ -59,8 +77,14 @@ class DemandePubliciteForm(forms.ModelForm):
             "message": "Message",
         }
 
+    def clean_message(self):
+        message = self.cleaned_data["message"].strip()
+        if len(message) > 5000:
+            raise forms.ValidationError("Le message ne doit pas depasser 5 000 caracteres.")
+        return message
 
-class CommentaireForm(forms.ModelForm):
+
+class CommentaireForm(SpamProtectedFormMixin, forms.ModelForm):
     class Meta:
         model = Commentaire
         fields = ["nom", "email", "message"]
@@ -78,8 +102,14 @@ class CommentaireForm(forms.ModelForm):
             "message": "Commentaire ou question",
         }
 
+    def clean_message(self):
+        message = self.cleaned_data["message"].strip()
+        if len(message) > 3000:
+            raise forms.ValidationError("Le commentaire ne doit pas depasser 3 000 caracteres.")
+        return message
 
-class AbonneForm(forms.ModelForm):
+
+class AbonneForm(SpamProtectedFormMixin, forms.ModelForm):
     consentement = forms.BooleanField(
         required=True,
         label="J'accepte de recevoir les nouvelles et communications de SEAKE JOURNAL.",

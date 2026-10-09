@@ -2,12 +2,14 @@ import shutil
 import tempfile
 
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
 
 from .feeds import article_html
+from .forms import DemandePubliciteForm
 from .models import (
     Article,
     Categorie,
@@ -212,6 +214,56 @@ class EnBrefAdminTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Publication rapide")
+
+
+class SecurityProtectionTests(TestCase):
+    def setUp(self):
+        cache.clear()
+
+    def test_admin_login_is_throttled_after_repeated_failures(self):
+        url = reverse("admin:login")
+        credentials = {"username": "unknown", "password": "wrong-password"}
+
+        for _ in range(8):
+            response = self.client.post(url, credentials)
+            self.assertEqual(response.status_code, 200)
+
+        response = self.client.post(url, credentials)
+        self.assertEqual(response.status_code, 429)
+
+    def test_advertising_form_rejects_disguised_image(self):
+        form = DemandePubliciteForm(
+            data={
+                "nom_client": "Test",
+                "email": "test@example.com",
+                "type_produit": "page",
+                "message": "Une demande legitime.",
+            },
+            files={
+                "photo": SimpleUploadedFile(
+                    "fausse-photo.jpg",
+                    b"ceci n'est pas une image",
+                    content_type="image/jpeg",
+                )
+            },
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn("photo", form.errors)
+
+    def test_honeypot_rejects_automated_submission(self):
+        form = DemandePubliciteForm(
+            data={
+                "nom_client": "Robot",
+                "email": "robot@example.com",
+                "type_produit": "page",
+                "message": "Message automatise.",
+                "website": "https://spam.example",
+            }
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn("website", form.errors)
 
 
 @override_settings(

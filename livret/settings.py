@@ -22,14 +22,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get(
-    'SECRET_KEY',
-    'django-insecure-_^!yazp8jq$5hb$kbg)v!w)9#i+o#h^_q57t+xxuv958zy(&m*',
-)
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+
+# Local development remains simple, but production must provide its own secret.
+if DEBUG:
+    SECRET_KEY = os.environ.get(
+        'SECRET_KEY',
+        'django-insecure-local-development-only-change-me',
+    )
+else:
+    SECRET_KEY = os.environ['SECRET_KEY']
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost", "testserver", "site.seakejournal.com"]
 render_hostname = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
@@ -63,6 +66,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'journal.middleware.RequestThrottleMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -70,6 +74,37 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# Render terminates HTTPS before forwarding requests to Django.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 60 * 60 * 12
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+SECURE_HSTS_SECONDS = 0 if DEBUG else 60 * 60 * 24 * 30
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+SECURE_HSTS_PRELOAD = False
+X_FRAME_OPTIONS = 'DENY'
+
+# Keep uploads on disk quickly and reject oversized request bodies.
+FILE_UPLOAD_MAX_MEMORY_SIZE = 2 * 1024 * 1024
+DATA_UPLOAD_MAX_MEMORY_SIZE = 110 * 1024 * 1024
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 500
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.environ.get('CACHE_LOCATION', '/tmp/seake-django-cache'),
+        'TIMEOUT': 60 * 15,
+        'OPTIONS': {'MAX_ENTRIES': 5000},
+    }
+}
 
 ROOT_URLCONF = 'livret.urls'
 

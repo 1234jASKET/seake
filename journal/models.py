@@ -4,6 +4,8 @@ from django.core.validators import FileExtensionValidator
 from django.utils import timezone
 import math
 
+from .validators import validate_image_file, validate_pdf_file, validate_video_file
+
 
 image_file_validator = FileExtensionValidator(
     allowed_extensions=["jpg", "jpeg", "png", "webp", "avif", "gif"],
@@ -52,14 +54,14 @@ class Article(models.Model):
     image = models.FileField(
         upload_to="articles/",
         blank=True,
-        validators=[image_file_validator],
+        validators=[image_file_validator, validate_image_file],
     )
     publicite_titre = models.CharField(max_length=160, blank=True)
     publicite_texte = models.TextField(blank=True)
     publicite_image = models.FileField(
         upload_to="articles/publicites/",
         blank=True,
-        validators=[image_file_validator],
+        validators=[image_file_validator, validate_image_file],
     )
     publicite_lien = models.URLField(blank=True)
     publicite_bouton = models.CharField(max_length=80, blank=True)
@@ -109,7 +111,7 @@ class NumeroMagazine(models.Model):
     couverture = models.FileField(
         upload_to="magazines/couvertures/",
         blank=True,
-        validators=[image_file_validator],
+        validators=[image_file_validator, validate_image_file],
     )
     editorial = models.TextField(blank=True)
     articles = models.ManyToManyField(
@@ -133,13 +135,13 @@ class NumeroMagazine(models.Model):
     pdf_numerique = models.FileField(
         upload_to="magazines/numeriques/",
         blank=True,
-        validators=[pdf_file_validator],
+        validators=[pdf_file_validator, validate_pdf_file],
         help_text="PDF leger pour la lecture a l'ecran.",
     )
     pdf_presse = models.FileField(
         upload_to="magazines/presse/",
         blank=True,
-        validators=[pdf_file_validator],
+        validators=[pdf_file_validator, validate_pdf_file],
         help_text="PDF haute resolution valide pour le prépresse.",
     )
     publie = models.BooleanField(default=False)
@@ -166,7 +168,7 @@ class PhotoArticle(models.Model):
     )
     image = models.FileField(
         upload_to="articles/galerie/",
-        validators=[image_file_validator],
+        validators=[image_file_validator, validate_image_file],
     )
     legende = models.CharField(max_length=180, blank=True)
     ordre = models.PositiveIntegerField(
@@ -226,12 +228,12 @@ class DemandePublicite(models.Model):
     photo = models.FileField(
         upload_to="demandes_publicites/",
         blank=True,
-        validators=[image_file_validator],
+        validators=[image_file_validator, validate_image_file],
     )
     video = models.FileField(
         upload_to="demandes_publicites/videos/",
         blank=True,
-        validators=[video_file_validator],
+        validators=[video_file_validator, validate_video_file],
     )
     message = models.TextField()
     statut = models.CharField(
@@ -263,7 +265,7 @@ class InfoDuJour(models.Model):
     photo = models.FileField(
         upload_to="infos_du_jour/",
         blank=True,
-        validators=[image_file_validator],
+        validators=[image_file_validator, validate_image_file],
         help_text="Photo principale pour la page Aujourd'hui sur SEAKE.",
     )
     meteo = models.CharField(max_length=220, blank=True)
@@ -297,12 +299,12 @@ class EnBref(models.Model):
     photo = models.FileField(
         upload_to="en_bref/photos/",
         blank=True,
-        validators=[image_file_validator],
+        validators=[image_file_validator, validate_image_file],
     )
     video = models.FileField(
         upload_to="en_bref/videos/",
         blank=True,
-        validators=[video_file_validator],
+        validators=[video_file_validator, validate_video_file],
         help_text="Video MP4, WEBM, MOV ou M4V enregistree avec le telephone.",
     )
     lien = models.URLField(
